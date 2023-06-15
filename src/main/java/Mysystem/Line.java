@@ -1,0 +1,130 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Mysystem;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author User
+ */
+public class Line extends Activable{
+    private DSystem system;
+    private List<Node> nodes;
+    
+    @Override
+    void onActivate(){
+        int stat;
+        if (this.getDec()==null)stat=0;
+        else stat = this.getDec().getStatus();
+        for(int i = 0; i<nodes.size(); i++)
+            if(nodes.get(i).getColumn().isActive())nodes.get(i).activate(this.isActive(), this.getDec(), stat);
+    }
+
+    public void setSystem(DSystem system) {
+        this.system = system;
+    }
+
+    public DSystem getSystem() {
+        return system;
+    }
+
+    public Node getDiffNode(Node node){
+        if (node==nodes.get(0)) return nodes.get(1);
+        else return nodes.get(0);
+    }
+
+    public List<Node> getNodes() {
+        return nodes;
+    }
+
+    public int getActive() {//количество активных ячеек
+        int count=0;
+        for(int i=0; i<nodes.size(); i++)
+            if(nodes.get(i).isActive())count++;
+        return count;
+    }
+    public Line(){
+        nodes=new ArrayList<>();
+    }
+    
+    
+    public void addNode(Node add){
+        nodes.add(add);
+        add.setLine(this);
+    }
+    
+    public boolean IsEmpty(){ //проверяет пустая ли строка
+        for(int i=0; i<nodes.size(); i++)
+            if(nodes.get(i).isActive()&&nodes.get(i).getActive()!=0)return false;
+        return true;    
+    }
+    public boolean hasempty(){ //проверяет есть ли пустые ячейки
+        for(int i=0; i<nodes.size(); i++)
+            if(nodes.get(i).isActive()&&nodes.get(i).getActive()==0)return true;
+        return false;    
+    }
+    @Override
+    public String toString(){ //отладочный
+        String ret="";
+        if(this.isActive()){
+            for(int i=0; i<nodes.size(); i++)
+                ret=ret+nodes.get(i).toString()+" ";
+        }
+        //return ret+"active: "+active;
+        return ret;
+    }
+    public String toString(boolean withinactive){ //отладочный
+        String ret="";
+        if(this.isActive()){
+            for(int i=0; i<nodes.size(); i++){
+                ret=ret+nodes.get(i).getColumn().getVariable().getName()+":";
+                if(nodes.get(i).isActive())ret+=nodes.get(i).toString()+" ";
+                else ret+="{} ";
+            }
+        }
+        //return ret+"active: "+active;
+        return ret;
+    }
+    
+    public Node getnodefromcol(Column col){
+        Node ret=null;
+        for(int i=0; i<nodes.size(); i++)
+            if(nodes.get(i).getColumn()==col)return nodes.get(i);
+        return ret;
+    }
+    
+    
+    public Line dominated(Line lin){ //для C-таблиц
+        Line ret=null;
+        int last=-1;
+        for(int i=0; i<nodes.size(); i++){
+            Node thisnode=nodes.get(i);
+            if(thisnode.isActive()){
+                int chk=thisnode.isdominatedby(lin.getnodefromcol(thisnode.getColumn()));
+                switch (chk){
+                    case 0:
+                        if (ret==null)ret=this;
+                        break;
+                    case 1:
+                        if (last<2)ret=lin;
+                        else return null;
+                        break;
+                    case 2:
+                        if (last!=1)ret=this;
+                        else return null;
+                        break;
+                    case 3:
+                        return null;
+                }
+                last=chk;
+            }
+        }
+        return ret;
+    }
+
+}

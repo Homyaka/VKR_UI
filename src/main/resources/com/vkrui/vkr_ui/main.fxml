@@ -22,7 +22,7 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <TextField fx:id="tfFrequency" layoutX="25.0" layoutY="111.0" prefHeight="25.0" prefWidth="254.0" promptText="Введите частоту встречаемости θ " text="2">
+                  <TextField fx:id="tfFrequency" layoutX="25.0" layoutY="111.0" prefHeight="25.0" prefWidth="254.0" promptText="Введите частоту встречаемости θ ">
                      <font>
                         <Font size="14.0" />
                      </font>

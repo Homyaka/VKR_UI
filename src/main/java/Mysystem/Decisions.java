@@ -25,9 +25,6 @@ public class Decisions {
     
     public void addDec(Decision dec){
         decisions.add(dec);
-        //System.out.println(this.toString()+"\n"+sys.toString());
-        
-
     }
     
     public Decision getDec(int n){

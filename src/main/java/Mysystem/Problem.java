@@ -1,6 +1,7 @@
 package Mysystem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
@@ -8,15 +9,15 @@ import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.exception.ContradictionException;
 import static org.chocosolver.solver.search.strategy.Search.intVarSearch;
 
-import tests.Nqueens;
+import org.chocosolver.solver.variables.IntVar;
 
 public class Problem {
     private final Model model;
-    private final List<Myvariable> vars;
+    private final List<Variable> vars;
     private final Valuevocab domvals;
     private List<DSystem> problems;
-    private  int minSup;
-
+    private int minSup;
+    public HashMap<IntVar,Line> mapIntVarLine;
     public int getMinSup() {
         return minSup;
     }
@@ -28,12 +29,12 @@ public class Problem {
     private List<List<DSystem>> orderedsystems;
     private boolean prepared;
     private final Decisions decisions;
-    private final List<MySolution> solutions;
+    private final List<Solution> solutions;
 
     public List<List<DSystem>> getOrderedsystems() {
         return orderedsystems;
     }
-    public List<Myvariable> getVars() {
+    public List<Variable> getVars() {
         return vars;
     }
 
@@ -45,11 +46,18 @@ public class Problem {
         return decisions;
     }
 
-    public List<MySolution> getSolutions() {
+    public List<Solution> getSolutions() {
         return solutions;
     }
 
-    private Myvariable getVariable(String name){
+    private Line getLine(){
+        IntVar intVar=model.intVar(0,1);
+        Line line=new Line();
+        line.intVar=intVar;
+        mapIntVarLine.put(intVar,line);
+        return line;
+    }
+    private Variable getVariable(String name){
         for(int i=0; i<vars.size(); i++)
             if(vars.get(i).getName().compareTo(name)==0) return vars.get(i);
         return null;
@@ -64,30 +72,30 @@ public class Problem {
         return ret;
     }*/
     
-    private List<Myvalue> buildColumndomain(Myvariable tmp,String doms){
-        List<Myvalue> domarr = new ArrayList<>();
-        Myvalue tmpval = null;
+    private List<Value> buildColumndomain(Variable tmp, String doms){
+        List<Value> domarr = new ArrayList<>();
+        Value tmpval = null;
         while (doms.contains(";")){
             int dind = domvals.getIndex(doms.substring(0, doms.indexOf(";")));
             if (dind ==-1){
-                tmpval = new Myvalue(domvals.addValue(doms.substring(0, doms.indexOf(";"))));
+                tmpval = new Value(domvals.addValue(doms.substring(0, doms.indexOf(";"))));
                 if(tmp!=null)tmp.addValue(tmpval);
             }
             else{
                 if(tmp!=null) tmpval = tmp.checkValue(domvals.getVocab().get(dind));
-                else tmpval = new Myvalue(domvals.getVocab().get(dind));
+                else tmpval = new Value(domvals.getVocab().get(dind));
             }    
             domarr.add(tmpval);
             doms=doms.substring(doms.indexOf(";")+1);
         }
         int dind = domvals.getIndex(doms);
         if (dind ==-1){
-            tmpval = new Myvalue(domvals.addValue(doms));
+            tmpval = new Value(domvals.addValue(doms));
             if(tmp!=null)tmp.addValue(tmpval);
         }
         else{
             if(tmp!=null) tmpval = tmp.checkValue(domvals.getVocab().get(dind));
-            else tmpval = new Myvalue(domvals.getVocab().get(dind));
+            else tmpval = new Value(domvals.getVocab().get(dind));
         }
         domarr.add(tmpval);
         return domarr;
@@ -98,28 +106,28 @@ public class Problem {
         for (int i=0; i<domnum;i++){
             String name = problem.get(i).get(0);
             String temp = problem.get(i).get(1);
-            Myvariable tmp = getVariable(name);
+            Variable tmp = getVariable(name);
             String doms = temp.substring(temp.indexOf("{")+1 , temp.indexOf("}"));
-            List<Myvalue> domarr = buildColumndomain(tmp,doms);
+            List<Value> domarr = buildColumndomain(tmp,doms);
             if(tmp==null){
-                tmp = new Myvariable(name,domarr);
+                tmp = new Variable(name,domarr);
                 vars.add(tmp);
             }
             Column newvar = new Column(domarr);
             tmp.addColumn(newvar);
             prblm.addColumn(newvar);
-            for(int j=2; j<problem.get(0).size();j++){
-                if(prblm.getLines().size()<j-1)prblm.addLine(new Line());
-                List<Myvalue> nodevals = new ArrayList<>();
+            for (int j=2; j<problem.get(0).size();j++){
+                if (prblm.getLines().size()<j-1) prblm.addLine(getLine());
+                List<Value> nodevals = new ArrayList<>();
                 String cons = problem.get(i).get(j);
                 temp = cons.substring(cons.indexOf("{")+1 , cons.indexOf("}"));
                 while (temp.contains(";")){
                     int indx =domvals.getCode(temp.substring(0, temp.indexOf(";"))); 
-                    if(indx!=-1)nodevals.add(newvar.getValue(indx));
+                    if (indx!=-1) nodevals.add(newvar.getValue(indx));
                     temp=temp.substring(temp.indexOf(";")+1);
                 }
                 int indx = domvals.getCode(temp);
-                if(indx!=-1)nodevals.add(newvar.getValue(indx));
+                if (indx!=-1) nodevals.add(newvar.getValue(indx));
                 Node newnode= new Node(nodevals);
                 newvar.addNode(newnode);
                 prblm.getLines().get(j-2).addNode(newnode);
@@ -128,10 +136,12 @@ public class Problem {
     }
     
     public void buildqueen(int n){
-        Nqueens nq = new Nqueens();
-        nq.build(n, vars, domvals, problems, solutions, decisions);
+       /* Nqueens nq = new Nqueens();
+        nq.build(n, vars, domvals, problems, solutions, decisions);*/
     }
-    public Problem(String name){
+    public Problem(String name,int minSup){
+        mapIntVarLine =new HashMap<>();
+       this.minSup=minSup;
         model = new Model(name);
         model.getSolver().limitTime(120000);
         vars = new ArrayList<>();
@@ -143,15 +153,16 @@ public class Problem {
         orderedsystems = new ArrayList<>();
     }
 
-    public void addsys(String name,List <List<String>> sys, boolean isC){
-        DSystem prblm = new DSystem(name, solutions, decisions);
+    public void addsys(String name,List <List<String>> sys){
+        DSystem prblm = new DSystem(name, solutions, decisions,this);
         buildsys(prblm,sys);
         problems.add(prblm);
     }
 
     public void addSys(String name,List <List<String>> sys,int tay){
-        DSystem prblm = new DSystem(name,solutions,decisions);
+        DSystem prblm = new DSystem(name,solutions,decisions,this);
     }
+
     public String prop(){
         preparechoco(false);
         Solver solver = model.getSolver();
@@ -166,8 +177,6 @@ public class Problem {
         }
         return ret;
     }
-    
-    
     private void ordersystems(){
         for(int i=0; i<problems.size(); i++){
             DSystem sys = problems.get(i);
@@ -182,17 +191,12 @@ public class Problem {
     private void preparechoco(boolean withtiming){
         long time= java.lang.System.currentTimeMillis();
         if(!prepared){
-            for(int i=0; i<vars.size(); i++)
-                vars.get(i).buildchoco(model);
+            //for(int i=0; i<vars.size(); i++)
+               // vars.get(i).buildchoco(model);
             for(int i=0; i<problems.size(); i++){
                 DSystem prblm = problems.get(i);
-                /*if(prblm.isC()){
-                    Constraint c = new Constraint("C-system", new MyCpropagator(prblm));
-                    model.and(c).post();
-                }
-                else{*/
-                    Constraint c = new Constraint("D-system", new DPropagator(prblm));
-                    model.and(c).post();
+                Constraint c = new Constraint("D-system", new DPropagator(prblm));
+                model.and(c).post();
                 }
             }
             prepared=true;
@@ -219,10 +223,8 @@ public class Problem {
 
     //new
 
-    
-
-    public List<Myvariable> getActiveVars() {
-        List<Myvariable> ret = new ArrayList<>();
+    public List<Variable> getActiveVars() {
+        List<Variable> ret = new ArrayList<>();
         for (int i=0; i<vars.size(); i++)
             if(vars.get(i).isActive())ret.add(vars.get(i));
         return ret;
@@ -234,12 +236,12 @@ public class Problem {
         preparechoco(withtiming);
         long time= java.lang.System.currentTimeMillis();
         Solver solver = model.getSolver();
-        DvarSelectorSystems varsel=new DvarSelectorSystems(this);
-        DvalSelector valsel=new DvalSelector(decisions);
+        DVariableSelector varsel=new DVariableSelector(this);
+        DValueSelector valsel=new DValueSelector(decisions);
         Decoperator decop = new Decoperator(decisions);
-        solver.setSearch((intVarSearch(varsel,valsel,decop,problems.get(0).getIntvars())));
+        solver.setSearch((intVarSearch(varsel,valsel,decop,problems.get(0).getIntVars())));
         while(solver.solve())
-            solutions.add(new MySolution(vars,decisions.getDecisions()));
+            solutions.add(new Solution(vars,decisions.getDecisions()));
         if(withtiming)time= java.lang.System.currentTimeMillis()-time;
         return time;
     }
@@ -248,12 +250,12 @@ public class Problem {
         preparechoco(withtiming);
         long time= java.lang.System.currentTimeMillis();
         Solver solver = model.getSolver();
-        DvarSelectorSystems varsel=new DvarSelectorSystems(this);
-        DvalSelector valsel=new DvalSelector(decisions);
+        DVariableSelector varsel=new DVariableSelector(this);
+        DValueSelector valsel=new DValueSelector(decisions);
         Decoperator decop = new Decoperator(decisions);
-        solver.setSearch((intVarSearch(varsel,valsel,decop,problems.get(0).getIntvars())));
+        solver.setSearch((intVarSearch(varsel,valsel,decop,problems.get(0).getIntVars())));
         solver.solve();
-        solutions.add(new MySolution(vars,decisions.getDecisions()));
+        solutions.add(new Solution(vars,decisions.getDecisions()));
         if(withtiming)time= java.lang.System.currentTimeMillis()-time;
         return time;
     }

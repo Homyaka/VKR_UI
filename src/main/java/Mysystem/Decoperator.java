@@ -20,56 +20,27 @@ public class Decoperator implements DecisionOperator<IntVar>{
     public Decoperator(Decisions decs){
         decisions=decs;
     }
-    
-    @Override
-    public MyDecoperatorop opposite(){
-        return null;
-    }
-
     @Override
     public void apply(IntVar v, int i, ICause icause) throws ContradictionException {
-        System.out.println("Apply"+v.toString());
         Node nd=(Node)decisions.getDec(i).getChanges().get(0);
-        System.out.println("Apply!!!"+nd.getColumn().getVariable().toString());
-        int []upd=nd.toIntarr();
-        IntIterableBitSet q = new IntIterableBitSet ();
-        q.addAll(upd);
-        v.removeAllValuesBut(q, icause);
+        v.instantiateTo(0,icause);
         Decision newmy = new Decision(nd.getComplvals(), "Values "+nd.toString()+" is chosen for domain of variable "+nd.getColumn().getVariable().getName(), 3);
         newmy.apply(false);
         decisions.addDec(newmy);
-        System.out.println("1Apply"+v.toString());
-        System.out.println("2Apply!!!"+nd.getColumn().getVariable().toString());
-        System.out.println("3Apply:"+nd.toString()+"\n"+nd.getLine().getSystem().toString());
-
     }
-
     @Override
     public void unapply(IntVar v, int i, ICause icause) throws ContradictionException {
-        Node node=(Node)decisions.getDec(i).getChanges().get(0);
-        System.out.println("Before Unapply:"+node.toString()+"\n"+node.getLine().getSystem().toString());
-
         decisions.unapplyto(i, false);
-        System.out.println("After Unapply:"+node.toString()+"\n"+node.getLine().getSystem().toString());
-
-        //Node node=(Node)decisions.getDec(i).getChanges().get(0);
-        //System.out.println("Unapply:\n"+node.getLine().getSystem().toString());
-        Node node1=node.getLine().getDiffNode(node);
-        int []upd=node1.toIntarr();
-        IntIterableBitSet q = new IntIterableBitSet ();
-        q.addAll(upd);
-        v.removeAllValuesBut(q, icause);
+        v.instantiateTo(1,icause);
+        Node node1=((Node)decisions.getDec(i).getChanges().get(0)).getLine().getNodes().get(1);
         Decision newmy = new Decision(node1.getComplvals(), "Values "+node1.toString()+" is chosen for domain of variable "+node1.getColumn().getVariable().getName(), 3);
         newmy.apply(false);
         decisions.addDec(newmy);
-        System.out.println("new Unapply:"+node1.toString()+"\n"+node.getLine().getSystem().toString());
-       /* int []upd=node.toIntarr();
-        IntIterableBitSet q = new IntIterableBitSet ();
-        q.addAll(upd);
-        v.removeValues(q, icause);
-        Decision newmy = new Decision(node.getActivevals(), "values "+node.toString()+" is removed from domain of variable "+node.getColumn().getVariable().getName(), 3);
-        newmy.apply(false);
-        decisions.addDec(newmy);*/
     }
-    
+
+    @Override
+    public DecisionOperator<IntVar> opposite() {
+        return null;
+    }
+
 }

@@ -5,6 +5,8 @@
  */
 package Mysystem;
 
+import org.chocosolver.solver.variables.IntVar;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +14,10 @@ import java.util.List;
  *
  * @author User
  */
-public class Line extends Activable{
+public class Line extends Activable {
     private DSystem system;
     private List<Node> nodes;
+    public IntVar intVar;
     
     @Override
     void onActivate(){
@@ -31,11 +34,6 @@ public class Line extends Activable{
 
     public DSystem getSystem() {
         return system;
-    }
-
-    public Node getDiffNode(Node node){
-        if (node==nodes.get(0)) return nodes.get(1);
-        else return nodes.get(0);
     }
 
     public List<Node> getNodes() {

@@ -5,7 +5,6 @@
  */
 package constraintchoco;
 
-import Mysystem.MySolution;
 import Mysystem.Problem;
 
 import java.io.FileNotFoundException;
@@ -23,12 +22,10 @@ import org.chocosolver.solver.exception.ContradictionException;
  * @author User
  */
 public class Constraintchoco {
-    private static String PATH = "E:\\benchmarks";
-
+    private static final String PATH = "E:\\benchmarks";
     static void logging(PrintWriter fout, String mes){
     fout.append(mes+"\n");
     System.out.println(mes);
-
     }
     
     static List <List<String>> loadsys(String filepath) throws FileNotFoundException, IOException{
@@ -58,15 +55,15 @@ public class Constraintchoco {
 
 
     private static void spill(){
-        constraintchoco.Spill sp = new constraintchoco.Spill();
+        Spill sp = new Spill();
         sp.prepare();
         sp.solve(0);
     }
     
     public static void main(String[] args) throws IOException, ContradictionException {
-        Problem nq = new Problem("test");
-        String dir="e:\\test1.txt";
-        nq.addsys("test",loadsys(dir),false);
+        Problem problem = new Problem("test",2);
+        String dir="c:\\Users\\polin\\IdeaProjects\\VKR\\src\\dataFile\\";
+        problem.addsys("test",loadsys(dir+"test1.txt"));
         /*String dir = "e:\\systems\\10\\";
         qq.addsys("XY",loadsys(dir+"XY.txt"), true);
         qq.addsys("YZ",loadsys(dir+"YZ.txt"), true);
@@ -79,10 +76,8 @@ public class Constraintchoco {
         */
         //nq.buildqueen(12);
         //qq.solvemanymin(true);
-        nq.solvemany(true);
-        System.out.println(nq.showsolutions(false,false));
-
-
+        problem.solvemany(true);
+        System.out.println(problem.showsolutions(false,false));
         //Autoshop tst=new Autoshop();
         //tst.solve(false,2);
         //0-пессимистичный
@@ -92,7 +87,6 @@ public class Constraintchoco {
          //spill();
 
     }
-    
 }
 /*4	2	
 5	10	

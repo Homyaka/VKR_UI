@@ -14,9 +14,9 @@ import java.util.List;
  */
 public class Column extends Activable{
     
-    private final List<Myvalue> localdomain; //локальный домен для столбца
+    private final List<Value> localdomain; //локальный домен для столбца
     private final List<Node> nodes; //указатель на ячейки
-    private Myvariable variable; //указатель на переменную
+    private Variable variable; //указатель на переменную
     private DSystem system; //указатель на систему в которой столбец
     
     @Override
@@ -29,12 +29,12 @@ public class Column extends Activable{
 
     }
 
-    public void setVariable(Myvariable variable) {
+    public void setVariable(Variable variable) {
         this.variable = variable;
     }
 
 
-    public Myvariable getVariable() {
+    public Variable getVariable() {
         return variable;
     }
 
@@ -62,7 +62,7 @@ public class Column extends Activable{
         return count;
     }
 
-    public List<Myvalue> getLocaldomain() {
+    public List<Value> getLocaldomain() {
         return localdomain;
     }
 
@@ -76,12 +76,12 @@ public class Column extends Activable{
         nodes=new ArrayList<>();
     }
 
-    public Column(List<Myvalue> dom){
+    public Column(List<Value> dom){
         nodes=new ArrayList<>();
         localdomain = dom;
     }
     
-    public void addValue(Myvalue val){
+    public void addValue(Value val){
         localdomain.add(val);
     }
     
@@ -110,7 +110,7 @@ public class Column extends Activable{
         return reti;
     }
     
-    public Myvalue getValue(int code){ //значение по коду code
+    public Value getValue(int code){ //значение по коду code
         for(int i=0; i<localdomain.size(); i++)
             if(localdomain.get(i).getValue().getCode()==code) return localdomain.get(i);
         return null;
@@ -125,29 +125,29 @@ public class Column extends Activable{
         return ret;
     }
     
-    public List<Myvalue> getdomainwithout(List<CodedValue> codedvalue){
-        List<Myvalue> ret = new ArrayList<>();
+    public List<Value> getdomainwithout(List<CodedValue> codedvalue){
+        List<Value> ret = new ArrayList<>();
         for(int i=0; i<localdomain.size(); i++){
-            Myvalue chk = localdomain.get(i);
+            Value chk = localdomain.get(i);
             if(!codedvalue.contains(chk.getValue())) ret.add(chk);}
         return ret;
     }
-    public List<Myvalue> getdomainwithout(CodedValue codedvalue){
-        List<Myvalue> ret = new ArrayList<>();
+    public List<Value> getdomainwithout(CodedValue codedvalue){
+        List<Value> ret = new ArrayList<>();
         for(int i=0; i<localdomain.size(); i++){
-            Myvalue chk = localdomain.get(i);
+            Value chk = localdomain.get(i);
             if(codedvalue!=chk.getValue()) ret.add(chk);}
         return ret;
     }
 
-    public List<Myvalue> getActivedomain(){
-        List<Myvalue> ret = new ArrayList<>();
+    public List<Value> getActivedomain(){
+        List<Value> ret = new ArrayList<>();
         for(int i=0; i<localdomain.size(); i++){
-            Myvalue val=localdomain.get(i);
+            Value val=localdomain.get(i);
             if(val.isActive()) ret.add(val);}
         return ret;
     }
-    public boolean hasinNodes(Myvalue val){
+    public boolean hasinNodes(Value val){
         for (int i=0; i<nodes.size();i++){
             Node tmpnode=nodes.get(i);
             if(tmpnode.isActive()){

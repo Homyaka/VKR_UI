@@ -5,24 +5,18 @@
  */
 package Mysystem;
 
-import com.beust.jcommander.internal.Maps;
-import com.sun.jdi.Value;
-
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author User
- */
+
 public class SolvedVariable {
-    Mysystem.Myvariable variable;
-    List<Mysystem.CodedValue> values;
+    Variable variable;
+    List<CodedValue> values;
     
-    public SolvedVariable(Mysystem.Myvariable vr){
+    public SolvedVariable(Variable vr){
         values = new ArrayList<>();
         variable = vr;
-        List<Myvalue> dom=vr.getDomain();
+        List<Value> dom=vr.getDomain();
         for(int i=0; i<dom.size();i++)
             if(dom.get(i).isActive())
                 values.add(dom.get(i).getValue());

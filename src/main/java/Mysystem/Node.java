@@ -15,7 +15,7 @@ import java.util.List;
 public class Node extends Activable{
     private Column column; //колонка
     private Line line; //строка
-    private List<Myvalue> values; //значения в ячейке
+    private List<Value> values; //значения в ячейке
     @Override
     void onActivate(){
     }
@@ -30,7 +30,7 @@ public class Node extends Activable{
         return line;
     }
 
-    public List<Myvalue> getValues() {
+    public List<Value> getValues() {
         return values;
     }
 
@@ -45,11 +45,11 @@ public class Node extends Activable{
         values = new ArrayList<>();
     }
 
-    public Node(List<Myvalue> vals){
+    public Node(List<Value> vals){
         values = vals;
     }
     
-    public void addval(Myvalue val){
+    public void addval(Value val){
         values.add(val);
     }
 

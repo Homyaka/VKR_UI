@@ -1,0 +1,35 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Mysystem;
+
+/**
+ *
+ * @author User
+ */
+public class Value extends Activable{
+    private CodedValue value;
+    //private String value;
+    private Variable variable;
+    
+    @Override
+    void onActivate(){
+    }
+
+    public void setVariable(Variable var) {
+        this.variable = var;
+    }
+
+    public CodedValue getValue() {
+        return value;
+    }
+
+    public Variable getVar() {
+        return variable;
+    }
+    public Value(CodedValue cv){
+        value=cv;
+    }
+}

@@ -53,17 +53,24 @@ public class Constraintchoco {
     return problem;
     }
 
-
     private static void spill(){
         Spill sp = new Spill();
         sp.prepare();
         sp.solve(0);
     }
-    
+
+    public String findInDSystem(String filePath,int minSup) throws  IOException,ContradictionException{
+        Problem nq = new Problem("test",minSup);
+        nq.addsys("test",loadsys(filePath));
+        nq.solvemany(true);
+        System.out.println(nq.showsolutions(false,false));
+        return nq.showsolutions(false,false);
+    }
+
     public static void main(String[] args) throws IOException, ContradictionException {
-        Problem problem = new Problem("test",2);
+        /*Problem problem = new Problem("test",2);
         String dir="c:\\Users\\polin\\IdeaProjects\\VKR\\src\\dataFile\\";
-        problem.addsys("test",loadsys(dir+"test1.txt"));
+        problem.addsys("test",loadsys(dir+"test1.txt"));*/
         /*String dir = "e:\\systems\\10\\";
         qq.addsys("XY",loadsys(dir+"XY.txt"), true);
         qq.addsys("YZ",loadsys(dir+"YZ.txt"), true);
@@ -76,8 +83,8 @@ public class Constraintchoco {
         */
         //nq.buildqueen(12);
         //qq.solvemanymin(true);
-        problem.solvemany(true);
-        System.out.println(problem.showsolutions(false,false));
+       /* problem.solvemany(true);
+        System.out.println(problem.showsolutions(false,false));*/
         //Autoshop tst=new Autoshop();
         //tst.solve(false,2);
         //0-пессимистичный
@@ -85,7 +92,6 @@ public class Constraintchoco {
         //2-общий
         //bench(29);
          //spill();
-
     }
 }
 /*4	2	

@@ -261,7 +261,9 @@ public class Problem {
     }
     
         public String showsolutions(boolean justcount,boolean withdec){
-        String ret="";
+            if (solutions.size()==0) return "Решений не найдено"+"\n"+"или содержимое файла" + "\n"+"некорректно!";
+            String ret="Найдено "+ solutions.size()+" решений: \n";
+            //String ret="Найдено "+ solutions.size()+" решений: \n";
         if(!justcount){
             for(int i=0; i<solutions.size();i++){
                 ret+=solutions.get(i).solutiontoString(false);
@@ -270,7 +272,7 @@ public class Problem {
             }
             if (ret.length()==0)ret="no solutions";
         }
-        ret+="\nTotal solutions:"+solutions.size();
+       // ret+="\nTotal solutions:"+solutions.size();
         return ret;
     }
 }

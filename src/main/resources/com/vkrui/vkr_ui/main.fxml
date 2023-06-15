@@ -37,13 +37,8 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ScrollPane fx:id="paneSolutions" layoutX="25.0" layoutY="165.0" prefHeight="486.0" prefWidth="394.0" style="-fx-background-color: #DCDCDC;">
+                  <ScrollPane fx:id="paneSolutions" layoutX="25.0" layoutY="165.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="500.0" prefWidth="400.0" style="-fx-background-color: #DCDCDC;">
                      <content>
-                        <Label fx:id="textSolutions" prefHeight="485.0" prefWidth="378.0" style="-fx-background-color: #FAEBD7;">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
                      </content>
                   </ScrollPane>
                   <Label fx:id="labelFileName" layoutX="103.0" layoutY="31.0">

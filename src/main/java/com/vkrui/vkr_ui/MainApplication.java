@@ -3,10 +3,8 @@ package com.vkrui.vkr_ui;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 
 public class MainApplication extends Application {
@@ -17,8 +15,6 @@ public class MainApplication extends Application {
         stage.setTitle("Application");
         stage.setScene(scene);
         stage.show();
-        FileChooser fileChooser=new FileChooser();
-
     }
 
     public static void main(String[] args) {

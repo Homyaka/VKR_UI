@@ -16,31 +16,31 @@
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #FFEFD5;">
                <children>
-                  <TextField fx:id="tfFrequency" layoutX="25.0" layoutY="111.0" prefHeight="25.0" prefWidth="254.0" promptText="Введите частоту встречаемости θ ">
+                  <TextField fx:id="tfFrequency" layoutX="25.0" layoutY="102.0" prefHeight="25.0" prefWidth="254.0" promptText="Введите частоту встречаемости θ ">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </TextField>
-                  <Button fx:id="DbtnStart" layoutX="287.0" layoutY="111.0" mnemonicParsing="false" style="-fx-background-color: #FFDAB9;" text="Начать" textFill="DIMGRAY">
+                  <Button fx:id="DbtnStart" layoutX="25.0" layoutY="162.0" mnemonicParsing="false" style="-fx-background-color: #FFDAB9;" text="Найти паттерны" textFill="DIMGRAY">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Label fx:id="DlabelSelect" layoutX="25.0" layoutY="31.0" text="Файл не выбран">
+                  <Label fx:id="DlabelSelect" layoutX="25.0" layoutY="18.0" text="Файл не выбран">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ScrollPane fx:id="paneSolutions" layoutX="25.0" layoutY="165.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="500.0" prefWidth="400.0" style="-fx-background-color: #DCDCDC;">
+                  <ScrollPane fx:id="paneSolutions" layoutX="25.0" layoutY="206.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="554.0" prefWidth="400.0" style="-fx-background-color: #DCDCDC;">
                      <content>
                      </content>
                   </ScrollPane>
-                  <Label fx:id="DlabelFileName" layoutX="103.0" layoutY="31.0">
+                  <Label fx:id="DlabelFileName" layoutX="124.0" layoutY="18.0">
                      <font>
                         <Font name="System Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="DbtnSelectFile" layoutX="25.0" layoutY="70.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="78.0" style="-fx-background-color: #FFDAB9;" text="Выбрать" textFill="DIMGRAY">
+                  <Button fx:id="DbtnSelectFile" layoutX="25.0" layoutY="58.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="146.0" style="-fx-background-color: #FFDAB9;" text="Выбрать файл" textFill="DIMGRAY">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -52,33 +52,69 @@
       <content>
         <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #FFEFD5;">
                <children>
-                  <Label fx:id="OAselectFile" layoutX="22.0" layoutY="28.0" text="Файл не выбран">
+                  <Label fx:id="OAselectFile" layoutX="22.0" layoutY="27.0" text="Файл не выбран">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="OAbtnSelectFile" layoutX="175.0" layoutY="28.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="78.0" style="-fx-background-color: #FFDAB9;" text="Выбрать" textFill="DIMGRAY">
+                  <Button fx:id="OAbtnSelectFile" layoutX="22.0" layoutY="69.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="114.0" style="-fx-background-color: #FFDAB9;" text="Выбрать файл" textFill="DIMGRAY">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="OAbtnBuildDTable" layoutX="214.0" layoutY="85.0" mnemonicParsing="false" style="-fx-background-color: #FFDAB9;" text="Перевести в D-таблицу" textFill="DIMGRAY">
+                  <Button fx:id="OAbtnBuildDTable" layoutX="219.0" layoutY="119.0" mnemonicParsing="false" style="-fx-background-color: #FFDAB9;" text="Перевести в D-таблицу" textFill="DIMGRAY">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="OAbtnLookTable" layoutX="22.0" layoutY="85.0" mnemonicParsing="false" style="-fx-background-color: #FFDAB9;" text="Посмотреть ОП таблицу" textFill="DIMGRAY">
+                  <Button fx:id="OAbtnLookTable" layoutX="22.0" layoutY="119.0" mnemonicParsing="false" style="-fx-background-color: #FFDAB9;" text="Посмотреть ОП таблицу" textFill="DIMGRAY">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Pane fx:id="OApane" layoutX="22.0" layoutY="134.0" style="-fx-background-color: #F0FFFF;" />
+                  <Pane fx:id="OApane" layoutX="22.0" layoutY="192.0" style="-fx-background-color: #F0FFFF;" />
+                  <Label fx:id="OAFileName" layoutX="144.0" layoutY="27.0">
+                     <font>
+                        <Font name="System Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="OAlabelCreateDFile" layoutX="28.0" layoutY="184.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                </children></AnchorPane>
       </content>
     </Tab>
       <Tab text="Файл с данными">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #FFEFD5;" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #FFEFD5;">
+               <children>
+                  <Button fx:id="btnSelectDataFile" layoutX="24.0" layoutY="75.0" mnemonicParsing="false" style="-fx-background-color: #FFDAB9;" text="Выбрать файл" textFill="DIMGRAY">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Label fx:id="FileselectFile" layoutX="24.0" layoutY="30.0" text="Файл не выбран">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="fileNameData" layoutX="159.0" layoutY="30.0">
+                     <font>
+                        <Font name="System Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btnConvertToOA" layoutX="24.0" layoutY="138.0" mnemonicParsing="false" style="-fx-background-color: #FFDAB9;" text="Перевести в объектно-признаковую таблицу" textFill="DIMGRAY">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Label fx:id="labelBuildOAResult" layoutX="24.0" layoutY="199.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
+               </children></AnchorPane>
         </content>
       </Tab>
       <Tab text="Справка">

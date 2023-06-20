@@ -83,6 +83,11 @@ public class MainController {
 
     @FXML
     private Label selectDataFile;
+    @FXML
+    private Button btnCodedAtt;
+    @FXML
+    private Label labelCodedAtt;
+
 
     @FXML
     private TextField tfFrequency;
@@ -101,6 +106,7 @@ public class MainController {
         fileWriter.close();
         if (type.equals("DTable")) OAlabelCreateDFile.setText("Создан файл: "+outfile.getPath());
         if (type.equals("OATable")) labelBuildOAResult.setText("Cоздан файл: "+ outfile.getPath());
+        if (type.equals("CodedAtt")) labelCodedAtt.setText("Cоздан файл: "+ outfile.getPath());
 
     }
     public void selectFile(Label labelSelect,Label fileName) throws IOException {
@@ -168,12 +174,22 @@ public class MainController {
         btnConvertToOA.setOnAction(event -> {
             dataWorker= new DataWorker();
             try {
-                List<String> data=dataWorker.txtParse(selectFile.getPath());
+                data=dataWorker.txtParse(selectFile.getPath());
                 dataWorker.codedAttribute(data);
                 List<String> OAtable=dataWorker.convertToOATable(data,dataWorker.attributeSet);
                 writter(OAtable,"OATable");
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            }
+        });
+        btnCodedAtt.setOnAction(event -> {
+            if(selectFile.isFile()) {
+                dataWorker.codedAttribute(data);
+                try {
+                    writter(dataWorker.attributeSet, "CodedAtt");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }

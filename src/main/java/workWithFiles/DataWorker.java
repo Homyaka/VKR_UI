@@ -10,6 +10,8 @@ public class DataWorker {
 
     public Boolean[][] matrix;
     public List<String> attributeSet;
+    public HashMap<Integer,Integer> weightDictionary;
+
     public void generatematrix(List<String> data){
         LinkedHashSet<String> set= new LinkedHashSet<>();
         String firstLine=data.get(0);
@@ -27,7 +29,16 @@ public class DataWorker {
             }
         }
     }
-
+    public void generateWeightDictionary(List<String> data){
+        HashMap<Integer,Integer> map= new HashMap<>();
+        for(int i=0;i<data.size();i++){
+            if (!map.containsKey(i)) {
+                String[] line=data.get(i).split("\t");
+              map.put(i,Integer.parseInt(line[line.length-1]));
+            }
+        }
+        weightDictionary=new HashMap<>(map);
+    }
     public List<String> txtParse(String path) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(path), Charset.forName("windows-1251"));
         for (String s:lines) {

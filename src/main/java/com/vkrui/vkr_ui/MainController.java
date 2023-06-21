@@ -99,15 +99,17 @@ public class MainController {
     public void writter(List<String> data,String type) throws IOException {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM_dd_HH_mm");
         LocalDateTime now = LocalDateTime.now();
-        File outfile=new File("D:\\"+type+"_"+dtf.format(now)+".txt");
-        FileWriter fileWriter= new FileWriter(outfile);
+        File outfile = new File("D:\\" + type + "_" + dtf.format(now) + ".txt");
+        FileWriter fileWriter = new FileWriter(outfile);
         fileWriter.write(data.get(0));
-        for (int i=1;i<data.size();i++) fileWriter.write("\n"+data.get(i));
+        for (int i = 1; i < data.size(); i++) {
+            fileWriter.write(" "+i+"\n" + data.get(i));
+        }
+        if (type.equals("CodedAtt")) fileWriter.write(data.size());
         fileWriter.close();
         if (type.equals("DTable")) OAlabelCreateDFile.setText("Создан файл: "+outfile.getPath());
         if (type.equals("OATable")) labelBuildOAResult.setText("Cоздан файл: "+ outfile.getPath());
         if (type.equals("CodedAtt")) labelCodedAtt.setText("Cоздан файл: "+ outfile.getPath());
-
     }
     public void selectFile(Label labelSelect,Label fileName) throws IOException {
         Stage stage=new Stage();

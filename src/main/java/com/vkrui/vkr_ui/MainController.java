@@ -103,7 +103,8 @@ public class MainController {
         FileWriter fileWriter = new FileWriter(outfile);
         fileWriter.write(data.get(0));
         for (int i = 1; i < data.size(); i++) {
-            fileWriter.write(" "+i+"\n" + data.get(i));
+            if (type.equals("CodedAtt")) fileWriter.write(" -m"+i);
+            fileWriter.write("\n" + data.get(i));
         }
         if (type.equals("CodedAtt")) fileWriter.write(data.size());
         fileWriter.close();

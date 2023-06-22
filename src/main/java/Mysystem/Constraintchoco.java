@@ -36,7 +36,6 @@ public class Constraintchoco {
             }
             problem.add(new ArrayList<>());
             problem.get(ii).add(tmp);
-            
             for (int i=1; i<lines.size();i++){
                 tmp = lines.get(i);
                 for(int j=0; j<ii; j++){

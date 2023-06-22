@@ -22,6 +22,8 @@ public class Problem {
         return minSup;
     }
 
+    public ArrayList<Integer> weights;
+
     public void setMinSup(int minSup) {
         this.minSup = minSup;
     }
@@ -71,6 +73,7 @@ public class Problem {
         }
         return ret;
     }*/
+
     
     private List<Value> buildColumndomain(Variable tmp, String doms){
         List<Value> domarr = new ArrayList<>();
@@ -103,6 +106,12 @@ public class Problem {
     
     private void buildsys(DSystem prblm, List <List<String>> problem){
         int domnum=problem.size();
+        String weight=problem.get(0).get(2);
+        weight=weight.substring(weight.indexOf('{')+1,weight.indexOf('}'));
+        System.out.println(weight);
+        String[] weightsArr=weight.split(";");
+        weights=new ArrayList<>();
+        for(int i=0;i<weightsArr.length;i++) weights.add(Integer.parseInt(weightsArr[i]));
         for (int i=0; i<domnum;i++){
             String name = problem.get(i).get(0);
             String temp = problem.get(i).get(1);
@@ -116,8 +125,8 @@ public class Problem {
             Column newvar = new Column(domarr);
             tmp.addColumn(newvar);
             prblm.addColumn(newvar);
-            for (int j=2; j<problem.get(0).size();j++){
-                if (prblm.getLines().size()<j-1) prblm.addLine(getLine());
+            for (int j=3; j<problem.get(0).size();j++){
+                if (prblm.getLines().size()<j-2) prblm.addLine(getLine());
                 List<Value> nodevals = new ArrayList<>();
                 String cons = problem.get(i).get(j);
                 temp = cons.substring(cons.indexOf("{")+1 , cons.indexOf("}"));
@@ -130,9 +139,11 @@ public class Problem {
                 if (indx!=-1) nodevals.add(newvar.getValue(indx));
                 Node newnode= new Node(nodevals);
                 newvar.addNode(newnode);
-                prblm.getLines().get(j-2).addNode(newnode);
+                prblm.getLines().get(j-3).addNode(newnode);
             }
         }
+        System.out.println(prblm.toString());
+        System.out.println(prblm.getLines().size()+"  "+prblm.getColumns().size());
     }
     
     public void buildqueen(int n){

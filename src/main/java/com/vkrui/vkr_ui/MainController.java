@@ -18,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainController {
@@ -26,11 +27,18 @@ public class MainController {
     List<String> data;
     File selectFile;
     Constraintchoco cc=new Constraintchoco();
+    ArrayList<Integer> weights;
 
     public DataWorker dataWorker;
 
     @FXML
     private Button DbtnSelectFile;
+
+    @FXML
+    private Button DbtnShowAttributes;
+
+    @FXML
+    private Button DbtnShowWeights;
 
     @FXML
     private Button DbtnStart;
@@ -42,13 +50,20 @@ public class MainController {
     private Label DlabelSelect;
 
     @FXML
+    private ScrollPane DpaneShowAttributes;
+
+    @FXML
+    private ScrollPane DpaneShowWeight;
+
+    @FXML
+    private Label FileselectFile;
+
+    @FXML
     private Label OAFileName;
 
     @FXML
     private Button OAbtnBuildDTable;
 
-    @FXML
-    private Label OAlabelCreateDFile;
     @FXML
     private Button OAbtnLookTable;
 
@@ -56,38 +71,46 @@ public class MainController {
     private Button OAbtnSelectFile;
 
     @FXML
+    private Button OAbtnShowAtt;
+
+    @FXML
+    private Button OAbtnShowWeights;
+
+    @FXML
+    private Label OAlabelCreateDFile;
+
+    @FXML
     private Pane OApane;
+
+    @FXML
+    private ScrollPane OApaneShowAtt;
+
+    @FXML
+    private ScrollPane OApaneShowWeights;
 
     @FXML
     private Label OAselectFile;
 
     @FXML
-    private Button btnDCheckFile;
-
-    @FXML
-    private Button btnSelectDataFile;
+    private Button btnCodedAtt;
 
     @FXML
     private Button btnConvertToOA;
+
+    @FXML
+    private Button btnSelectDataFile;
 
     @FXML
     private Label fileNameData;
 
     @FXML
     private Label labelBuildOAResult;
-    @FXML
-    private Label FileselectFile;
 
-    @FXML
-    private ScrollPane paneSolutions;
-
-    @FXML
-    private Label selectDataFile;
-    @FXML
-    private Button btnCodedAtt;
     @FXML
     private Label labelCodedAtt;
 
+    @FXML
+    private ScrollPane paneSolutions;
 
     @FXML
     private TextField tfFrequency;
@@ -102,9 +125,11 @@ public class MainController {
         File outfile = new File("D:\\" + type + "_" + dtf.format(now) + ".txt");
         FileWriter fileWriter = new FileWriter(outfile);
         fileWriter.write(data.get(0));
+        weights=new ArrayList<>(dataWorker.weight);
         for (int i = 1; i < data.size(); i++) {
             if (type.equals("CodedAtt")) fileWriter.write(" -m"+i);
-            fileWriter.write("\n" + data.get(i));
+           if(type.equals("OATable")) fileWriter.write("\n" + data.get(i)+"\t"+dataWorker.weight.get(i-1));
+           if(type.equals("DTable")) fileWriter.write("\n" + data.get(i));
         }
         if (type.equals("CodedAtt")) fileWriter.write(data.size());
         fileWriter.close();
@@ -117,10 +142,6 @@ public class MainController {
         FileChooser fileChooser=new FileChooser();
         selectFile=fileChooser.showOpenDialog(stage);
         System.out.println(selectFile.getPath());
-        /*DataWorker dataWorker = new DataWorker();
-        List<String> data= dataWorker.txtParse(selectFile.getPath());
-        dataWorker.codedAttribute(data);
-        writter(dataWorker.convertToOATable(data, dataWorker.attributeSet));*/
         if (selectFile.isFile()){
             fileName.setText(selectFile.getPath());
             labelSelect.setText("Выбран:");
@@ -131,10 +152,10 @@ public class MainController {
         DbtnSelectFile.setOnAction(event -> {
             try {
                 selectFile(DlabelSelect,DlabelFileName);
+                System.out.println(selectFile.getPath());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println(selectFile.getPath());
         });
         DbtnStart.setOnAction(event -> {
             try {

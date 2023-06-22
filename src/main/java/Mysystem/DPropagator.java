@@ -74,7 +74,7 @@ public class DPropagator extends Propagator<IntVar>{
             Line line = problem.getLines().get(i);
             if(line.isActive()){
                 int notempty =-1;
-                if(line.getNodes().get(0).getActive()<problem.getProblem().getMinSup()) notempty=1;
+                if(calcNodeWeight((line.getNodes().get(0).getActivevals()))<problem.getProblem().getMinSup()) notempty=1;
                 if(line.getNodes().get(1).getActive()==0) notempty=0;
                 if(notempty!=-1){
                     line.intVar.instantiateTo(notempty, this);
@@ -118,15 +118,24 @@ public class DPropagator extends Propagator<IntVar>{
             decisions.addDec(newmy);
         }
     }
+    public int calcNodeWeight(List<Value> values){
+        int sum=0;
+        for(Value v: values){
+            int ind=Integer.parseInt(v.getValue().getValue())-1;
+            sum+=problem.getProblem().weights.get(ind);
+        }
+        return sum;
+    }
+
     private boolean checkDomainOnLessSup(int support) throws ContradictionException{
         if(problem.getActiveColumnsCount()>0){
             Column column=problem.getColumns().get(0);
-                   if( column.getActivedomaincount() <support) {
-                       this.fails();
-                       return false;
-                   }
-                return true;
-                }
+            if(calcNodeWeight(column.getActivedomain())<support){
+                this.fails();
+                return false;
+            }
+            return true;
+        }
         return false;
     }
 

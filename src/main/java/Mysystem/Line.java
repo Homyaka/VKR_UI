@@ -88,40 +88,10 @@ public class Line extends Activable {
         //return ret+"active: "+active;
         return ret;
     }
-    
     public Node getnodefromcol(Column col){
         Node ret=null;
         for(int i=0; i<nodes.size(); i++)
             if(nodes.get(i).getColumn()==col)return nodes.get(i);
-        return ret;
-    }
-    
-    
-    public Line dominated(Line lin){ //для C-таблиц
-        Line ret=null;
-        int last=-1;
-        for(int i=0; i<nodes.size(); i++){
-            Node thisnode=nodes.get(i);
-            if(thisnode.isActive()){
-                int chk=thisnode.isdominatedby(lin.getnodefromcol(thisnode.getColumn()));
-                switch (chk){
-                    case 0:
-                        if (ret==null)ret=this;
-                        break;
-                    case 1:
-                        if (last<2)ret=lin;
-                        else return null;
-                        break;
-                    case 2:
-                        if (last!=1)ret=this;
-                        else return null;
-                        break;
-                    case 3:
-                        return null;
-                }
-                last=chk;
-            }
-        }
         return ret;
     }
 

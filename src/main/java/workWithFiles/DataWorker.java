@@ -10,7 +10,8 @@ public class DataWorker {
 
     public Boolean[][] matrix;
     public List<String> attributeSet;
-    public HashMap<Integer,Integer> weightDictionary;
+    public ArrayList<Integer> weight;
+    public List<String> data;
 
     public void generatematrix(List<String> data){
         LinkedHashSet<String> set= new LinkedHashSet<>();
@@ -29,18 +30,9 @@ public class DataWorker {
             }
         }
     }
-    public void generateWeightDictionary(List<String> data){
-        HashMap<Integer,Integer> map= new HashMap<>();
-        for(int i=0;i<data.size();i++){
-            if (!map.containsKey(i)) {
-                String[] line=data.get(i).split("\t");
-              map.put(i,Integer.parseInt(line[line.length-1]));
-            }
-        }
-        weightDictionary=new HashMap<>(map);
-    }
     public List<String> txtParse(String path) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(path), Charset.forName("windows-1251"));
+        data=new ArrayList<>(lines);
         for (String s:lines) {
             System.out.println(s);
         }
@@ -57,11 +49,11 @@ public class DataWorker {
         }
         attributeSet= new ArrayList<>(set);
     }
-
     public List<String> convertToOATable(List<String> data,List<String> attributes){//Преобразует данные в ОП таблицу
         List<String> OAtable= new ArrayList<>();
         String firstLine="#";
         matrix =new Boolean[data.size()-1][attributes.size()];
+        weight= new ArrayList<>();
         for(int i=1;i<=attributes.size();i++){
             firstLine+="\tm"+i;
         }
@@ -79,6 +71,7 @@ public class DataWorker {
                 }
             }
             OAtable.add(lineOATable);
+            weight.add(Integer.parseInt(data.get(i).substring(data.get(i).lastIndexOf('\t')+1)));
         }
         return OAtable;
     }
@@ -91,6 +84,7 @@ public class DataWorker {
         return line;
     }
     public List<String> convertToDTable(){
+        weight= new ArrayList<>();
         for (String s:attributeSet) System.out.print(s+" ");
         System.out.println("\n");
         for (int i=0;i<matrix.length;i++){
@@ -105,7 +99,11 @@ public class DataWorker {
         ArrayList<Integer> obj= new ArrayList<>();
         for (int m = 1; m< matrix.length+1; m++) obj.add(m);
         for (int n=1;n<attributeSet.size()+1;n++) att.add(n);
+        for (int q=1;q<data.size();q++) weight.add(Integer.parseInt(data.get(q).substring(data.get(q).lastIndexOf('\t')+1)));
         dtable.add(buildLine(obj,att));
+        ArrayList<Integer> empty=new ArrayList<>();
+        empty.add(-1);
+        dtable.add(buildLine(weight,empty));
         for(int j=0;j<attributeSet.size();j++){
             ArrayList<Integer>  x= new ArrayList<>();
             ArrayList<Integer> y= new ArrayList<>(att);

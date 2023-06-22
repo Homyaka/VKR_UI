@@ -8,10 +8,6 @@ package Mysystem;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author User
- */
 public class Node extends Activable{
     private Column column; //колонка
     private Line line; //строка
@@ -60,6 +56,7 @@ public class Node extends Activable{
     public void setLine(Line line) {
         this.line = line;
     }
+
     
     @Override
     public String toString(){
@@ -91,25 +88,12 @@ public class Node extends Activable{
         return ret;
     }
     
-    public List<Activable> getActivevals(){  // получить активные значения ячейки
-        List<Activable> ret = new ArrayList<>();
+    public List<Value> getActivevals(){  // получить активные значения ячейки
+        List<Value> ret = new ArrayList<>();
         for(int i=0; i<values.size(); i++)
             if(values.get(i).isActive())
                 ret.add(values.get(i));
         return ret;
-    }
-    public int isdominatedby (Node nd){ // для C-систем
-        int ret=3;
-        List<Activable>thisact=this.getActivevals();
-        List<Activable>ndact=nd.getActivevals();
-        if(thisact.containsAll(ndact))ret=1;
-        if(ndact.containsAll(thisact))ret--;
-        return ret;
-        /*0 - this equals nd
-        1 - this contains nd
-        2 - nd contains this
-        3 - nd and this not comparable
-        */
     }
 
 }

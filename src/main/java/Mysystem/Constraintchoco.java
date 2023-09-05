@@ -5,8 +5,6 @@
  */
 package Mysystem;
 
-import Mysystem.Problem;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -52,5 +50,12 @@ public class Constraintchoco {
         nq.solvemany(true);
         System.out.println(nq.showsolutions(false,false));
         return nq.showsolutions(false,false);
+    }
+    public List<Solution> findSolutions(String filePath, int minSup) throws IOException {
+        Problem nq = new Problem("test",minSup);
+        nq.addsys("test",loadsys(filePath));
+        nq.solvemany(true);
+        System.out.println(nq.getSolutions());
+        return nq.getSolutions();
     }
 }

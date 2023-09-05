@@ -1,16 +1,14 @@
 package com.vkrui.vkr_ui;
 
 import Mysystem.Constraintchoco;
+import Mysystem.Solution;
+import Mysystem.Value;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.chocosolver.solver.exception.ContradictionException;
 import workWithFiles.DataWorker;
 
 import java.io.File;
@@ -28,7 +26,6 @@ public class MainController {
     File selectFile;
     Constraintchoco cc=new Constraintchoco();
     ArrayList<Integer> weights;
-
     public DataWorker dataWorker;
 
     @FXML
@@ -92,6 +89,15 @@ public class MainController {
     private Label OAselectFile;
 
     @FXML
+    private TextField tf_OneAtt;
+
+    @FXML
+    private Button btn_ContainAtt;
+
+    @FXML
+    private CheckBox cb_OneAtt;
+
+    @FXML
     private Button btnCodedAtt;
 
     @FXML
@@ -115,8 +121,15 @@ public class MainController {
     @FXML
     private TextField tfFrequency;
 
+    private List<Solution> solutions;
 
-
+    public String solutionsToStr(List<Solution> solutions){
+        String res ="Найдено "+solutions.size()+" решений"+'\n';
+        for(Solution sol: solutions)
+            res+=sol.solutiontoString(false)+'\n';
+        System.out.println(res);
+        return res;
+    }
     public  Font font= new Font("Times New Roman", 24);
 
     public void writter(List<String> data,String type) throws IOException {
@@ -162,12 +175,13 @@ public class MainController {
                 if (selectFile.isFile()|| !tfFrequency.getText().isEmpty()) {
                     textSolutions=new Label();
                     textSolutions.setFont(font);
-                    textSolutions.setText(cc.findInDSystem(selectFile.getPath(), Integer.parseInt(tfFrequency.getText())));
+                    solutions=cc.findSolutions(selectFile.getPath(),Integer.parseInt(tfFrequency.getText()));
+                    textSolutions.setText(solutionsToStr(solutions));
                     paneSolutions.setContent(textSolutions);
                     paneSolutions.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
                     paneSolutions.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
                 }
-            } catch (IOException | ContradictionException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -213,6 +227,14 @@ public class MainController {
                     writter(dataWorker.attributeSet, "CodedAtt");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
+                }
+            }
+        });
+        btn_ContainAtt.setOnAction(event-> {
+            if (!tf_OneAtt.getText().isEmpty()){
+                String att=tf_OneAtt.getText();
+                for(Solution solution: solutions){
+                    if (solution.getSolution().get(1)==)
                 }
             }
         });

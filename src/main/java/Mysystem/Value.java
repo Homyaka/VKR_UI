@@ -11,7 +11,7 @@ package Mysystem;
  */
 public class Value extends Activable{
     private CodedValue value;
-    //private String value;
+    //private int value;
     private Variable variable;
     
     @Override
@@ -25,7 +25,6 @@ public class Value extends Activable{
     public CodedValue getValue() {
         return value;
     }
-
     public Variable getVar() {
         return variable;
     }

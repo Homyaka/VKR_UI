@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class DataWorker {
-
     public Boolean[][] matrix;
     public List<String> attributeSet;
     public ArrayList<Integer> weight;

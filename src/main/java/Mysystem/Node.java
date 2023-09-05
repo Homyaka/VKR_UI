@@ -64,7 +64,7 @@ public class Node extends Activable{
         if(this.isActive(true)){
             ret="{";
             for(int i =0; i<values.size(); i++)
-                if(values.get(i).isActive())ret+=values.get(i).getValue().getValue()+";";
+                if(values.get(i).isActive())ret+=values.get(i).getValue()+";";
             ret+="}";}
         //ret+="active: "+active;
         return ret;
@@ -73,7 +73,7 @@ public class Node extends Activable{
     public int[] toIntarr(){
         List<Integer> ret = new ArrayList<>();
         for(int i =0; i<values.size(); i++)
-            if(values.get(i).isActive())ret.add(values.get(i).getValue().getCode());
+            if(values.get(i).isActive())ret.add(values.get(i).getValue());
         int[] reti = new int[ret.size()];
         for (int i=0; i<ret.size(); i++)
             reti[i]=ret.get(i);

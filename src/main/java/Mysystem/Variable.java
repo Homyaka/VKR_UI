@@ -71,12 +71,12 @@ public class Variable {
         val.setVariable(this);
     }
 
-    private Value getValue(CodedValue val){
+    private Value getValue(int val){
         for(int i=0; i<domain.size(); i++)
             if(domain.get(i).getValue()==val)return domain.get(i);
         return null;
     }
-    public Value checkValue(CodedValue val){
+    public Value checkValue(int val){
         Value ret = getValue(val);
         if(ret==null) {
             ret=new Value(val);
@@ -87,7 +87,7 @@ public class Variable {
     public int[] toIntarr(){
         List<Integer> ret = new ArrayList<>();
         for(int i =0; i<domain.size(); i++)
-            if(domain.get(i).isActive())ret.add(domain.get(i).getValue().getCode());
+            if(domain.get(i).isActive())ret.add(domain.get(i).getValue());
         int[] reti = new int[ret.size()];
         for (int i=0; i<ret.size(); i++)
             reti[i]=ret.get(i);
@@ -110,7 +110,8 @@ public class Variable {
     public String toString(){
         String ret = name+" = {";
         for(int i=0; i<domain.size();i++)
-            if(domain.get(i).isActive())ret+=domain.get(i).getValue().getValue()+";";
+            //if(domain.get(i).isActive())ret+=domain.get(i).getValue().getValue()+";";
+            if(domain.get(i).isActive())ret+=domain.get(i).getValue()+";";
         ret=ret.substring(0, ret.length()-1)+"}";
         return ret;
     }

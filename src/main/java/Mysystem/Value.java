@@ -10,8 +10,8 @@ package Mysystem;
  * @author User
  */
 public class Value extends Activable{
-    private CodedValue value;
-    //private int value;
+    private int value;
+    //private String value;
     private Variable variable;
     
     @Override
@@ -22,13 +22,14 @@ public class Value extends Activable{
         this.variable = var;
     }
 
-    public CodedValue getValue() {
+    public int getValue() {
         return value;
     }
+
     public Variable getVar() {
         return variable;
     }
-    public Value(CodedValue cv){
+    public Value(int cv){
         value=cv;
     }
 }

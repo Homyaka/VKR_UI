@@ -2,6 +2,7 @@ package com.vkrui.vkr_ui;
 
 import Mysystem.Constraintchoco;
 import Mysystem.Solution;
+import Mysystem.SolvedVariable;
 import Mysystem.Value;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -232,10 +233,16 @@ public class MainController {
         });
         btn_ContainAtt.setOnAction(event-> {
             if (!tf_OneAtt.getText().isEmpty()){
-                String att=tf_OneAtt.getText();
+                int att=Integer.parseInt(tf_OneAtt.getText());
+                List<Solution> solutionsContainsAtt= new ArrayList<>();
                 for(Solution solution: solutions){
-                    if (solution.getSolution().get(1)==)
+                    List<Integer> values=solution.getSolution().get(1).getValues();
+                    if (values.contains(att)) solutionsContainsAtt.add(solution);
                 }
+                textSolutions=new Label();
+                textSolutions.setFont(font);
+                textSolutions.setText(solutionsToStr(solutionsContainsAtt));
+                paneSolutions.setContent(textSolutions);
             }
         });
     }

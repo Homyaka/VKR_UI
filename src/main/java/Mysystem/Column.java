@@ -94,13 +94,13 @@ public class Column extends Activable{
     public String toString(){
         String ret=variable.getName()+":"+ "{";
         for(int i =0; i<localdomain.size(); i++)
-            if(localdomain.get(i).isActive())ret+=localdomain.get(i).getValue().getValue()+";"/*+"(nodes: "+domain.get(i).getNodes().size()+");"*/;
+            if(localdomain.get(i).isActive())ret+=localdomain.get(i).getValue()+";"/*+"(nodes: "+domain.get(i).getNodes().size()+");"*/;
     ret+="} "/*+chocovar.toString()*/;
     return ret;
         
     }
     
-    public int[] toIntarr(){
+   /* public int[] toIntarr(){
         List<Integer> ret = new ArrayList<>();
         for(int i =0; i<localdomain.size(); i++)
             if(localdomain.get(i).isActive())ret.add(localdomain.get(i).getValue().getCode());
@@ -108,11 +108,11 @@ public class Column extends Activable{
         for (int i=0; i<ret.size(); i++)
             reti[i]=ret.get(i);
         return reti;
-    }
+    }*/
     
     public Value getValue(int code){ //значение по коду code
         for(int i=0; i<localdomain.size(); i++)
-            if(localdomain.get(i).getValue().getCode()==code) return localdomain.get(i);
+            if(localdomain.get(i).getValue()==code) return localdomain.get(i);
         return null;
     }
     
@@ -125,20 +125,20 @@ public class Column extends Activable{
         return ret;
     }
     
-    public List<Value> getdomainwithout(List<CodedValue> codedvalue){
+   /* public List<Value> getdomainwithout(List<CodedValue> codedvalue){
         List<Value> ret = new ArrayList<>();
         for(int i=0; i<localdomain.size(); i++){
             Value chk = localdomain.get(i);
             if(!codedvalue.contains(chk.getValue())) ret.add(chk);}
         return ret;
-    }
-    public List<Value> getdomainwithout(CodedValue codedvalue){
+    }*/
+   /*public List<Value> getdomainwithout(CodedValue codedvalue){
         List<Value> ret = new ArrayList<>();
         for(int i=0; i<localdomain.size(); i++){
             Value chk = localdomain.get(i);
             if(codedvalue!=chk.getValue()) ret.add(chk);}
         return ret;
-    }
+    }*/
 
     public List<Value> getActivedomain(){
         List<Value> ret = new ArrayList<>();

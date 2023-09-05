@@ -10,8 +10,8 @@ import java.util.List;
 
 
 public class SolvedVariable {
-    Variable variable;
-    List<CodedValue> values;
+    private Variable variable;
+    private List<Integer> values;
     
     public SolvedVariable(Variable vr){
         values = new ArrayList<>();
@@ -26,12 +26,29 @@ public class SolvedVariable {
             String ret="";
             ret=ret+variable.getName()+"={";
             for(int i=0; i<values.size(); i++){
-                ret+=values.get(i).getValue();
-                if(withcodes) ret+="("+values.get(i).getCode()+")";
+               /* ret+=values.get(i).getValue();
+                if(withcodes) ret+="("+values.get(i).getCode()+")";*/
+                ret+=values.get(i);
+                if(withcodes) ret+="("+values.get(i)+")";
                 if(i!=values.size()-1)ret+=",";
             }
             ret+="}\n";
             return ret;
     }
 
+    public Variable getVariable() {
+        return variable;
+    }
+
+    public void setVariable(Variable variable) {
+        this.variable = variable;
+    }
+
+    public List<Integer> getValues() {
+        return values;
+    }
+
+    public void setValues(List<Integer> values) {
+        this.values = values;
+    }
 }

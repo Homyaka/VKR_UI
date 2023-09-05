@@ -2,6 +2,7 @@ package Mysystem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
@@ -14,7 +15,7 @@ import org.chocosolver.solver.variables.IntVar;
 public class Problem {
     private final Model model;
     private final List<Variable> vars;
-    private final Valuevocab domvals;
+    private final HashSet<Integer> domvals;
     private List<DSystem> problems;
     private int minSup;
     public HashMap<IntVar,Line> mapIntVarLine;
@@ -64,41 +65,32 @@ public class Problem {
             if(vars.get(i).getName().compareTo(name)==0) return vars.get(i);
         return null;
     }
-    
-    /*public List<Mysystem> getactiveproblems(){
-        List<Mysystem> ret = new ArrayList<>();
-        for(int i=0; i<problems.size(); i++){
-            Mysystem tmp= problems.get(i);
-            if(tmp.isActive()&&(tmp.getActivecolumnscount()*tmp.getActivelinescount()!=0))ret.add(tmp);
-        }
-        return ret;
-    }*/
 
-    
     private List<Value> buildColumndomain(Variable tmp, String doms){
         List<Value> domarr = new ArrayList<>();
         Value tmpval = null;
         while (doms.contains(";")){
-            int dind = domvals.getIndex(doms.substring(0, doms.indexOf(";")));
-            if (dind ==-1){
-                tmpval = new Value(domvals.addValue(doms.substring(0, doms.indexOf(";"))));
+            int dind =Integer.parseInt(doms.substring(0, doms.indexOf(";")));
+            if (!domvals.contains(dind)){
+                domvals.add(dind);
+                tmpval = new Value(dind);
                 if(tmp!=null)tmp.addValue(tmpval);
             }
             else{
-                if(tmp!=null) tmpval = tmp.checkValue(domvals.getVocab().get(dind));
-                else tmpval = new Value(domvals.getVocab().get(dind));
+                if(tmp!=null) tmpval = tmp.checkValue(dind);
+                else tmpval = new Value(dind);
             }    
             domarr.add(tmpval);
             doms=doms.substring(doms.indexOf(";")+1);
         }
-        int dind = domvals.getIndex(doms);
-        if (dind ==-1){
-            tmpval = new Value(domvals.addValue(doms));
+        int dind = Integer.parseInt(doms);
+        if (!domvals.contains(dind)){
+            tmpval = new Value(dind);
             if(tmp!=null)tmp.addValue(tmpval);
         }
         else{
-            if(tmp!=null) tmpval = tmp.checkValue(domvals.getVocab().get(dind));
-            else tmpval = new Value(domvals.getVocab().get(dind));
+            if(tmp!=null) tmpval = tmp.checkValue(dind);
+            else tmpval = new Value(dind);
         }
         domarr.add(tmpval);
         return domarr;
@@ -131,12 +123,12 @@ public class Problem {
                 String cons = problem.get(i).get(j);
                 temp = cons.substring(cons.indexOf("{")+1 , cons.indexOf("}"));
                 while (temp.contains(";")){
-                    int indx =domvals.getCode(temp.substring(0, temp.indexOf(";"))); 
-                    if (indx!=-1) nodevals.add(newvar.getValue(indx));
+                    int indx =Integer.parseInt(temp.substring(0, temp.indexOf(";")));
+                    nodevals.add(newvar.getValue(indx));
                     temp=temp.substring(temp.indexOf(";")+1);
                 }
-                int indx = domvals.getCode(temp);
-                if (indx!=-1) nodevals.add(newvar.getValue(indx));
+                int indx = Integer.parseInt(temp);
+                nodevals.add(newvar.getValue(indx));
                 Node newnode= new Node(nodevals);
                 newvar.addNode(newnode);
                 prblm.getLines().get(j-3).addNode(newnode);
@@ -156,7 +148,7 @@ public class Problem {
         model = new Model(name);
         model.getSolver().limitTime(120000);
         vars = new ArrayList<>();
-        domvals = new Valuevocab();
+        domvals = new HashSet<>();
         problems = new ArrayList<>();
         prepared = false;
         decisions = new Decisions();
@@ -213,26 +205,6 @@ public class Problem {
             prepared=true;
             if(withtiming) java.lang.System.out.println("Preparation is done in "+(java.lang.System.currentTimeMillis()-time)+" ms");
         }
-    
-
-
-   /* public long solveone(boolean withtiming){
-        preparechoco(withtiming);
-        long time=System.currentTimeMillis();
-        Solver solver = model.getSolver();
-        String ret="";
-        MyDvarselector varsel=new MyDvarselector(problems.get(0));
-        MyDvalselector valsel=new MyDvalselector(decisions);
-        MyDecoperator decop = new MyDecoperator(decisions);
-        solver.setSearch((intVarSearch(varsel,valsel,decop,problems.get(0).getIntvars())));
-        solver.findAllSolutions(null);
-        if(withtiming)time=System.currentTimeMillis()-time;
-        return time;
-        
-    }*/
-    
-
-    //new
 
     public List<Variable> getActiveVars() {
         List<Variable> ret = new ArrayList<>();
@@ -240,9 +212,7 @@ public class Problem {
             if(vars.get(i).isActive())ret.add(vars.get(i));
         return ret;
     }
-    
-    
-    
+
     public long solvemany(boolean withtiming){
         preparechoco(withtiming);
         long time= java.lang.System.currentTimeMillis();

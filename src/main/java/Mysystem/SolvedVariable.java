@@ -21,6 +21,13 @@ public class SolvedVariable {
             if(dom.get(i).isActive())
                 values.add(dom.get(i).getValue());
     }
+
+    public int GetValuesNum(){
+        int num=0;
+        for(int i:this.values)
+            num++;
+        return num;
+    }
     
     public String toString(boolean withcodes){
             String ret="";

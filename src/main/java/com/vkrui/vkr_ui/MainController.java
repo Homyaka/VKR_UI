@@ -23,15 +23,21 @@ import java.util.List;
 public class MainController {
     @FXML
     private Label textSolutions;
+    List<Solution> solutionsContainsAtt;
+    List<Solution> solutionsNoOneAtt;
+    String fullSolutions;
+    String cutOneAttSolutions;
+    String cutContainAtt;
     List<String> data;
     File selectFile;
     Constraintchoco cc=new Constraintchoco();
+    boolean flagCutOneAtt=false;
+    boolean flagContainAtt=false;
     ArrayList<Integer> weights;
     public DataWorker dataWorker;
 
     @FXML
     private Button DbtnSelectFile;
-
     @FXML
     private Button DbtnShowAttributes;
 
@@ -108,6 +114,9 @@ public class MainController {
     private Button btnSelectDataFile;
 
     @FXML
+    private Button btn_OneAtt;
+
+    @FXML
     private Label fileNameData;
 
     @FXML
@@ -177,10 +186,13 @@ public class MainController {
                     textSolutions=new Label();
                     textSolutions.setFont(font);
                     solutions=cc.findSolutions(selectFile.getPath(),Integer.parseInt(tfFrequency.getText()));
+                    fullSolutions=solutionsToStr(solutions);
                     textSolutions.setText(solutionsToStr(solutions));
                     paneSolutions.setContent(textSolutions);
                     paneSolutions.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
                     paneSolutions.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+                    flagContainAtt=false;
+                    flagCutOneAtt=false;
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -234,16 +246,45 @@ public class MainController {
         btn_ContainAtt.setOnAction(event-> {
             if (!tf_OneAtt.getText().isEmpty()){
                 int att=Integer.parseInt(tf_OneAtt.getText());
-                List<Solution> solutionsContainsAtt= new ArrayList<>();
+                solutionsContainsAtt= new ArrayList<>();
                 for(Solution solution: solutions){
                     List<Integer> values=solution.getSolution().get(1).getValues();
                     if (values.contains(att)) solutionsContainsAtt.add(solution);
                 }
                 textSolutions=new Label();
                 textSolutions.setFont(font);
+                cutContainAtt=solutionsToStr(solutionsContainsAtt);
                 textSolutions.setText(solutionsToStr(solutionsContainsAtt));
                 paneSolutions.setContent(textSolutions);
+                flagContainAtt=true;
             }
         });
+        btn_OneAtt.setOnAction(event -> {
+            if (!flagCutOneAtt){
+                List<Solution> currentSolutions;
+                if(flagContainAtt) currentSolutions= solutionsContainsAtt;
+                else currentSolutions=solutions;
+                solutionsNoOneAtt=new ArrayList<>();
+                for(Solution solution: currentSolutions){
+                    SolvedVariable Y= solution.getSolution().get(1);
+                    if (Y.GetValuesNum()!=1) solutionsNoOneAtt.add(solution);
+                }
+                textSolutions.setText(solutionsToStr(solutionsNoOneAtt));
+                paneSolutions.setContent(textSolutions);
+                flagCutOneAtt=true;
+            }
+            else if (flagContainAtt){
+                textSolutions.setText(cutContainAtt);
+                paneSolutions.setContent(textSolutions);
+                flagCutOneAtt=false;
+            }
+            else {
+                textSolutions=new Label();
+                textSolutions.setText(fullSolutions);
+                paneSolutions.setContent(textSolutions);
+                flagCutOneAtt=false;
+            }
+            }
+        );
     }
 }

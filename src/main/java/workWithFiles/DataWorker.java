@@ -1,7 +1,9 @@
 package workWithFiles;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -30,7 +32,7 @@ public class DataWorker {
         }
     }
     public List<String> txtParse(String path) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(path), Charset.forName("windows-1251"));
+        List<String> lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
         data=new ArrayList<>(lines);
         for (String s:lines) {
             System.out.println(s);

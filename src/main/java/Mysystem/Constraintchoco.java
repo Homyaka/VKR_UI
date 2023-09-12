@@ -48,8 +48,13 @@ public class Constraintchoco {
         Problem nq = new Problem("test",minSup);
         nq.addsys("test",loadsys(filePath));
         nq.solvemany(true);
-        System.out.println(nq.showsolutions(false,false));
-        return nq.showsolutions(false,false);
+        nq.removeWastePattern();
+        System.out.println(nq.removeWastePattern());
+        String result="";
+        for(String str: nq.removeWastePattern()){
+            result+=str;
+        }
+        return result;
     }
     public List<Solution> findSolutions(String filePath, int minSup) throws IOException {
         Problem nq = new Problem("test",minSup);

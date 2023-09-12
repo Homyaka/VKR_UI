@@ -6,11 +6,13 @@
 package Mysystem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Solution {
     List<SolvedVariable> solution;
     List<String> decisions;
+    HashMap<SolvedVariable,SolvedVariable>  uniqueSolution;
 
     public List<SolvedVariable> getSolution() {
         return solution;
@@ -28,6 +30,9 @@ public class Solution {
         for(int i=0; i<dec.size(); i++)
             decisions.add(dec.get(i).getDescr());
     }
+    public Solution(List<SolvedVariable> variables){
+
+    }
     
     public String solutiontoString(boolean withcodes){
         String ret="";
@@ -42,5 +47,6 @@ public class Solution {
             ret+=decisions.get(i)+"\n";
         return ret;
     }
+
     
 }

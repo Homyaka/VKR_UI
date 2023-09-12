@@ -43,21 +43,15 @@ public class Variable {
         return name;
     }
 
-    /*public IntVar getChocovar() {
-        return chocovar;
-    }*/
-
     public Variable(String nam){
         name=nam;
         domain=new ArrayList<>();
         columns = new ArrayList<>();
     }
-
     public void addColumn(Column col){
         columns.add(col);
         col.setVariable(this);
     }
-    
     public Variable(String nam, List<Value> dom){
         name=nam;
         domain = dom;
@@ -65,12 +59,10 @@ public class Variable {
         for(int i=0; i<dom.size(); i++)
             domain.get(i).setVariable(this);
     }
-    
     public void addValue(Value val){
         domain.add(val);
         val.setVariable(this);
     }
-
     private Value getValue(int val){
         for(int i=0; i<domain.size(); i++)
             if(domain.get(i).getValue()==val)return domain.get(i);
@@ -94,10 +86,6 @@ public class Variable {
         return reti;
     }
 
-    
-    /*public void buildchoco(Model model){
-      //  chocovar = model.intVar(name, toIntarr());
-    }*/
     
     public int getActiveDomainSize(){
         int ret=0;

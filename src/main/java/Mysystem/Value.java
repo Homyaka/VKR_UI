@@ -11,9 +11,9 @@ package Mysystem;
  */
 public class Value extends Activable{
     private int value;
-    //private String value;
+
     private Variable variable;
-    
+
     @Override
     void onActivate(){
     }

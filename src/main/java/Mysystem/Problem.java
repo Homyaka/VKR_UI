@@ -1,9 +1,8 @@
 package Mysystem;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.security.Key;
+import java.util.*;
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.constraints.Constraint;
@@ -13,6 +12,8 @@ import static org.chocosolver.solver.search.strategy.Search.intVarSearch;
 import org.chocosolver.solver.variables.IntVar;
 
 public class Problem {
+    //public HashMap<SolvedVariable,SolvedVariable> uniqueSolution;
+    public HashMap<String,List<Integer>> uniqueSolution;
     private final Model model;
     private final List<Variable> vars;
     private final HashSet<Integer> domvals;
@@ -241,7 +242,7 @@ public class Problem {
         return time;
     }
     
-        public String showsolutions(boolean justcount,boolean withdec){
+    public String showsolutions(boolean justcount,boolean withdec){
             if (solutions.size()==0) return "Решений не найдено"+"\n"+"или содержимое файла" + "\n"+"некорректно!";
             String ret="Найдено "+ solutions.size()+" решений: \n";
             //String ret="Найдено "+ solutions.size()+" решений: \n";
@@ -255,5 +256,37 @@ public class Problem {
         }
        // ret+="\nTotal solutions:"+solutions.size();
         return ret;
+    }
+
+    public List<String> removeWastePattern(){
+        List<String> filterSolutions=new ArrayList<>();
+        if (solutions.size()==0) {
+            filterSolutions.add("Решений не найдено"+"\n"+"или содержимое файла" + "\n"+"некорректно!");
+            return  filterSolutions;
+        }
+        uniqueSolution=new HashMap<>();
+        for(Solution sol:solutions){
+           String Xkey=sol.solution.get(0).toString();
+           List<Integer> Yvalue=sol.solution.get(1).getValues();
+            if(!uniqueSolution.containsKey(Xkey)){
+                uniqueSolution.put(Xkey,Yvalue);
+            }
+            else{
+                List<Integer> oldYvalue=uniqueSolution.get(Xkey);
+                if(oldYvalue.size()<Yvalue.size()) uniqueSolution.replace(Xkey,Yvalue);
+            }
+        }
+        filterSolutions.add("Найдено "+uniqueSolution.size()+" решений: \n");
+        for (String key:uniqueSolution.keySet()) {
+            filterSolutions.add(key);
+            String temp="Y:{ ";
+            for(Integer i: uniqueSolution.get(key)){
+                temp+=i+",";
+            }
+            temp=temp.substring(0,temp.length()-1);
+            temp+="}"+'\n';
+            filterSolutions.add(temp);
+        }
+            return  filterSolutions;
     }
 }

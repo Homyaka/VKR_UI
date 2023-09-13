@@ -22,6 +22,10 @@ public class SolvedVariable {
                 values.add(dom.get(i).getValue());
     }
 
+    public SolvedVariable(List<Integer> vl){
+        values=vl;
+    }
+
     public int GetValuesNum(){
         int num=0;
         for(int i:this.values)

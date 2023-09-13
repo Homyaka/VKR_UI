@@ -48,5 +48,22 @@ public class Solution {
         return ret;
     }
 
+    public Solution stringToSolution(String stringSolution){
+        String[] line=stringSolution.split("\n");
+        String x=line[0];
+        String y=line[1];
+        x=x.substring(0,x.length()-1);
+        List<Integer> varX=new ArrayList<>();
+        List<Integer> varY=new ArrayList<>();
+        for(String s:x.split(",")) varX.add(Integer.parseInt(s));
+        for (String s:y.split(",")) varY.add(Integer.parseInt(s));
+        SolvedVariable svX=new SolvedVariable(varX);
+        SolvedVariable svY=new SolvedVariable(varY);
+        List<SolvedVariable> sol=new ArrayList<>();
+        sol.add(svX);
+        sol.add(svY);
+        return new Solution(sol);
+    }
+
     
 }

@@ -114,6 +114,8 @@ public class MainController {
 
     @FXML
     private Pane paneContainAtt;
+    @FXML
+    private Pane DpaneUseOAtable;
 
     @FXML
     private AnchorPane paneExtraConstr;
@@ -153,7 +155,8 @@ public class MainController {
         String res ="Найдено "+solutions.size()+" решений"+'\n';
         for(Solution sol: solutions)
             res+=sol.solutiontoString(false)+'\n';
-        System.out.println(res);
+        //System.out.println(res);
+        res+="Время поиска: "+cc.time+" ms";
         return res;
     }
     public  Font font= new Font("Times New Roman", 24);

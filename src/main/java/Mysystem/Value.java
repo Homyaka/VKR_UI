@@ -13,6 +13,8 @@ public class Value extends Activable{
     private int value;
     private Variable variable;
 
+    public boolean[] boolVector;
+
     @Override
     void onActivate(){
     }

@@ -1,6 +1,7 @@
 package Mysystem;
 
-import java.security.Key;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 import org.chocosolver.solver.Model;
@@ -10,6 +11,7 @@ import org.chocosolver.solver.exception.ContradictionException;
 import static org.chocosolver.solver.search.strategy.Search.intVarSearch;
 
 import org.chocosolver.solver.variables.IntVar;
+import workWithFiles.DataWorker;
 
 public class Problem {
     //public HashMap<SolvedVariable,SolvedVariable> uniqueSolution;
@@ -35,6 +37,7 @@ public class Problem {
     private boolean prepared;
     private final Decisions decisions;
     private final List<Solution> solutions;
+    public ArrayList<Boolean[]> listBoolVectors;
 
     public List<List<DSystem>> getOrderedsystems() {
         return orderedsystems;
@@ -54,6 +57,7 @@ public class Problem {
     public List<Solution> getSolutions() {
         return solutions;
     }
+
 
     private Line getLine(){
         IntVar intVar=model.intVar(0,1);
@@ -283,6 +287,82 @@ public class Problem {
 
     public List<Solution> removeByBooleanVector(){
         List<Solution> filterSolutions=new ArrayList<>();
+        for(Solution solution:solutions){
+            List<Integer> varX=solution.solution.get(0).getValues();
+            Boolean[] res=listBoolVectors.get(varX.get(0));
+            for(int i=1;i<varX.size();i++){
+                res=vectorMultiply(res,listBoolVectors.get(varX.get(i)));
+            }
+        }
         return filterSolutions;
+    }
+
+  /* public void getBoolVector(){
+        Variable X=vars.get(0);
+        List<Value> values=X.getDomain();
+        List<Line> lines=problems.get(0).getLines();
+        Node node;
+            for (Line line : lines) {
+                node = line.getNodes().get(0);
+                values=node.getValues();
+                List<Activable> Ynode=line.getNodes().get(1).getComplvals();
+            }
+    }*/
+
+    public void generateBoolVectorsList(List<String> text, File oatableFile) throws IOException {
+        if(oatableFile.isFile()){
+            DataWorker dw=new DataWorker();
+            dw.generatematrix(dw.txtParse(oatableFile.getPath()));
+            listBoolVectors=new ArrayList<>();
+            for(int n=0;n<dw.matrix.length;n++)
+                listBoolVectors.add(dw.matrix[n]);
+        }
+        else {
+            System.out.print("НЕ ТОТ ПУТЬ ФАЙЛА");
+            int yDomSize;
+            String l = text.get(1);
+            l = l.substring(1, l.length());
+            yDomSize = l.split(",").length;
+            List<Value> values = vars.get(0).getDomain();
+            for (int i = 3; i < text.size(); i++) {
+                String line = text.get(i);
+                String[] str = line.split(" ");
+                String node = str[0];
+                node = node.substring(1, node.length());
+                String y = str[0].substring(1, str.length);
+                int ind = getMissingNum(y, yDomSize);
+                for (String s : node.split(",")) {
+                    System.out.print(s+" ");
+                }
+                System.out.print('\n');
+            }
+        }
+    }
+    public int getMissingNum(String str,int size){
+        for(int i=1;i<=size;i++){
+            String i_= String.valueOf(i);
+            if(!str.contains(i_)) return i;
+        }
+        return -1;
+    }
+
+    public Boolean[] vectorMultiply(Boolean[] arr1,Boolean[] arr2){
+        Boolean[] res=new Boolean[arr1.length];
+        for (boolean b : arr1) System.out.print(b + " ");
+        System.out.print('\n');
+        for (boolean b : arr2) System.out.print(b + " ");
+        for(int i=0;i<arr1.length;i++)
+            res[i]=arr1[i]&arr2[i];
+        System.out.print('\n');
+        for (boolean re : res) System.out.print(re + " ");
+        System.out.print('\n');
+        System.out.print('\n');
+        return res;
+    }
+
+    public boolean checkVectors(Boolean[] arr1,Boolean[] arr2){
+        for(int i=0;i<arr1.length;i++)
+            if (arr1[i]!=arr2[i]) return false;
+        return true;
     }
 }

@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
@@ -17,11 +18,11 @@
          <content>
             <SplitPane dividerPositions="0.28396572827417377" prefHeight="160.0" prefWidth="200.0">
                <items>
-                  <SplitPane dividerPositions="0.16658004158004155" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                  <SplitPane dividerPositions="0.4388830347734457" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                     <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="206.0" prefWidth="396.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="124.0" prefWidth="368.0">
                            <children>
-                              <Button fx:id="DbtnSelectFile" layoutX="14.0" layoutY="57.0" mnemonicParsing="false" text="Выбрать файл">
+                              <Button fx:id="DbtnSelectFile" layoutX="14.0" layoutY="57.0" mnemonicParsing="false" text="Выбрать файлс  D-таблицей">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -36,6 +37,8 @@
                                     <Font name="System Italic" size="18.0" />
                                  </font>
                               </Label>
+                              <RadioButton layoutX="8.0" layoutY="105.0" mnemonicParsing="false" text="Использовать файл с ОП-таблицей" />
+                              <Pane fx:id="DpaneUseOAtable" layoutX="8.0" layoutY="130.0" prefHeight="101.0" prefWidth="318.0" />
                            </children></AnchorPane>
                         <ScrollPane fx:id="scrollpaneExtraConstr">
                            <content>

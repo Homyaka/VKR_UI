@@ -87,6 +87,13 @@ public class Node extends Activable{
                 ret.add(column.getLocaldomain().get(i));
         return ret;
     }
+    public List<Value> getAllVals(){
+        List<Value> res=new ArrayList<>();
+        for(int i = 0; i< column.getLocaldomain().size(); i++)
+            if(column.getLocaldomain().get(i).isActive()&&!values.contains(column.getLocaldomain().get(i)))
+                res.add(column.getLocaldomain().get(i));
+        return res;
+    }
     
     public List<Value> getActivevals(){  // получить активные значения ячейки
         List<Value> ret = new ArrayList<>();

@@ -1,9 +1,8 @@
 package com.vkrui.vkr_ui;
 
-import Mysystem.Constraintchoco;
-import Mysystem.Solution;
-import Mysystem.SolvedVariable;
-import Mysystem.Value;
+import Mysystem.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -22,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainController {
@@ -42,7 +42,8 @@ public class MainController {
     public DataWorker dataWorker=new DataWorker();
     public File OAFile=new File("");
     public File DFile=new File("");
-
+    @FXML
+    private RadioButton DRadButUseOAFile;
     @FXML
     private Button DbtnSelectFile;
     @FXML
@@ -71,6 +72,8 @@ public class MainController {
 
     @FXML
     private Label FileselectFile;
+    @FXML
+    private Label DlabelUseOAFile;
 
     @FXML
     private Label OAFileName;
@@ -141,7 +144,11 @@ public class MainController {
     @FXML
     private Button btn_OneAtt;
     @FXML
+    private Button DbntSelectWithOAFile;
+    @FXML
     private Label fileNameData;
+    @FXML
+    private Label DlabelOAFile;
 
     @FXML
     private Label labelBuildOAResult;
@@ -149,6 +156,8 @@ public class MainController {
     private Label DlabelAttributesFile;
     @FXML
     private Label labelCodedAtt;
+    @FXML
+    private CheckBox d_CheckBoxUseOAFile;
     private List<Solution> solutions;
 
     public String solutionsToStr(List<Solution> solutions){
@@ -199,14 +208,47 @@ public class MainController {
             labelSelect.setText("Выбран:");
         }
     }
+
+    public void test() throws IOException {
+        Problem problem=cc.problem;
+        problem.generateBoolVectorsList(Collections.singletonList("q"),OAFile);
+        String text=solutionsToStr(problem.removeByBooleanVector());
+        System.out.println(text);
+    }
     @FXML
     void initialize() {
         OAbtnShowDTable.setVisible(false);
+        DbntSelectWithOAFile.setVisible(false);
+        DlabelOAFile.setVisible(false);
+        DlabelUseOAFile.setVisible(false);
+        d_CheckBoxUseOAFile.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
+            if(!d_CheckBoxUseOAFile.isSelected()){
+                DbntSelectWithOAFile.setVisible(false);
+                DlabelOAFile.setVisible(false);
+                DlabelUseOAFile.setVisible(false);
+            }
+            else {
+                DbntSelectWithOAFile.setVisible(true);
+                DlabelOAFile.setVisible(true);
+                DlabelUseOAFile.setVisible(true);
+            }
+        });
         DbtnSelectFile.setOnAction(event -> {
             try {
                 selectFile(DlabelSelect, DlabelFileName);
-                System.out.println(selectFile.getPath());
+                DFile=selectFile;
+               // System.out.println(selectFile.getPath());
             } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        DbntSelectWithOAFile.setOnAction(event -> {
+            try {
+                selectFile(DlabelUseOAFile,DlabelOAFile);
+                OAFile=selectFile;
+                selectFile=new File(DlabelFileName.getText());
+            }
+            catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -223,6 +265,7 @@ public class MainController {
                     paneSolutions.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
                     flagContainAtt = false;
                     flagCutOneAtt = false;
+                    test();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

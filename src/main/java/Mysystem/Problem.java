@@ -160,6 +160,7 @@ public class Problem {
         decisions = new Decisions();
         solutions = new ArrayList<>();
         orderedsystems = new ArrayList<>();
+        listBoolVectors=new ArrayList<>();
     }
 
     public void addsys(String name,List <List<String>> sys){
@@ -286,18 +287,40 @@ public class Problem {
     }
 
     public List<Solution> removeByBooleanVector(){
+        int num=1;
         List<Solution> filterSolutions=new ArrayList<>();
         for(Solution solution:solutions){
             List<Integer> varX=solution.solution.get(0).getValues();
-            Boolean[] res=listBoolVectors.get(varX.get(0));
+            List<Integer> varY=solution.solution.get(1).getValues();
+            Boolean[] res=listBoolVectors.get(varX.get(0)-1);
+            Boolean[] solVector=getBoolVectorSolution(solution);
+            boolean flag=false;
             for(int i=1;i<varX.size();i++){
-                res=vectorMultiply(res,listBoolVectors.get(varX.get(i)));
+                res=vectorMultiply(res,listBoolVectors.get(varX.get(i)-1));
             }
+            System.out.println(num+" решение");
+            num++;
+            System.out.print(" X: ");
+            for(int i:varX) System.out.print(i+" ");
+            System.out.print("\n");
+            System.out.print("Y: ");
+            for (int i:varY) System.out.print(i+" ");
+            System.out.print("\n");
+            for(int i=0;i<res.length;i++) {
+                System.out.print(res[i]+" ");
+            }
+            System.out.print("\n");
+            for(int i=0;i<solVector.length;i++)
+                System.out.print(solVector[i]+" ");
+            System.out.print("\n"+"Результат:"+"\n");
+           if(checkVectors(res,solVector)) {
+               filterSolutions.add(solution);
+           }
         }
         return filterSolutions;
     }
 
-  /* public void getBoolVector(){
+   public void getBoolVector(){
         Variable X=vars.get(0);
         List<Value> values=X.getDomain();
         List<Line> lines=problems.get(0).getLines();
@@ -305,10 +328,16 @@ public class Problem {
             for (Line line : lines) {
                 node = line.getNodes().get(0);
                 values=node.getValues();
-                List<Activable> Ynode=line.getNodes().get(1).getComplvals();
+                List<Value> Ynode= line.getNodes().get(1).getAllVals();
             }
-    }*/
-
+    }
+    public void generateListBoolVector(){
+        Boolean[] vec=new Boolean[problems.get(0).getColumns().get(1).getActivedomaincount()];
+        Arrays.fill(vec, false);
+        for(int i=0;i<solutions.size();i++){
+            listBoolVectors.add(vec);
+        }
+    }
     public void generateBoolVectorsList(List<String> text, File oatableFile) throws IOException {
         if(oatableFile.isFile()){
             DataWorker dw=new DataWorker();
@@ -320,8 +349,7 @@ public class Problem {
         else {
             System.out.print("НЕ ТОТ ПУТЬ ФАЙЛА");
             int yDomSize;
-            String l = text.get(1);
-            l = l.substring(1, l.length());
+            String l = text.get(1).substring(1, text.get(1).length());
             yDomSize = l.split(",").length;
             List<Value> values = vars.get(0).getDomain();
             for (int i = 3; i < text.size(); i++) {
@@ -338,6 +366,20 @@ public class Problem {
             }
         }
     }
+    public Boolean[] getBoolVectorSolution(Solution sol){
+        Boolean[] res=new Boolean[listBoolVectors.get(0).length];
+        Arrays.fill(res,false);
+        List<Integer> varY=sol.solution.get(1).getValues();
+            for(int y:varY){
+                res[y-1]=true;
+            }
+            System.out.println('\n'+"SOLUTION");
+        for(int i=0;i<res.length;i++){
+            System.out.print(res[i]+" ");
+        }
+        System.out.println('\n');
+        return res;
+    }
     public int getMissingNum(String str,int size){
         for(int i=1;i<=size;i++){
             String i_= String.valueOf(i);
@@ -345,7 +387,6 @@ public class Problem {
         }
         return -1;
     }
-
     public Boolean[] vectorMultiply(Boolean[] arr1,Boolean[] arr2){
         Boolean[] res=new Boolean[arr1.length];
         for (boolean b : arr1) System.out.print(b + " ");
@@ -361,8 +402,16 @@ public class Problem {
     }
 
     public boolean checkVectors(Boolean[] arr1,Boolean[] arr2){
+        boolean flag=true;
         for(int i=0;i<arr1.length;i++)
-            if (arr1[i]!=arr2[i]) return false;
-        return true;
+            System.out.print(arr1[i]+" ");
+        System.out.print("\n");
+        for(int i=0;i<arr2.length;i++)
+            System.out.print(arr2[i]+" ");
+        System.out.print("\n");
+        for(int i=0;i<arr1.length;i++)
+            if (arr1[i]!=arr2[i]) flag=false;
+        System.out.print(flag);
+        return flag;
     }
 }

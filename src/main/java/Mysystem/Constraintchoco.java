@@ -17,6 +17,7 @@ import org.chocosolver.solver.exception.ContradictionException;
 
 public class Constraintchoco {
     public List<Solution> filterSolutions;
+    public Problem problem;
     public  long time;
     static void logging(PrintWriter fout, String mes){
     fout.append(mes+"\n");
@@ -57,11 +58,12 @@ public class Constraintchoco {
     }
     public List<Solution> findSolutions(String filePath, int minSup) throws IOException {
         time= java.lang.System.currentTimeMillis();
-        Problem nq = new Problem("test",minSup);
-        nq.addsys("test",loadsys(filePath));
-        nq.solvemany(true);
-        List<Solution> res=nq.removeWastePattern();
+        problem = new Problem("test",minSup);
+        problem.addsys("test",loadsys(filePath));
+        problem.solvemany(true);
+        List<Solution> res=problem.removeWastePattern();
         time= java.lang.System.currentTimeMillis()-time;
+        problem.generateListBoolVector();
         return res;
     }
 }

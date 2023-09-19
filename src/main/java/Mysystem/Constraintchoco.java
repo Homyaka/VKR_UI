@@ -60,10 +60,13 @@ public class Constraintchoco {
         time= java.lang.System.currentTimeMillis();
         problem = new Problem("test",minSup);
         problem.addsys("test",loadsys(filePath));
-        problem.solvemany(true);
-        List<Solution> res=problem.removeWastePattern();
-        time= java.lang.System.currentTimeMillis()-time;
         problem.generateListBoolVector();
+        problem.genBoolVectors();
+        problem.solvemany(true);
+       // List<Solution> res=problem.removeWastePattern();
+       // time= java.lang.System.currentTimeMillis()-time;
+        List<Solution> res=problem.removeByBooleanVector();
+        time= java.lang.System.currentTimeMillis()-time;
         return res;
     }
 }

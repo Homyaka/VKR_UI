@@ -211,7 +211,7 @@ public class MainController {
 
     public void test() throws IOException {
         Problem problem=cc.problem;
-        problem.generateBoolVectorsList(Collections.singletonList("q"),OAFile);
+        problem.generateBoolVectorsList(OAFile);
         String text=solutionsToStr(problem.removeByBooleanVector());
         System.out.println(text);
     }

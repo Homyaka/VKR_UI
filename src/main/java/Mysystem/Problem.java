@@ -286,6 +286,40 @@ public class Problem {
         return  filterSolutions;
     }
 
+    public void genBoolVectors() {
+       /* Variable X=vars.get(0);
+        List<Value> values=X.getDomain();*/
+        List<Line> lines = problems.get(0).getLines();
+        for (Line line : lines) {
+            List<Value> Ynode = line.getNodes().get(1).getMissVals();
+            List<Value> Xnode = line.getNodes().get(0).getActivevals();
+            List<Integer> Yvals = new ArrayList<>();
+            List<Integer> Xvals = new ArrayList<>();
+            for (Value x : Xnode) Xvals.add(x.getValue());
+            for (Value y : Ynode) Yvals.add(y.getValue());
+            for (int i : Xvals) System.out.print(i + " ");
+            System.out.print("\t Y: ");
+            for (int i : Yvals) System.out.print(i + " ");
+            System.out.print("\n");
+            Boolean[] test;
+            for (Value x : Xnode) {
+                for (Value y : Ynode) {
+                    listBoolVectors.get(x.getValue() - 1)[y.getValue() - 1] = true;
+                    test = listBoolVectors.get(x.getValue() - 1);
+                    System.out.println("Change in row " + (x.getValue() - 1));
+                    for (int i = 0; i < test.length; i++) System.out.print(test[i] + " ");
+                    System.out.print("\n All Table: \n");
+                    for(int q=0;q<listBoolVectors.size();q++){
+                        System.out.print(q+" row: ");
+                        for(int i=0;i<listBoolVectors.get(q).length;i++) System.out.print(listBoolVectors.get(q)[i]+" ");
+                        System.out.print("\n");
+                    }
+                    System.out.print('\n');
+                }
+            }
+        }
+    }
+
     public List<Solution> removeByBooleanVector(){
         int num=1;
         List<Solution> filterSolutions=new ArrayList<>();
@@ -306,12 +340,11 @@ public class Problem {
             System.out.print("Y: ");
             for (int i:varY) System.out.print(i+" ");
             System.out.print("\n");
-            for(int i=0;i<res.length;i++) {
-                System.out.print(res[i]+" ");
+            for (Boolean re : res) {
+                System.out.print(re + " ");
             }
             System.out.print("\n");
-            for(int i=0;i<solVector.length;i++)
-                System.out.print(solVector[i]+" ");
+            for (Boolean aBoolean : solVector) System.out.print(aBoolean + " ");
             System.out.print("\n"+"Результат:"+"\n");
            if(checkVectors(res,solVector)) {
                filterSolutions.add(solution);
@@ -319,26 +352,14 @@ public class Problem {
         }
         return filterSolutions;
     }
-
-   public void getBoolVector(){
-        Variable X=vars.get(0);
-        List<Value> values=X.getDomain();
-        List<Line> lines=problems.get(0).getLines();
-        Node node;
-            for (Line line : lines) {
-                node = line.getNodes().get(0);
-                values=node.getValues();
-                List<Value> Ynode= line.getNodes().get(1).getAllVals();
-            }
-    }
     public void generateListBoolVector(){
-        Boolean[] vec=new Boolean[problems.get(0).getColumns().get(1).getActivedomaincount()];
-        Arrays.fill(vec, false);
-        for(int i=0;i<solutions.size();i++){
+        for(int i=0;i<problems.get(0).getColumns().get(0).getActivedomaincount();i++){
+            Boolean[] vec=new Boolean[problems.get(0).getColumns().get(1).getLocaldomain().size()];
+            Arrays.fill(vec,false);
             listBoolVectors.add(vec);
         }
     }
-    public void generateBoolVectorsList(List<String> text, File oatableFile) throws IOException {
+    public void generateBoolVectorsList( File oatableFile) throws IOException {
         if(oatableFile.isFile()){
             DataWorker dw=new DataWorker();
             dw.generatematrix(dw.txtParse(oatableFile.getPath()));
@@ -347,7 +368,8 @@ public class Problem {
                 listBoolVectors.add(dw.matrix[n]);
         }
         else {
-            System.out.print("НЕ ТОТ ПУТЬ ФАЙЛА");
+            genBoolVectors();
+            /*System.out.print("НЕ ТОТ ПУТЬ ФАЙЛА");
             int yDomSize;
             String l = text.get(1).substring(1, text.get(1).length());
             yDomSize = l.split(",").length;
@@ -362,10 +384,9 @@ public class Problem {
                 for (String s : node.split(",")) {
                     System.out.print(s+" ");
                 }
-                System.out.print('\n');
+                System.out.print('\n');*/
             }
         }
-    }
     public Boolean[] getBoolVectorSolution(Solution sol){
         Boolean[] res=new Boolean[listBoolVectors.get(0).length];
         Arrays.fill(res,false);

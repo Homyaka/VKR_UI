@@ -63,9 +63,10 @@ public class Constraintchoco {
         problem.generateListBoolVector();
         problem.genBoolVectors();
         problem.solvemany(true);
-       // List<Solution> res=problem.removeWastePattern();
-       // time= java.lang.System.currentTimeMillis()-time;
+        //List<Solution> res=problem.removeWastePattern();
+        //time= java.lang.System.currentTimeMillis()-time;
         List<Solution> res=problem.removeByBooleanVector();
+        //List<Solution> res=problem.removeWastePattern();
         time= java.lang.System.currentTimeMillis()-time;
         return res;
     }

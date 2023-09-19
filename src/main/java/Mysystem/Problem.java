@@ -23,6 +23,8 @@ public class Problem {
     private int minSup;
     public HashMap<IntVar,Line> mapIntVarLine;
 
+    public HashSet<String> setXsol;
+
     public int getMinSup() {
         return minSup;
     }
@@ -161,6 +163,7 @@ public class Problem {
         solutions = new ArrayList<>();
         orderedsystems = new ArrayList<>();
         listBoolVectors=new ArrayList<>();
+        setXsol=new HashSet<>();
     }
 
     public void addsys(String name,List <List<String>> sys){
@@ -305,55 +308,39 @@ public class Problem {
             for (Value x : Xnode) {
                 for (Value y : Ynode) {
                     listBoolVectors.get(x.getValue() - 1)[y.getValue() - 1] = true;
-                    test = listBoolVectors.get(x.getValue() - 1);
-                    System.out.println("Change in row " + (x.getValue() - 1));
-                    for (int i = 0; i < test.length; i++) System.out.print(test[i] + " ");
-                    System.out.print("\n All Table: \n");
-                    for(int q=0;q<listBoolVectors.size();q++){
-                        System.out.print(q+" row: ");
-                        for(int i=0;i<listBoolVectors.get(q).length;i++) System.out.print(listBoolVectors.get(q)[i]+" ");
-                        System.out.print("\n");
-                    }
-                    System.out.print('\n');
                 }
             }
         }
     }
-
     public List<Solution> removeByBooleanVector(){
         int num=1;
         List<Solution> filterSolutions=new ArrayList<>();
-        for(Solution solution:solutions){
-            List<Integer> varX=solution.solution.get(0).getValues();
-            List<Integer> varY=solution.solution.get(1).getValues();
-            Boolean[] res=listBoolVectors.get(varX.get(0)-1);
-            Boolean[] solVector=getBoolVectorSolution(solution);
-            boolean flag=false;
-            for(int i=1;i<varX.size();i++){
-                res=vectorMultiply(res,listBoolVectors.get(varX.get(i)-1));
+        for(Solution solution:solutions) {
+            String strVarx = solution.solution.get(0).toString(false);
+            if (!setXsol.contains(strVarx)) {
+                setXsol.add(strVarx);
+                List<Integer> varX = solution.solution.get(0).getValues();
+                Boolean[] res = listBoolVectors.get(varX.get(0) - 1);
+                //Boolean[] solVector = getBoolVectorSolution(solution);
+                boolean flag = false;
+                for (int i = 1; i < varX.size(); i++) {
+                    res = vectorMultiply(res, listBoolVectors.get(varX.get(i) - 1));
+                }
+                List<Integer> Y=new ArrayList<>();
+                for (int i=0;i<res.length;i++){
+                    if (res[i]) Y.add(i+1);
+                }
+               SolvedVariable newY=new SolvedVariable(Y,solution.getSolution().get(1).getVariable());
+                List<SolvedVariable> sol=new ArrayList<>();
+                sol.add(solution.solution.get(0));
+                sol.add(newY);
+                filterSolutions.add(new Solution(sol));
             }
-            System.out.println(num+" решение");
-            num++;
-            System.out.print(" X: ");
-            for(int i:varX) System.out.print(i+" ");
-            System.out.print("\n");
-            System.out.print("Y: ");
-            for (int i:varY) System.out.print(i+" ");
-            System.out.print("\n");
-            for (Boolean re : res) {
-                System.out.print(re + " ");
-            }
-            System.out.print("\n");
-            for (Boolean aBoolean : solVector) System.out.print(aBoolean + " ");
-            System.out.print("\n"+"Результат:"+"\n");
-           if(checkVectors(res,solVector)) {
-               filterSolutions.add(solution);
-           }
         }
         return filterSolutions;
     }
     public void generateListBoolVector(){
-        for(int i=0;i<problems.get(0).getColumns().get(0).getActivedomaincount();i++){
+        for(int i=0;i<problems.get(0).getColumns().get(0).getLocaldomain().size();i++){
             Boolean[] vec=new Boolean[problems.get(0).getColumns().get(1).getLocaldomain().size()];
             Arrays.fill(vec,false);
             listBoolVectors.add(vec);

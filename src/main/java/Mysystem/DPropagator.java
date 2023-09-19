@@ -120,6 +120,7 @@ public class DPropagator extends Propagator<IntVar>{
     }
     public int calcNodeWeight(List<Value> values){
         int sum=0;
+        if(values.isEmpty()) return -1;
         for(Value v: values){
             int ind=v.getValue()-1;
             sum+=problem.getProblem().weights.get(ind);

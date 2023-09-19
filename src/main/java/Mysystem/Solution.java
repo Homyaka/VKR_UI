@@ -31,7 +31,7 @@ public class Solution {
             decisions.add(dec.get(i).getDescr());
     }
     public Solution(List<SolvedVariable> variables){
-
+    solution=variables;
     }
     
     public String solutiontoString(boolean withcodes){
@@ -48,7 +48,7 @@ public class Solution {
         return ret;
     }
 
-    public Solution stringToSolution(String stringSolution){
+    /*public Solution stringToSolution(String stringSolution){
         String[] line=stringSolution.split("\n");
         String x=line[0];
         String y=line[1];
@@ -63,7 +63,7 @@ public class Solution {
         sol.add(svX);
         sol.add(svY);
         return new Solution(sol);
-    }
+    }*/
 
     
 }

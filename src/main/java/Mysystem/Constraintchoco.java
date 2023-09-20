@@ -63,10 +63,12 @@ public class Constraintchoco {
         problem.generateListBoolVector();
         problem.genBoolVectors();
         problem.solvemany(true);
+
+        // Через словарь
         //List<Solution> res=problem.removeWastePattern();
-        //time= java.lang.System.currentTimeMillis()-time;
+        // Через булевые вектора
         List<Solution> res=problem.removeByBooleanVector();
-        //List<Solution> res=problem.removeWastePattern();
+       // System.out.print("BYTE ARRAY: "+b+" !!!!\n");
         time= java.lang.System.currentTimeMillis()-time;
         return res;
     }

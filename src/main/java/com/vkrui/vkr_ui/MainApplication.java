@@ -19,6 +19,19 @@ public class MainApplication extends Application {
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
+        long l=8;
+        char[] c=Long.toBinaryString(l).toCharArray();
+        for(char q: c){
+            if (q=='1') System.out.print(" !"+q+"! ");
+            else System.out.print(" -"+q+"- ");
+        }
+        System.out.print("\n");
+        int[] q=new int[]{0,1,1,1};
+        long t=0;
+        for(int i=0;i<q.length;i++){
+            if(q[i]==1) t+= (long)Math.pow(2,q.length-i-1);
+        }
+        System.out.print("\nRESULT:"+t);
     }
     public static void main(String[] args) {
         launch();

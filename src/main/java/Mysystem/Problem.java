@@ -40,6 +40,8 @@ public class Problem {
     private final Decisions decisions;
     private final List<Solution> solutions;
     public ArrayList<Boolean[]> listBoolVectors;
+    public long[] vectors;
+    public int countAtt;
 
     public List<List<DSystem>> getOrderedsystems() {
         return orderedsystems;
@@ -142,8 +144,8 @@ public class Problem {
                 prblm.getLines().get(j-3).addNode(newnode);
             }
         }
-        System.out.println(prblm.toString());
-        System.out.println(prblm.getLines().size()+"  "+prblm.getColumns().size());
+        // System.out.println(prblm.toString());
+       // System.out.println(prblm.getLines().size()+"  "+prblm.getColumns().size());
     }
     
     public void buildqueen(int n){
@@ -170,6 +172,7 @@ public class Problem {
         DSystem prblm = new DSystem(name, solutions, decisions,this);
         buildsys(prblm,sys);
         problems.add(prblm);
+        countAtt=problems.get(0).getColumns().get(1).getLocaldomain().size();
     }
 
     public void addSys(String name,List <List<String>> sys,int tay){
@@ -321,7 +324,7 @@ public class Problem {
                 setXsol.add(strVarx);
                 List<Integer> varX = solution.solution.get(0).getValues();
                 Boolean[] res = listBoolVectors.get(varX.get(0) - 1);
-                //Boolean[] solVector = getBoolVectorSolution(solution);
+                Boolean[] solVector = getBoolVectorSolution(solution);
                 boolean flag = false;
                 for (int i = 1; i < varX.size(); i++) {
                     res = vectorMultiply(res, listBoolVectors.get(varX.get(i) - 1));
@@ -330,14 +333,104 @@ public class Problem {
                 for (int i=0;i<res.length;i++){
                     if (res[i]) Y.add(i+1);
                 }
-               SolvedVariable newY=new SolvedVariable(Y,solution.getSolution().get(1).getVariable());
+                SolvedVariable newY=new SolvedVariable(Y,solution.getSolution().get(1).getVariable());
                 List<SolvedVariable> sol=new ArrayList<>();
                 sol.add(solution.solution.get(0));
                 sol.add(newY);
                 filterSolutions.add(new Solution(sol));
+               // if (checkVectors(res,solVector)) filterSolutions.add(solution);
             }
         }
         return filterSolutions;
+    }
+
+    public void fillArrayLong(){
+        List<Line> lines=problems.get(0).getLines();
+        for(Line line:lines){
+            List<Value> varX=line.getNodes().get(0).getValues();
+            List<Value> varY=line.getNodes().get(1).getMissVals();
+            for(Value y: varY) System.out.println("\n In Y: "+y.getValue());
+            for(Value x:varX){
+                for(Value y:varY)
+                    vectors[x.getValue()-1]+=(long)Math.pow(2,countAtt-y.getValue()-1);
+            }
+        }
+        System.out.println("Check BoolVector and LongVector:");
+        for(int i=0;i<vectors.length;i++){
+            System.out.print("Boolean: ");
+            Boolean[] booleans=listBoolVectors.get(i);
+            for(Boolean b:booleans) System.out.print(b+" ");
+            System.out.print("    Long: "+vectors[i]);
+            System.out.print("\n");
+        }
+    }
+
+    public List<Solution> removeByVectorsNOSET(){
+        List<Solution> filterSolutions=new ArrayList<>();
+        for(Solution solution:solutions){
+            List<Integer> valX=solution.solution.get(0).getValues();
+            long vec=vectors[valX.get(0)-1];
+            System.out.print("X: ");
+            for (int x:valX) System.out.print(x+" ");
+            System.out.println('\n');
+            System.out.println("LongVector: "+vec);
+            System.out.print("BoolVector: ");
+            Boolean[] b=listBoolVectors.get(valX.get(0)-1);
+            for(boolean q:b) System.out.print(q+" ");
+            System.out.print("\n");
+            for(int i=1;i<valX.size();i++){
+                vec=vec&vectors[valX.get(i)-1];
+                System.out.println(vec);
+            }
+            long solvec=getSolutionVector(solution);
+            System.out.println("Compare Vec and SolVec:");
+            System.out.println(vec);
+            System.out.println(solvec);
+            if (solvec==vec) filterSolutions.add(solution);
+        }
+        return filterSolutions;
+    }
+    public List<Solution> removeByVectorsWITHSET(){
+        List<Solution> filterSolutions=new ArrayList<>();
+            for (Solution solution : solutions) {
+                String strVarx = solution.solution.get(0).toString(false);
+                if(!setXsol.contains(strVarx)) {
+                    setXsol.add(strVarx);
+                    List<Integer> valX = solution.solution.get(0).getValues();
+                    long vec = vectors[valX.get(0) - 1];
+                    /*System.out.print("X: ");
+                    for (int x : valX) System.out.print(x + " ");
+                    System.out.println('\n');
+                    System.out.println("LongVector: " + vec);
+                    System.out.print("BoolVector: ");
+                    Boolean[] b = listBoolVectors.get(valX.get(0) - 1);
+                    for (boolean q : b) System.out.print(q + " ");
+                    System.out.print("\n");*/
+                    for (int i = 1; i < valX.size(); i++)
+                        vec = vec & vectors[valX.get(i) - 1];
+                    char[] charVec=Long.toBinaryString(vec).toCharArray();
+                    List<Integer> newY=new ArrayList<>();
+                    long[] binaryNum=new long[charVec.length];
+                    for (int i=0;i<charVec.length;i++){
+                        if (charVec[i]=='1') newY.add(i+1);
+                    }
+                    SolvedVariable svY=new SolvedVariable(newY,new Variable("Y"));
+                    List<SolvedVariable> sv=new ArrayList<>();
+                    sv.add(solution.solution.get(0));
+                    sv.add(svY);
+                    Solution sol=new Solution(sv);
+                    filterSolutions.add(sol);
+                }
+
+        }
+        return filterSolutions;
+    }
+
+    public long getSolutionVector(Solution sol){
+        long res=0;
+        List<Integer> varY=sol.solution.get(1).getValues();
+        for(int i:varY) res+=(long) Math.pow(2,countAtt-1-i);
+        return res;
     }
     public void generateListBoolVector(){
         for(int i=0;i<problems.get(0).getColumns().get(0).getLocaldomain().size();i++){
@@ -345,6 +438,10 @@ public class Problem {
             Arrays.fill(vec,false);
             listBoolVectors.add(vec);
         }
+    }
+    public void generateArrayLong(){
+        vectors=new long[problems.get(0).getColumns().get(0).getLocaldomain().size()];
+        Arrays.fill(vectors,0);
     }
     public void generateBoolVectorsList( File oatableFile) throws IOException {
         if(oatableFile.isFile()){
@@ -408,7 +505,6 @@ public class Problem {
         System.out.print('\n');
         return res;
     }
-
     public boolean checkVectors(Boolean[] arr1,Boolean[] arr2){
         boolean flag=true;
         for(int i=0;i<arr1.length;i++)

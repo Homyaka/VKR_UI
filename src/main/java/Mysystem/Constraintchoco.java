@@ -62,13 +62,17 @@ public class Constraintchoco {
         problem.addsys("test",loadsys(filePath));
         problem.generateListBoolVector();
         problem.genBoolVectors();
+        problem.generateArrayLong();
+        problem.fillArrayLong();
         problem.solvemany(true);
-
         // Через словарь
         //List<Solution> res=problem.removeWastePattern();
         // Через булевые вектора
         List<Solution> res=problem.removeByBooleanVector();
-       // System.out.print("BYTE ARRAY: "+b+" !!!!\n");
+        // через числовой вектор БЕЗ СЕТА
+        //List<Solution> res=problem.removeByVectorsNOSET();
+        // Через чиловой вектор С СЕТОМ
+        //List<Solution> res=problem.removeByVectorsWITHSET();
         time= java.lang.System.currentTimeMillis()-time;
         return res;
     }

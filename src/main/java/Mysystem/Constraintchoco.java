@@ -68,11 +68,31 @@ public class Constraintchoco {
         // Через словарь
         //List<Solution> res=problem.removeWastePattern();
         // Через булевые вектора
-        List<Solution> res=problem.removeByBooleanVector();
+        //List<Solution> res=problem.removeByBooleanVector();
         // через числовой вектор БЕЗ СЕТА
         //List<Solution> res=problem.removeByVectorsNOSET();
         // Через чиловой вектор С СЕТОМ
-        //List<Solution> res=problem.removeByVectorsWITHSET();
+        List<Solution> res=problem.removeByVectorsWITHSET();
+        time= java.lang.System.currentTimeMillis()-time;
+        return res;
+    }
+    public List<Solution> findSolutionsWithConstrain(String filePath, int minSup,int containAtt,int noContainAtt) throws IOException {
+        time= java.lang.System.currentTimeMillis();
+        problem = new Problem("test",minSup,containAtt,noContainAtt);
+        problem.addsys("test",loadsys(filePath));
+        problem.generateListBoolVector();
+        problem.genBoolVectors();
+        problem.generateArrayLong();
+        problem.fillArrayLong();
+        problem.solvemany(true);
+        // Через словарь
+       // List<Solution> res=problem.removeWastePattern();
+        // Через булевые вектора
+        //List<Solution> res=problem.removeByBooleanVector();
+        // через числовой вектор БЕЗ СЕТА
+       // List<Solution> res=problem.removeByVectorsNOSET();
+        // Через чиловой вектор С СЕТОМ
+        List<Solution> res=problem.removeByVectorsWITHSET();
         time= java.lang.System.currentTimeMillis()-time;
         return res;
     }

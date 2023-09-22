@@ -69,13 +69,24 @@ public class DPropagator extends Propagator<IntVar>{
         checkDomainOnLessSup(problem.getProblem().getMinSup()); //8 statement
         checkEmptyRow(); // 1 statement
         deleteRowWithFullComp(); // 4 statement
-       // deleteEmptyCol();
+        deleteEmptyCol();
         while(problem.getActiveLinesCount()>0 && i<problem.getLines().size()){
             Line line = problem.getLines().get(i);
             if(line.isActive()){
                 int notempty =-1;
                 if(calcNodeWeight((line.getNodes().get(0).getActivevals()))<problem.getProblem().getMinSup()) notempty=1;
                 if(line.getNodes().get(1).getActive()==0) notempty=0;
+                if(problem.getProblem().containAtt!=-1){
+                    Value v=problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().containAtt-1);
+                    if(!line.getNodes().get(1).getActivevals().contains(v)) {
+                        System.out.print("LINE:"+line.toString()+"\n");
+                        notempty=0;
+                    }
+                }
+                if(problem.getProblem().noContainAtt!=-1){
+                    Value v=problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().noContainAtt-1);
+                    if((!line.getNodes().get(1).getActivevals().contains(v)) && problem.getColumns().get(1).getActivedomain().contains(v)) notempty=1;
+                }
                 if(notempty!=-1){
                     line.intVar.instantiateTo(notempty, this);
                     Node node=line.getNodes().get(notempty);
@@ -131,11 +142,26 @@ public class DPropagator extends Propagator<IntVar>{
     private boolean checkDomainOnLessSup(int support) throws ContradictionException{
         if(problem.getActiveColumnsCount()>0){
             Column column=problem.getColumns().get(0);
+            Column yCol=problem.getColumns().get(1);
             if(calcNodeWeight(column.getActivedomain())<support){
                 this.fails();
                 return false;
             }
-            return true;
+            if (problem.getProblem().containAtt!=-1) {
+                Value v = problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().containAtt - 1);
+                if (!yCol.getActivedomain().contains(v)) {
+                    this.fails();
+                    return false;
+                }
+                return true;
+            }
+            if (problem.getProblem().noContainAtt!=-1){
+                Value v=problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().noContainAtt-1);
+                if (problem.getColumns().get(1).getActivedomain().size()==1 && problem.getColumns().get(1).getActivedomain().contains(v)){
+                    this.fails();
+                    return false;
+                }
+            }
         }
         return false;
     }

@@ -21,6 +21,9 @@ public class Problem {
     private final HashSet<Integer> domvals;
     private List<DSystem> problems;
     private int minSup;
+
+    public int containAtt;
+    public int noContainAtt;
     public HashMap<IntVar,Line> mapIntVarLine;
 
     public HashSet<String> setXsol;
@@ -155,6 +158,8 @@ public class Problem {
     public Problem(String name,int minSup){
         mapIntVarLine =new HashMap<>();
        this.minSup=minSup;
+       containAtt=-1;
+       noContainAtt=-1;
         model = new Model(name);
         model.getSolver().limitTime(120000);
         vars = new ArrayList<>();
@@ -167,6 +172,25 @@ public class Problem {
         listBoolVectors=new ArrayList<>();
         setXsol=new HashSet<>();
     }
+
+    public Problem(String name,int minSup,int containAtt,int noContainAtt){
+        mapIntVarLine =new HashMap<>();
+        this.minSup=minSup;
+        this.containAtt=containAtt;
+        this.noContainAtt=noContainAtt;
+        model = new Model(name);
+        model.getSolver().limitTime(120000);
+        vars = new ArrayList<>();
+        domvals = new HashSet<>();
+        problems = new ArrayList<>();
+        prepared = false;
+        decisions = new Decisions();
+        solutions = new ArrayList<>();
+        orderedsystems = new ArrayList<>();
+        listBoolVectors=new ArrayList<>();
+        setXsol=new HashSet<>();
+    }
+
 
     public void addsys(String name,List <List<String>> sys){
         DSystem prblm = new DSystem(name, solutions, decisions,this);
@@ -352,7 +376,7 @@ public class Problem {
             for(Value y: varY) System.out.println("\n In Y: "+y.getValue());
             for(Value x:varX){
                 for(Value y:varY)
-                    vectors[x.getValue()-1]+=(long)Math.pow(2,countAtt-y.getValue()-1);
+                    vectors[x.getValue()-1]+=(long)Math.pow(2,countAtt-y.getValue());
             }
         }
         System.out.println("Check BoolVector and LongVector:");

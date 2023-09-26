@@ -422,14 +422,6 @@ public class Problem {
                     setXsol.add(strVarx);
                     List<Integer> valX = solution.solution.get(0).getValues();
                     long vec = vectors[valX.get(0) - 1];
-                    /*System.out.print("X: ");
-                    for (int x : valX) System.out.print(x + " ");
-                    System.out.println('\n');
-                    System.out.println("LongVector: " + vec);
-                    System.out.print("BoolVector: ");
-                    Boolean[] b = listBoolVectors.get(valX.get(0) - 1);
-                    for (boolean q : b) System.out.print(q + " ");
-                    System.out.print("\n");*/
                     for (int i = 1; i < valX.size(); i++)
                         vec = vec & vectors[valX.get(i) - 1];
                     char[] charVec=Long.toBinaryString(vec).toCharArray();
@@ -453,7 +445,7 @@ public class Problem {
     public long getSolutionVector(Solution sol){
         long res=0;
         List<Integer> varY=sol.solution.get(1).getValues();
-        for(int i:varY) res+=(long) Math.pow(2,countAtt-1-i);
+        for(int i:varY) res+=(long) Math.pow(2,countAtt-i);
         return res;
     }
     public void generateListBoolVector(){

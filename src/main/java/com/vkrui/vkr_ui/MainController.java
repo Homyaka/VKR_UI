@@ -259,15 +259,20 @@ public class MainController {
                 if (selectFile.isFile() || !tfFrequency.getText().isEmpty()) {
                     textSolutions = new Label();
                     textSolutions.setFont(font);
-                    if(!tf_OneAtt.getText().isEmpty()) {
-                        solutions = cc.findSolutionsWithConstrain(selectFile.getPath(), Integer.parseInt(tfFrequency.getText()), Integer.parseInt(tf_OneAtt.getText()),-1);
-                        System.out.print("ТЕКСТ ПОЛЯ:"+tf_OneAtt.getText()+"!");
-                    }
+                    if ((!tf_NOcontainAtt.getText().isEmpty())&& (!tf_OneAtt.getText().isEmpty()))
+                        solutions = cc.findSolutionsWithConstrain(selectFile.getPath(), Integer.parseInt(tfFrequency.getText()), Integer.parseInt(tf_OneAtt.getText()), Integer.parseInt(tf_NOcontainAtt.getText()));
                     else {
-                        if (!tf_NOcontainAtt.getText().isEmpty())
-                            solutions = cc.findSolutionsWithConstrain(selectFile.getPath(), Integer.parseInt(tfFrequency.getText()), -1, Integer.parseInt(tf_NOcontainAtt.getText()));
-                        else
-                            solutions = cc.findSolutions(selectFile.getPath(), Integer.parseInt(tfFrequency.getText()));
+                        if(!tf_OneAtt.getText().isEmpty()) {
+                            solutions = cc.findSolutionsWithConstrain(selectFile.getPath(), Integer.parseInt(tfFrequency.getText()), Integer.parseInt(tf_OneAtt.getText()),-1);
+                            System.out.print("ТЕКСТ ПОЛЯ:"+tf_OneAtt.getText()+"!");
+                        }
+                        else {
+                            if (!tf_NOcontainAtt.getText().isEmpty())
+                                solutions = cc.findSolutionsWithConstrain(selectFile.getPath(), Integer.parseInt(tfFrequency.getText()), -1, Integer.parseInt(tf_NOcontainAtt.getText()));
+                            else {
+                                solutions = cc.findSolutions(selectFile.getPath(), Integer.parseInt(tfFrequency.getText()));
+                            }
+                        }
                     }
                     fullSolutions = solutionsToStr(solutions);
                     textSolutions.setText(solutionsToStr(solutions));

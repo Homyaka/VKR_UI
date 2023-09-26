@@ -70,9 +70,9 @@ public class Constraintchoco {
         // Через булевые вектора
         //List<Solution> res=problem.removeByBooleanVector();
         // через числовой вектор БЕЗ СЕТА
-        //List<Solution> res=problem.removeByVectorsNOSET();
+        List<Solution> res=problem.removeByVectorsNOSET();
         // Через чиловой вектор С СЕТОМ
-        List<Solution> res=problem.removeByVectorsWITHSET();
+        //List<Solution> res=problem.removeByVectorsWITHSET();
         time= java.lang.System.currentTimeMillis()-time;
         return res;
     }
@@ -90,9 +90,9 @@ public class Constraintchoco {
         // Через булевые вектора
         //List<Solution> res=problem.removeByBooleanVector();
         // через числовой вектор БЕЗ СЕТА
-       // List<Solution> res=problem.removeByVectorsNOSET();
+        List<Solution> res=problem.removeByVectorsNOSET();
         // Через чиловой вектор С СЕТОМ
-        List<Solution> res=problem.removeByVectorsWITHSET();
+        //List<Solution> res=problem.removeByVectorsWITHSET();
         time= java.lang.System.currentTimeMillis()-time;
         return res;
     }

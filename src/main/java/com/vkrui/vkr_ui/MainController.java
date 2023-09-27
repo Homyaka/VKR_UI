@@ -99,18 +99,16 @@ public class MainController {
 
     @FXML
     private ScrollPane OApaneShowAtt;
-
     @FXML
     private ScrollPane OApaneShowWeights;
-
     @FXML
     private Label OAselectFile;
-
     @FXML
     private TextField tf_OneAtt;
     @FXML
     private TextField tf_NOcontainAtt;
-
+    @FXML
+    private TextField tf_patternLength;
     @FXML
     private Button btn_ContainAtt;
 
@@ -210,7 +208,6 @@ public class MainController {
             labelSelect.setText("Выбран:");
         }
     }
-
     public void test() throws IOException {
         Problem problem=cc.problem;
         problem.generateBoolVectorsList(OAFile);
@@ -257,11 +254,22 @@ public class MainController {
         DbtnStart.setOnAction(event -> {
             try {
                 if (selectFile.isFile() || !tfFrequency.getText().isEmpty()) {
+                    int numContainAtt=-1;
+                    int numNoContainAtt=-1;
+                    int numLengthAtt=-1;
+                    if(!tf_OneAtt.getText().isEmpty()) numContainAtt=Integer.parseInt(tf_OneAtt.getText());
+                    if(!tf_NOcontainAtt.getText().isEmpty()) numNoContainAtt=Integer.parseInt(tf_NOcontainAtt.getText());
+                    if(!tf_patternLength.getText().isEmpty()) numLengthAtt=Integer.parseInt(tf_patternLength.getText());
                     textSolutions = new Label();
                     textSolutions.setFont(font);
-                    if ((!tf_NOcontainAtt.getText().isEmpty())&& (!tf_OneAtt.getText().isEmpty()))
+                    if(numContainAtt==-1 && numNoContainAtt==-1 && numLengthAtt==-1)
+                        solutions=cc.findSolutions(selectFile.getPath(),Integer.parseInt(tfFrequency.getText()));
+                    else
+                        solutions=cc.findSolutionsWithConstrain(selectFile.getPath(),Integer.parseInt(tfFrequency.getText()),numContainAtt,numNoContainAtt,numLengthAtt);
+                   /* if ((!tf_NOcontainAtt.getText().isEmpty())&& (!tf_OneAtt.getText().isEmpty()))
                         solutions = cc.findSolutionsWithConstrain(selectFile.getPath(), Integer.parseInt(tfFrequency.getText()), Integer.parseInt(tf_OneAtt.getText()), Integer.parseInt(tf_NOcontainAtt.getText()));
-                    else {
+                    else
+                        {
                         if(!tf_OneAtt.getText().isEmpty()) {
                             solutions = cc.findSolutionsWithConstrain(selectFile.getPath(), Integer.parseInt(tfFrequency.getText()), Integer.parseInt(tf_OneAtt.getText()),-1);
                             System.out.print("ТЕКСТ ПОЛЯ:"+tf_OneAtt.getText()+"!");
@@ -273,7 +281,7 @@ public class MainController {
                                 solutions = cc.findSolutions(selectFile.getPath(), Integer.parseInt(tfFrequency.getText()));
                             }
                         }
-                    }
+                    }*/
                     fullSolutions = solutionsToStr(solutions);
                     textSolutions.setText(solutionsToStr(solutions));
                     paneSolutions.setContent(textSolutions);
@@ -346,7 +354,7 @@ public class MainController {
                 }
             }
         });
-        btn_ContainAtt.setOnAction(event -> {
+        /*btn_ContainAtt.setOnAction(event -> {
             if (!tf_OneAtt.getText().isEmpty()) {
                 int att = Integer.parseInt(tf_OneAtt.getText());
                 solutionsContainsAtt = new ArrayList<>();
@@ -361,8 +369,8 @@ public class MainController {
                 paneSolutions.setContent(textSolutions);
                 flagContainAtt = true;
             }
-        });
-        btn_OneAtt.setOnAction(event -> {
+        });*/
+        /*btn_OneAtt.setOnAction(event -> {
                     if (!flagCutOneAtt) {
                         List<Solution> currentSolutions;
                         if (flagContainAtt) currentSolutions = solutionsContainsAtt;
@@ -388,7 +396,7 @@ public class MainController {
                         paneSolutions.setContent(textSolutions);
                         flagCutOneAtt = false;
                     }
-                });
+                });*/
         DbtnShowAttributes.setOnAction(event -> {
             String text="";
             fileAttributesDict=new File("");

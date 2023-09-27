@@ -24,6 +24,7 @@ public class Problem {
 
     public int containAtt;
     public int noContainAtt;
+    public int patternLength;
     public HashMap<IntVar,Line> mapIntVarLine;
 
     public HashSet<String> setXsol;
@@ -157,9 +158,10 @@ public class Problem {
     }
     public Problem(String name,int minSup){
         mapIntVarLine =new HashMap<>();
-       this.minSup=minSup;
-       containAtt=-1;
-       noContainAtt=-1;
+        this.minSup=minSup;
+        containAtt=-1;
+        noContainAtt=-1;
+        patternLength=-1;
         model = new Model(name);
         model.getSolver().limitTime(120000);
         vars = new ArrayList<>();
@@ -173,11 +175,12 @@ public class Problem {
         setXsol=new HashSet<>();
     }
 
-    public Problem(String name,int minSup,int containAtt,int noContainAtt){
+    public Problem(String name,int minSup,int containAtt,int noContainAtt,int patternLength){
         mapIntVarLine =new HashMap<>();
         this.minSup=minSup;
         this.containAtt=containAtt;
         this.noContainAtt=noContainAtt;
+        this.patternLength=patternLength;
         model = new Model(name);
         model.getSolver().limitTime(120000);
         vars = new ArrayList<>();
@@ -258,8 +261,9 @@ public class Problem {
         DValueSelector valsel=new DValueSelector(decisions);
         Decoperator decop = new Decoperator(decisions);
         solver.setSearch((intVarSearch(varsel,valsel,decop,problems.get(0).getIntVars())));
-        while(solver.solve())
+        while(solver.solve()){
             solutions.add(new Solution(vars,decisions.getDecisions()));
+        }
         if(withtiming)time= java.lang.System.currentTimeMillis()-time;
         return time;
     }

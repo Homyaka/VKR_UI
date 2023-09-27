@@ -17,13 +17,13 @@ import org.chocosolver.util.ESat;
 public class DPropagator extends Propagator<IntVar>{
     private final DSystem problem;
     private final Decisions decisions;
-    private void delRow(Line line){
+    private void delRow(Line line) throws ContradictionException {
             List <Activable> lst = new ArrayList<>();
             lst.add(line);
             Decision decision = new Decision(lst, "deleting line "+/*lin.toString(true)+*/" in system "+problem.getName(), 1);
             decision.apply(false);
             decisions.addDec(decision);
-    }
+           }
     private boolean checkEmptyRow() throws ContradictionException{ //1 утверждение
         if(problem.getActiveColumnsCount()>0){
             List<Line> lines = problem.getLines();
@@ -66,10 +66,10 @@ public class DPropagator extends Propagator<IntVar>{
     }
     private void checkOnlyVar() throws ContradictionException { // 3 и 7 утверждения
         int i=0;
-        checkDomainOnLessSup(problem.getProblem().getMinSup()); //8 statement
         checkEmptyRow(); // 1 statement
         deleteRowWithFullComp(); // 4 statement
         deleteEmptyCol();
+        checkDomainOnLessSup(problem.getProblem().getMinSup()); //8 statement
         while(problem.getActiveLinesCount()>0 && i<problem.getLines().size()){
             Line line = problem.getLines().get(i);
             if(line.isActive()){
@@ -87,6 +87,7 @@ public class DPropagator extends Propagator<IntVar>{
                     Value v=problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().noContainAtt-1);
                     if((!line.getNodes().get(1).getActivevals().contains(v)) && problem.getColumns().get(1).getActivedomain().contains(v)) notempty=1;
                 }
+                if (problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount()==problem.getProblem().patternLength) notempty=1;
                 if(notempty!=-1){
                     line.intVar.instantiateTo(notempty, this);
                     Node node=line.getNodes().get(notempty);
@@ -94,10 +95,10 @@ public class DPropagator extends Propagator<IntVar>{
                     newmy.apply(false);
                     decisions.addDec(newmy);
                     delRow(line);
+                    //checkDomainOnLessSup(problem.getProblem().getMinSup());
                     deleteRowWithFullComp();
                     checkDomainOnLessSup(problem.getProblem().getMinSup());
-                    if(checkEmptyRow())
-                        i=1;
+                    if(checkEmptyRow()) i=1;
                 }
                 else i++;
             }
@@ -120,7 +121,6 @@ public class DPropagator extends Propagator<IntVar>{
                     }
                     j++;
                 }
-
             }
         }
         if(listDel!=null){
@@ -140,6 +140,18 @@ public class DPropagator extends Propagator<IntVar>{
     }
 
     private boolean checkDomainOnLessSup(int support) throws ContradictionException{
+        System.out.println(problem.toString());
+        if(problem.getProblem().patternLength!=-1){
+            if(problem.getColumns().get(1).getActivedomain().size()<problem.getProblem().patternLength){
+                this.fails();
+                return false;
+            }
+            if((problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount())>problem.getProblem().patternLength){
+                System.out.println("FAILS");
+                this.fails();
+                return false;
+            }
+        }
         if(problem.getActiveColumnsCount()>0){
             Column column=problem.getColumns().get(0);
             Column yCol=problem.getColumns().get(1);
@@ -174,6 +186,10 @@ public class DPropagator extends Propagator<IntVar>{
 
     @Override
     public void propagate(int evtmask) throws ContradictionException {
+           /* System.out.print("Разница домена и количества строк: ");
+            System.out.println(problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount());
+            System.out.println("Система:");*/
+            System.out.println(problem.toString());
             checkOnlyVar();
     }
     private void systemDeactivate(){
@@ -188,6 +204,5 @@ public class DPropagator extends Propagator<IntVar>{
     public ESat isEntailed() {
                 if(problem.getActiveLinesCount()==0){ systemDeactivate(); return ESat.TRUE;}
                 else return ESat.UNDEFINED;
-
     }
 }

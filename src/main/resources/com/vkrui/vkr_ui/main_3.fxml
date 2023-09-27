@@ -66,36 +66,27 @@
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Pane fx:id="paneOneAtt" layoutX="1.0" layoutY="49.0" prefHeight="126.0" prefWidth="398.0">
+                                    <Pane fx:id="paneOneAtt" layoutX="1.0" layoutY="49.0" prefHeight="86.0" prefWidth="398.0">
                                        <children>
-                                          <Label layoutX="12.0" layoutY="14.0" prefHeight="54.0" prefWidth="375.0" text="Скрыть/Показать паттерны с одним &#10;аттрибутом">
+                                          <Label layoutX="12.0" prefHeight="54.0" prefWidth="375.0" text="Показать решения с длинной">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Button fx:id="btn_OneAtt" layoutX="12.0" layoutY="76.0" mnemonicParsing="false" text="Скрыть/Показать">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </Button>
+                                          <TextField fx:id="tf_patternLength" layoutX="264.0" layoutY="15.0" prefHeight="25.0" prefWidth="120.0" promptText="Введите длину" />
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="paneContainAtt" layoutX="1.0" layoutY="175.0" prefHeight="126.0" prefWidth="398.0">
+                                    <Pane fx:id="paneContainAtt" layoutX="1.0" layoutY="135.0" prefHeight="61.0" prefWidth="398.0">
                                        <children>
-                                          <Label layoutX="12.0" layoutY="14.0" prefHeight="54.0" prefWidth="375.0" text="Показать только решения, содержащие &#10;аттрибут">
+                                          <Label layoutX="12.0" layoutY="-6.0" prefHeight="54.0" prefWidth="375.0" text="Показать только решения, содержащие &#10;аттрибут">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Button fx:id="btn_ContainAtt" layoutX="12.0" layoutY="76.0" mnemonicParsing="false" text="Показать">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </Button>
-                                          <TextField fx:id="tf_OneAtt" layoutX="96.0" layoutY="41.0" prefHeight="25.0" prefWidth="207.0" promptText="Введите номер аттрибута" />
+                                          <TextField fx:id="tf_OneAtt" layoutX="96.0" layoutY="21.0" prefHeight="25.0" prefWidth="207.0" promptText="Введите номер аттрибута" />
                                        </children>
                                     </Pane>
-                                    <Pane layoutX="17.0" layoutY="306.0" prefHeight="91.0" prefWidth="362.0">
+                                    <Pane layoutX="14.0" layoutY="197.0" prefHeight="91.0" prefWidth="362.0">
                                        <children>
                                           <Label layoutY="14.0" text="Показать решения, которые НЕ содержат&#10;аттрибут">
                                              <font>
@@ -125,7 +116,7 @@
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                              <ScrollPane fx:id="paneSolutions" layoutX="13.0" layoutY="67.0" prefHeight="690.0" prefWidth="581.0" />
+                              <ScrollPane fx:id="paneSolutions" layoutX="6.0" layoutY="67.0" prefHeight="690.0" prefWidth="581.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="770.0" prefWidth="253.0">

@@ -161,9 +161,18 @@ public class MainController {
     private List<Solution> solutions;
 
     public String solutionsToStr(List<Solution> solutions){
-        String res ="Найдено "+solutions.size()+" решений"+'\n';
-        for(Solution sol: solutions)
-            res+=sol.solutiontoString(false)+'\n';
+        String s="";
+        if(solutions.size()%10==1) s=" решение ";
+        else {
+            if(solutions.size()%10>1&& solutions.size()%10<5)s=" решения ";
+            else s=" решений ";
+        }
+        String res ="Найдено "+solutions.size()+s+'\n'+'\n';
+        for(int i=1;i<solutions.size()+1;i++) {
+            List<Integer> varX=solutions.get(i-1).getSolution().get(0).getValues();
+            res+=i+". "+solutions.get(i-1).getSolution().get(0).toString(false)+" вес: "+cc.problem.calcObjectWeight(varX)+"\n";
+            res+=solutions.get(i-1).getSolution().get(1).toString(false)+"\n\n";
+        }
         //System.out.println(res);
         res+="Время поиска: "+cc.time+" ms";
         return res;

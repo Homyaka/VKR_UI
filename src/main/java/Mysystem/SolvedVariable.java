@@ -21,7 +21,6 @@ public class SolvedVariable {
             if(dom.get(i).isActive())
                 values.add(dom.get(i).getValue());
     }
-
     public SolvedVariable(List<Integer> vl,Variable vr){
         values=vl;
         variable=vr;
@@ -44,7 +43,7 @@ public class SolvedVariable {
                 if(withcodes) ret+="("+values.get(i)+")";
                 if(i!=values.size()-1)ret+=",";
             }
-            ret+="}\n";
+            ret+="}";
             return ret;
     }
 

@@ -21,12 +21,10 @@ public class Problem {
     private final HashSet<Integer> domvals;
     private List<DSystem> problems;
     private int minSup;
-
     public int containAtt;
     public int noContainAtt;
     public int patternLength;
     public HashMap<IntVar,Line> mapIntVarLine;
-
     public HashSet<String> setXsol;
 
     public int getMinSup() {
@@ -251,6 +249,14 @@ public class Problem {
         for (int i=0; i<vars.size(); i++)
             if(vars.get(i).isActive())ret.add(vars.get(i));
         return ret;
+    }
+
+    public int calcObjectWeight(List<Integer> varX){
+        int res=0;
+        for(int x:varX){
+            res+=weights.get(x-1);
+        }
+        return res;
     }
 
     public long solvemany(boolean withtiming){

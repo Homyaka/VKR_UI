@@ -17,6 +17,11 @@ import org.chocosolver.util.ESat;
 public class DPropagator extends Propagator<IntVar>{
     private final DSystem problem;
     private final Decisions decisions;
+    public DPropagator(DSystem prblm) {
+        super(prblm.getIntVars());
+        problem=prblm;
+        decisions =prblm.getDecisions();
+    }
     private void delRow(Line line) throws ContradictionException {
             List <Activable> lst = new ArrayList<>();
             lst.add(line);
@@ -39,7 +44,7 @@ public class DPropagator extends Propagator<IntVar>{
         }
         return false;
     }
-   private void deleteEmptyCol(){ //2 утверждение
+    private void deleteEmptyCol(){ //2 утверждение
         List<Activable> list=null;
         List<Column> columns = problem.getColumns();
         for (Column column : columns) {
@@ -69,7 +74,7 @@ public class DPropagator extends Propagator<IntVar>{
         checkEmptyRow(); // 1 statement
         deleteRowWithFullComp(); // 4 statement
         deleteEmptyCol();
-        checkDomainOnLessSup(problem.getProblem().getMinSup()); //8 statement
+        checkOnNotSolution(problem.getProblem().getMinSup()); //8 statement
         while(problem.getActiveLinesCount()>0 && i<problem.getLines().size()){
             Line line = problem.getLines().get(i);
             if(line.isActive()){
@@ -88,6 +93,10 @@ public class DPropagator extends Propagator<IntVar>{
                     if((!line.getNodes().get(1).getActivevals().contains(v)) && problem.getColumns().get(1).getActivedomain().contains(v)) notempty=1;
                 }
                 if (problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount()==problem.getProblem().patternLength) notempty=1;
+                if(problem.getProblem().subPattern!=null)
+                    if (checkOnSubPattern(line)) notempty=0;
+                if (problem.getProblem().superPattern!=null)
+                    if (checkOnSuperPattern(line)) notempty=1;
                 if(notempty!=-1){
                     line.intVar.instantiateTo(notempty, this);
                     Node node=line.getNodes().get(notempty);
@@ -97,7 +106,7 @@ public class DPropagator extends Propagator<IntVar>{
                     delRow(line);
                     //checkDomainOnLessSup(problem.getProblem().getMinSup());
                     deleteRowWithFullComp();
-                    checkDomainOnLessSup(problem.getProblem().getMinSup());
+                    checkOnNotSolution(problem.getProblem().getMinSup());
                     if(checkEmptyRow()) i=1;
                 }
                 else i++;
@@ -138,18 +147,17 @@ public class DPropagator extends Propagator<IntVar>{
         }
         return sum;
     }
-
-    private boolean checkDomainOnLessSup(int support) throws ContradictionException{
+    private void checkOnNotSolution(int support) throws ContradictionException{
         System.out.println(problem.toString());
         if(problem.getProblem().patternLength!=-1){
             if(problem.getColumns().get(1).getActivedomain().size()<problem.getProblem().patternLength){
                 this.fails();
-                return false;
+                return;
             }
             if((problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount())>problem.getProblem().patternLength){
                 System.out.println("FAILS");
                 this.fails();
-                return false;
+                return;
             }
         }
         if(problem.getActiveColumnsCount()>0){
@@ -157,33 +165,47 @@ public class DPropagator extends Propagator<IntVar>{
             Column yCol=problem.getColumns().get(1);
             if(calcNodeWeight(column.getActivedomain())<support){
                 this.fails();
-                return false;
+                return;
             }
             if (problem.getProblem().containAtt!=-1) {
                 Value v = problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().containAtt - 1);
                 if (!yCol.getActivedomain().contains(v)) {
                     this.fails();
-                    return false;
+                    return;
                 }
-                return true;
+                return;
             }
             if (problem.getProblem().noContainAtt!=-1){
                 Value v=problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().noContainAtt-1);
                 if (problem.getColumns().get(1).getActivedomain().size()==1 && problem.getColumns().get(1).getActivedomain().contains(v)){
                     this.fails();
-                    return false;
                 }
             }
         }
+    }
+    public boolean checkOnSubPattern(Line line){
+        List<Integer> subPattern=problem.getProblem().subPattern;
+        if(subPattern!=null){
+            List<Value> valY=line.getNodes().get(1).getActivevals();
+            List<Integer> intY=new ArrayList<>();
+            for(Value v:valY)
+                intY.add(v.getValue());
+            for(int val:subPattern){
+                if(!intY.contains(val)) return true;
+            }
+            return false;
+        }
         return false;
     }
-
-    public DPropagator(DSystem prblm) {
-        super(prblm.getIntVars());
-        problem=prblm;
-        decisions =prblm.getDecisions();
+    public boolean checkOnSuperPattern(Line line){
+        List<Integer> superPattern=problem.getProblem().superPattern;
+        if(superPattern!=null){
+            List<Value> missVals=line.getNodes().get(1).getMissVals();
+            int missval=missVals.get(0).getValue();
+            return !superPattern.contains(missval);
+        }
+        return false;
     }
-
     @Override
     public void propagate(int evtmask) throws ContradictionException {
            /* System.out.print("Разница домена и количества строк: ");
@@ -199,7 +221,7 @@ public class DPropagator extends Propagator<IntVar>{
         newmy.apply(false);
         decisions.addDec(newmy);
     }
-    
+
     @Override 
     public ESat isEntailed() {
                 if(problem.getActiveLinesCount()==0){ systemDeactivate(); return ESat.TRUE;}

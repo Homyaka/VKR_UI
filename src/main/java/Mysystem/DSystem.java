@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.chocosolver.solver.variables.IntVar;
 
-/**
- *
- * @author User
- */
 public class DSystem extends Activable{
 
     private final Decisions decisions;

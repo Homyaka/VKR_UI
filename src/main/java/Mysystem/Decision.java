@@ -8,10 +8,6 @@ package Mysystem;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author User
- */
 public class Decision {
     private List <Activable> changes;
     private String descr;

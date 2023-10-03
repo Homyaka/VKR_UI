@@ -8,12 +8,9 @@ package Mysystem;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author User
- */
 public class Variable {
     private final String name;
+
     //private IntVar chocovar;
     private final List<Value> domain;
     private final List<Column> columns;

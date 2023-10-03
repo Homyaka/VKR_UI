@@ -10,10 +10,6 @@ import java.util.List;
 import org.chocosolver.solver.search.strategy.selectors.variables.VariableSelector;
 import org.chocosolver.solver.variables.IntVar;
 
-/**
- *
- * @author User
- */
 public class DVariableSelector implements VariableSelector<IntVar>{
     private final Problem problem;
     public DVariableSelector(Problem my){

@@ -39,6 +39,7 @@ public class MainController {
     boolean flagCutOneAtt=false;
     boolean flagContainAtt=false;
     ArrayList<Integer> weights;
+    public  Font font= new Font("Times New Roman", 24);
     public DataWorker dataWorker=new DataWorker();
     public File OAFile=new File("");
     public File DFile=new File("");
@@ -48,55 +49,40 @@ public class MainController {
     private Button DbtnSelectFile;
     @FXML
     private Button DbtnShowAttributes;
-
     @FXML
     private Button DbtnShowWeights;
-
     @FXML
     private Button DbtnStart;
-
     @FXML
     private Label DlabelFileName;
-
     @FXML
     private Label DlabelSelect;
-
     @FXML
     private ScrollPane DpaneShowAttributes;
-
     @FXML
     private ScrollPane DpaneShowWeight;
-
     @FXML
     private AnchorPane scrollpaneSol;
-
     @FXML
     private Label FileselectFile;
     @FXML
     private Label DlabelUseOAFile;
-
     @FXML
     private Label OAFileName;
-
     @FXML
     private Button OAbtnBuildDTable;
-
     @FXML
     private Button OAbtnLookTable;
-
     @FXML
     private Button OAbtnSelectFile;
-
     @FXML
     private Button OAbtnShowAtt;
     @FXML
     private Button OAbtnShowDTable;
     @FXML
     private Label OAlabelCreateDFile;
-
     @FXML
     private ScrollPane OApane;
-
     @FXML
     private ScrollPane OApaneShowAtt;
     @FXML
@@ -110,19 +96,19 @@ public class MainController {
     @FXML
     private TextField tf_patternLength;
     @FXML
+    private TextField tf_subPattern;
+    @FXML
+    private TextField tf_superPattern;
+    @FXML
     private Button btn_ContainAtt;
-
     @FXML
     private CheckBox cb_OneAtt;
-
     @FXML
     private Pane paneContainAtt;
     @FXML
     private Pane DpaneUseOAtable;
-
     @FXML
     private AnchorPane paneExtraConstr;
-
     @FXML
     private SplitPane scrollpaneSol_1;
     @FXML
@@ -149,7 +135,6 @@ public class MainController {
     private Label fileNameData;
     @FXML
     private Label DlabelOAFile;
-
     @FXML
     private Label labelBuildOAResult;
     @FXML
@@ -159,7 +144,6 @@ public class MainController {
     @FXML
     private CheckBox d_CheckBoxUseOAFile;
     private List<Solution> solutions;
-
     public String solutionsToStr(List<Solution> solutions){
         String s="";
         if(solutions.size()%10==1) s=" решение ";
@@ -177,8 +161,6 @@ public class MainController {
         res+="Время поиска: "+cc.time+" ms";
         return res;
     }
-    public  Font font= new Font("Times New Roman", 24);
-
     public void writter(List<String> data,String type) throws IOException {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM_dd_HH_mm");
         LocalDateTime now = LocalDateTime.now();
@@ -266,15 +248,29 @@ public class MainController {
                     int numContainAtt=-1;
                     int numNoContainAtt=-1;
                     int numLengthAtt=-1;
+                    ArrayList<Integer> subPattern=null;
+                    ArrayList<Integer> superPattern=null;
+                    if(!tf_subPattern.getText().isEmpty()){
+                        String[] values=tf_subPattern.getText().split(",");
+                        subPattern=new ArrayList<>();
+                        for(String s:values)
+                            subPattern.add(Integer.parseInt(s));
+                    }
+                    if(!tf_superPattern.getText().isEmpty()){
+                        String[] values=tf_superPattern.getText().split(",");
+                        superPattern=new ArrayList<>();
+                        for(String s:values)
+                            superPattern.add(Integer.parseInt(s));
+                    }
                     if(!tf_OneAtt.getText().isEmpty()) numContainAtt=Integer.parseInt(tf_OneAtt.getText());
                     if(!tf_NOcontainAtt.getText().isEmpty()) numNoContainAtt=Integer.parseInt(tf_NOcontainAtt.getText());
                     if(!tf_patternLength.getText().isEmpty()) numLengthAtt=Integer.parseInt(tf_patternLength.getText());
                     textSolutions = new Label();
                     textSolutions.setFont(font);
-                    if(numContainAtt==-1 && numNoContainAtt==-1 && numLengthAtt==-1)
+                    if(numContainAtt==-1 && numNoContainAtt==-1 && numLengthAtt==-1 && subPattern!=null && superPattern!=null)
                         solutions=cc.findSolutions(selectFile.getPath(),Integer.parseInt(tfFrequency.getText()));
                     else
-                        solutions=cc.findSolutionsWithConstrain(selectFile.getPath(),Integer.parseInt(tfFrequency.getText()),numContainAtt,numNoContainAtt,numLengthAtt);
+                        solutions=cc.findSolutionsWithConstrain(selectFile.getPath(),Integer.parseInt(tfFrequency.getText()),numContainAtt,numNoContainAtt,numLengthAtt,subPattern,superPattern);
                    /* if ((!tf_NOcontainAtt.getText().isEmpty())&& (!tf_OneAtt.getText().isEmpty()))
                         solutions = cc.findSolutionsWithConstrain(selectFile.getPath(), Integer.parseInt(tfFrequency.getText()), Integer.parseInt(tf_OneAtt.getText()), Integer.parseInt(tf_NOcontainAtt.getText()));
                     else
@@ -294,6 +290,7 @@ public class MainController {
                     fullSolutions = solutionsToStr(solutions);
                     textSolutions.setText(solutionsToStr(solutions));
                     paneSolutions.setContent(textSolutions);
+                    paneSolutions.setPrefWidth(700);
                     paneSolutions.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
                     paneSolutions.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
                     flagContainAtt = false;

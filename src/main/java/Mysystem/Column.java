@@ -26,28 +26,20 @@ public class Column extends Activable{
         else stat = this.getDec().getStatus();
         for(int i = 0; i<nodes.size(); i++)
             if(nodes.get(i).getLine().isActive()) nodes.get(i).activate(this.isActive(), this.getDec(),stat);
-
     }
 
     public void setVariable(Variable variable) {
         this.variable = variable;
     }
-
-
     public Variable getVariable() {
         return variable;
     }
-
-    
     public DSystem getSystem() {
         return system;
     }
-
     public void setSystem(DSystem system) {
         this.system = system;
     }
-
-
     public int getActivedomaincount() {
         int count=0;
         for(int i=0; i<localdomain.size(); i++)
@@ -61,7 +53,6 @@ public class Column extends Activable{
             if(nodes.get(i).isActive())count++;
         return count;
     }
-
     public List<Value> getLocaldomain() {
         return localdomain;
     }
@@ -70,7 +61,6 @@ public class Column extends Activable{
         return nodes;
     }
 
-    
     public Column(){
         localdomain=new ArrayList<>();
         nodes=new ArrayList<>();
@@ -80,7 +70,7 @@ public class Column extends Activable{
         nodes=new ArrayList<>();
         localdomain = dom;
     }
-    
+
     public void addValue(Value val){
         localdomain.add(val);
     }
@@ -115,9 +105,7 @@ public class Column extends Activable{
             if(localdomain.get(i).getValue()==code) return localdomain.get(i);
         return null;
     }
-    
-    //new
-    //faf
+
     public List<Node> getActivenodes() { // список активных ячеек столбца
         List<Node> ret=new ArrayList<>();
         for(int i=0; i<nodes.size(); i++)
@@ -153,7 +141,6 @@ public class Column extends Activable{
             if(tmpnode.isActive()){
                 if(tmpnode.getActivevals().contains(val)) return true;
             }
-        
         }
         return false;
     }

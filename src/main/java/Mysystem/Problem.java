@@ -24,6 +24,8 @@ public class Problem {
     public int containAtt;
     public int noContainAtt;
     public int patternLength;
+    public ArrayList<Integer> subPattern;
+    public ArrayList<Integer> superPattern;
     public HashMap<IntVar,Line> mapIntVarLine;
     public HashSet<String> setXsol;
 
@@ -160,6 +162,8 @@ public class Problem {
         containAtt=-1;
         noContainAtt=-1;
         patternLength=-1;
+        subPattern=null;
+        superPattern=null;
         model = new Model(name);
         model.getSolver().limitTime(120000);
         vars = new ArrayList<>();
@@ -173,12 +177,14 @@ public class Problem {
         setXsol=new HashSet<>();
     }
 
-    public Problem(String name,int minSup,int containAtt,int noContainAtt,int patternLength){
+    public Problem(String name,int minSup,int containAtt,int noContainAtt,int patternLength, ArrayList<Integer> subPattern,ArrayList<Integer> superPattern){
         mapIntVarLine =new HashMap<>();
         this.minSup=minSup;
         this.containAtt=containAtt;
         this.noContainAtt=noContainAtt;
         this.patternLength=patternLength;
+        this.superPattern=superPattern;
+        this.subPattern=subPattern;
         model = new Model(name);
         model.getSolver().limitTime(120000);
         vars = new ArrayList<>();

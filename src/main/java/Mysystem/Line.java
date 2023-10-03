@@ -10,10 +10,7 @@ import org.chocosolver.solver.variables.IntVar;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author User
- */
+
 public class Line extends Activable {
     private DSystem system;
     private List<Node> nodes;

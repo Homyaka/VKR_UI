@@ -9,10 +9,6 @@ package Mysystem;
 import org.chocosolver.solver.search.strategy.selectors.values.IntValueSelector;
 import org.chocosolver.solver.variables.IntVar;
 
-/**
- *
- * @author User
- */
 public class DValueSelector implements IntValueSelector{
     private Decisions decisions;
 

@@ -11,10 +11,7 @@ import org.chocosolver.solver.search.strategy.assignments.DecisionOperator;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.util.objects.setDataStructures.iterable.IntIterableBitSet;
 
-/**
- *
- * @author User
- */
+
 public class Decoperator implements DecisionOperator<IntVar>{
     private final Decisions decisions;
     public Decoperator(Decisions decs){

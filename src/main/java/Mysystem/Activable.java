@@ -5,10 +5,6 @@
  */
 package Mysystem;
 
-/**
- *
- * @author User
- */
 abstract class Activable {
     private boolean flagActive = true;
     private Decision dec = null;

@@ -47,6 +47,7 @@ public class Constraintchoco {
             }
     return problem;
     }
+
     public String findInDSystem(String filePath,int minSup) throws  IOException,ContradictionException{
         Problem nq = new Problem("test",minSup);
         nq.addsys("test",loadsys(filePath));
@@ -56,6 +57,7 @@ public class Constraintchoco {
         String result="";
         return result;
     }
+
     public List<Solution> findSolutions(String filePath, int minSup) throws IOException {
         time= java.lang.System.currentTimeMillis();
         problem = new Problem("test",minSup);
@@ -76,9 +78,10 @@ public class Constraintchoco {
         time= java.lang.System.currentTimeMillis()-time;
         return res;
     }
-    public List<Solution> findSolutionsWithConstrain(String filePath, int minSup,int containAtt,int noContainAtt,int lengthPattern) throws IOException {
+    
+    public List<Solution> findSolutionsWithConstrain(String filePath, int minSup,int containAtt,int noContainAtt,int lengthPattern,ArrayList<Integer> subPattern,ArrayList<Integer> superPattern) throws IOException {
         time= java.lang.System.currentTimeMillis();
-        problem = new Problem("test",minSup,containAtt,noContainAtt,lengthPattern);
+        problem = new Problem("test",minSup,containAtt,noContainAtt,lengthPattern,subPattern,superPattern);
         problem.addsys("test",loadsys(filePath));
         problem.generateListBoolVector();
         problem.genBoolVectors();

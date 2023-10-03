@@ -5,10 +5,6 @@
  */
 package Mysystem;
 
-/**
- *
- * @author User
- */
 public class Value extends Activable{
     private int value;
     private Variable variable;

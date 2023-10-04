@@ -267,7 +267,7 @@ public class MainController {
                     if(!tf_patternLength.getText().isEmpty()) numLengthAtt=Integer.parseInt(tf_patternLength.getText());
                     textSolutions = new Label();
                     textSolutions.setFont(font);
-                    if(numContainAtt==-1 && numNoContainAtt==-1 && numLengthAtt==-1 && subPattern!=null && superPattern!=null)
+                    if(numContainAtt==-1 && numNoContainAtt==-1 && numLengthAtt==-1 && subPattern==null && superPattern==null)
                         solutions=cc.findSolutions(selectFile.getPath(),Integer.parseInt(tfFrequency.getText()));
                     else
                         solutions=cc.findSolutionsWithConstrain(selectFile.getPath(),Integer.parseInt(tfFrequency.getText()),numContainAtt,numNoContainAtt,numLengthAtt,subPattern,superPattern);

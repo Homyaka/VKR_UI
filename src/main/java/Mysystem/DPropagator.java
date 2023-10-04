@@ -8,7 +8,6 @@ package Mysystem;
 //import constraintchoco.intvars.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.chocosolver.solver.constraints.Propagator;
 import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.variables.IntVar;
@@ -104,7 +103,7 @@ public class DPropagator extends Propagator<IntVar>{
                     newmy.apply(false);
                     decisions.addDec(newmy);
                     delRow(line);
-                    //checkDomainOnLessSup(problem.getProblem().getMinSup());
+                    checkOnNotSolution(problem.getProblem().getMinSup());
                     deleteRowWithFullComp();
                     checkOnNotSolution(problem.getProblem().getMinSup());
                     if(checkEmptyRow()) i=1;
@@ -148,7 +147,7 @@ public class DPropagator extends Propagator<IntVar>{
         return sum;
     }
     private void checkOnNotSolution(int support) throws ContradictionException{
-        System.out.println(problem.toString());
+        //System.out.println(problem.toString());
         if(problem.getProblem().patternLength!=-1){
             if(problem.getColumns().get(1).getActivedomain().size()<problem.getProblem().patternLength){
                 this.fails();
@@ -181,6 +180,31 @@ public class DPropagator extends Propagator<IntVar>{
                     this.fails();
                 }
             }
+            if(problem.getProblem().subPattern!=null){
+                List<Value> domainY= problem.getColumns().get(1).getActivedomain();
+                ArrayList<Integer> valY=new ArrayList<>();
+                for(Value v:domainY)
+                    valY.add(v.getValue());
+                for(int i:problem.getProblem().subPattern)
+                    if (!valY.contains(i)){
+                        this.fails();
+                        return;
+                    }
+            }
+            if(problem.getProblem().superPattern!=null){
+                boolean flag=false;
+                List<Value> domainY=problem.getColumns().get(1).getActivedomain();
+                ArrayList<Integer> valY=new ArrayList<>();
+                for(Value v:domainY)
+                    valY.add(v.getValue());
+                for(int i:problem.getProblem().superPattern) {
+                    if (!flag) {
+                        if (valY.contains(i)) flag = true;
+                    }
+                }
+                if (!flag)
+                    this.fails();
+            }
         }
     }
     public boolean checkOnSubPattern(Line line){
@@ -202,7 +226,7 @@ public class DPropagator extends Propagator<IntVar>{
         if(superPattern!=null){
             List<Value> missVals=line.getNodes().get(1).getMissVals();
             int missval=missVals.get(0).getValue();
-            return !superPattern.contains(missval);
+            if (!superPattern.contains(missval)) return true;
         }
         return false;
     }

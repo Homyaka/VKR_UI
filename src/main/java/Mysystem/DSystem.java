@@ -52,6 +52,14 @@ public class DSystem extends Activable{
         lin.setSystem(this);
     }
 
+    public List<Line> getActiveLines(){
+        List<Line> activeLines=new ArrayList<>();
+        for(Line line: getLines()){
+            if(line.isActive()) activeLines.add(line);
+        }
+        return activeLines;
+    }
+
     @Override
     public String toString(){
         String ret="";

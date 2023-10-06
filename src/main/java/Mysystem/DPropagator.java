@@ -30,14 +30,13 @@ public class DPropagator extends Propagator<IntVar>{
            }
     private boolean checkEmptyRow() throws ContradictionException{ //1 утверждение
         if(problem.getActiveColumnsCount()>0){
-            List<Line> lines = problem.getLines();
-            for (Line line : lines) {
-                if (line.isActive()) {
+          //  List<Line> lines = problem.getLines();
+            List<Line> activeLines=problem.getActiveLines();
+            for (Line line : activeLines) {
                     if (line.IsEmpty()) {
                         this.fails();
                         return false;
                     }
-                }
             }
         return true;
         }
@@ -72,7 +71,7 @@ public class DPropagator extends Propagator<IntVar>{
         int i=0;
         checkEmptyRow(); // 1 statement
         deleteRowWithFullComp(); // 4 statement
-        deleteEmptyCol();
+        //deleteEmptyCol();
         checkOnNotSolution(problem.getProblem().getMinSup()); //8 statement
         while(problem.getActiveLinesCount()>0 && i<problem.getLines().size()){
             Line line = problem.getLines().get(i);
@@ -115,9 +114,8 @@ public class DPropagator extends Propagator<IntVar>{
     }
     private void deleteRowWithFullComp() throws ContradictionException {  //4 утверждение
         List<Activable> listDel=null;
-        List<Line> lines = problem.getLines();
-        for (Line line : lines) {
-            if (line.isActive()) {
+        List<Line> activeLines = problem.getActiveLines();
+        for (Line line : activeLines) {
                 List<Node> nodes = line.getNodes();
                 int j = 0;
                 while (j < nodes.size()) {
@@ -129,7 +127,6 @@ public class DPropagator extends Propagator<IntVar>{
                     }
                     j++;
                 }
-            }
         }
         if(listDel!=null){
             Decision newmy = new Decision(listDel, "deleting lines with full nodes from system "+problem.getName(), 1);

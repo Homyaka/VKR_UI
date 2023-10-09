@@ -15,7 +15,6 @@ public class DSystem extends Activable{
     private final String name;
     private final List<Line> lines;
     private final List<Column> columns;
-
     private Problem problem;
 
     public DSystem(String name, List<Solution> sols, Decisions decs, Problem problem){

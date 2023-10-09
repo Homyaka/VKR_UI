@@ -1,161 +1,30 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="VKR_UI:jar">
+  <artifact type="jar" build-on-make="true" name="VKR_UI:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/VKR_UI_jar</output-path>
     <root id="archive" name="VKR_UI.jar">
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
-      </element>
       <element id="module-output" name="VKR_UI" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/18.0.1/javafx-fxml-18.0.1-win.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-compress/1.21/commons-compress-1.21.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.15/commons-codec-1.15.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/18.0.1/javafx-fxml-18.0.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml-lite/5.2.3/poi-ooxml-lite-5.2.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/xmlbeans/xmlbeans/5.1.1/xmlbeans-5.1.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1-win.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1-win.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/18.0.1/javafx-controls-18.0.1-win.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-collections4/4.4/commons-collections4-4.4.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml/5.2.3/poi-ooxml-5.2.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/virtuald/curvesapi/1.07/curvesapi-1.07.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.11.0/commons-io-2.11.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/poi/poi/5.2.3/poi-5.2.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/libs/choco-solver-4.0.1-with-dependencies.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/zaxxer/SparseBitSet/1.2/SparseBitSet-1.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-api/2.18.0/log4j-api-2.18.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-collections4/4.4/commons-collections4-4.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/xmlbeans/xmlbeans/5.1.1/xmlbeans-5.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml-lite/5.2.3/poi-ooxml-lite-5.2.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/18.0.1/javafx-fxml-18.0.1-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml/5.2.3/poi-ooxml-5.2.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/18.0.1/javafx-fxml-18.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/virtuald/curvesapi/1.07/curvesapi-1.07.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.15/commons-codec-1.15.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/18.0.1/javafx-controls-18.0.1.jar" path-in-jar="/" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-console-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-console-l1-2-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-datetime-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-debug-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-errorhandling-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-file-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-file-l1-2-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-file-l2-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-handle-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-heap-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-interlocked-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-libraryloader-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-localization-l1-2-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-memory-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-namedpipe-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-processenvironment-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-processthreads-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-processthreads-l1-1-1.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-profile-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-rtlsupport-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-string-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-synch-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-synch-l1-2-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-sysinfo-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-timezone-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-core-util-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/API-MS-Win-core-xstate-l2-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-conio-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-convert-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-environment-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-filesystem-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-heap-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-locale-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-math-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-multibyte-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-private-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-process-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-runtime-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-stdio-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-string-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-time-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/api-ms-win-crt-utility-l1-1-0.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/awt.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/bci.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/dcpr.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/decora_sse.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/deploy.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/dt_shmem.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/dt_socket.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/eula.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/fontmanager.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/fxplugins.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/glass.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/glib-lite.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/gstreamer-lite.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/hprof.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/instrument.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/j2gss.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/j2pcsc.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/j2pkcs11.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jaas_nt.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jabswitch.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/java-rmi.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/java.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/java.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/java_crw_demo.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/JavaAccessBridge-32.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/javacpl.cpl" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/javacpl.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/javafx_font.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/javafx_iio.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/javaw.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/javaws.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jawt.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/JAWTAccessBridge-32.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jdwp.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jfr.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jfxmedia.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jfxwebkit.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jjs.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jli.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jp2iexp.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jp2launcher.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jp2native.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jp2ssv.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jpeg.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jsdt.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jsound.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/jsoundds.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/keytool.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/kinit.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/klist.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/ktab.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/lcms.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/management.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/mlib_image.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/msvcp140.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/msvcp140_1.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/msvcp140_2.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/net.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/nio.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/npt.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/orbd.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/pack200.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/policytool.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/prism_common.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/prism_d3d.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/prism_sw.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/resource.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/rmid.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/rmiregistry.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/servertool.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/splashscreen.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/sspi_bridge.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/ssv.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/ssvagent.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/sunec.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/sunmscapi.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/t2k.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/tnameserv.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/ucrtbase.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/unpack.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/unpack200.exe" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/vcruntime140.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/verify.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/w2k_lsa_auth.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/WindowsAccessBridge-32.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/wsdetect.dll" />
-      <element id="file-copy" path="C:/Program Files (x86)/Java/jre-1.8/bin/zip.dll" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/18.0.1/javafx-controls-18.0.1-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.11.0/commons-io-2.11.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/libs/choco-solver-4.0.1-with-dependencies.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-compress/1.21/commons-compress-1.21.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/zaxxer/SparseBitSet/1.2/SparseBitSet-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-api/2.18.0/log4j-api-2.18.0.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/../javafx-sdk-21/bin" />
     </root>
   </artifact>
 </component>

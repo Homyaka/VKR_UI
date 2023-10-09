@@ -144,7 +144,8 @@ public class DPropagator extends Propagator<IntVar>{
         return sum;
     }
     private void checkOnNotSolution(int support) throws ContradictionException{
-        //System.out.println(problem.toString());
+        Column xCol=problem.getColumns().get(0);
+        Column yCol=problem.getColumns().get(1);
         if(problem.getProblem().patternLength!=-1){
             if(problem.getColumns().get(1).getActivedomain().size()<problem.getProblem().patternLength){
                 this.fails();
@@ -157,13 +158,11 @@ public class DPropagator extends Propagator<IntVar>{
             }
         }
         if(problem.getActiveColumnsCount()>0){
-            Column column=problem.getColumns().get(0);
-            Column yCol=problem.getColumns().get(1);
-            if(calcNodeWeight(column.getActivedomain())<support){
+            if(calcNodeWeight(xCol.getActivedomain())<support){
                 this.fails();
                 return;
             }
-            if (problem.getProblem().containAtt!=-1) {
+            if (problem.getProblem().containAtt!=-1) { // ограничение на включение атриубута
                 Value v = problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().containAtt - 1);
                 if (!yCol.getActivedomain().contains(v)) {
                     this.fails();
@@ -171,13 +170,13 @@ public class DPropagator extends Propagator<IntVar>{
                 }
                 return;
             }
-            if (problem.getProblem().noContainAtt!=-1){
+            if (problem.getProblem().noContainAtt!=-1){ //ограничение на отсутствие атрибута
                 Value v=problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().noContainAtt-1);
                 if (problem.getColumns().get(1).getActivedomain().size()==1 && problem.getColumns().get(1).getActivedomain().contains(v)){
                     this.fails();
                 }
             }
-            if(problem.getProblem().subPattern!=null){
+            if(problem.getProblem().subPattern!=null){ // ограничение на подпаттерн
                 List<Value> domainY= problem.getColumns().get(1).getActivedomain();
                 ArrayList<Integer> valY=new ArrayList<>();
                 for(Value v:domainY)
@@ -188,7 +187,7 @@ public class DPropagator extends Propagator<IntVar>{
                         return;
                     }
             }
-            if(problem.getProblem().superPattern!=null){
+            if(problem.getProblem().superPattern!=null){ // ограничение на суперпаттерн
                 boolean flag=false;
                 List<Value> domainY=problem.getColumns().get(1).getActivedomain();
                 ArrayList<Integer> valY=new ArrayList<>();
@@ -196,7 +195,10 @@ public class DPropagator extends Propagator<IntVar>{
                     valY.add(v.getValue());
                 for(int i:problem.getProblem().superPattern) {
                     if (!flag) {
-                        if (valY.contains(i)) flag = true;
+                        if (valY.contains(i)) {
+                            flag = true;
+                            break;
+                        }
                     }
                 }
                 if (!flag)
@@ -206,25 +208,18 @@ public class DPropagator extends Propagator<IntVar>{
     }
     public boolean checkOnSubPattern(Line line){
         List<Integer> subPattern=problem.getProblem().subPattern;
-        if(subPattern!=null){
             List<Value> valY=line.getNodes().get(1).getActivevals();
             List<Integer> intY=new ArrayList<>();
             for(Value v:valY)
                 intY.add(v.getValue());
-            for(int val:subPattern){
+            for(int val:subPattern)
                 if(!intY.contains(val)) return true;
-            }
             return false;
-        }
-        return false;
     }
     public boolean checkOnSuperPattern(Line line){
-        List<Integer> superPattern=problem.getProblem().superPattern;
-        if(superPattern!=null){
             List<Value> missVals=line.getNodes().get(1).getMissVals();
             int missval=missVals.get(0).getValue();
-            if (!superPattern.contains(missval)) return true;
-        }
+            if (!problem.getProblem().superPattern.contains(missval)) return true;
         return false;
     }
     @Override

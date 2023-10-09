@@ -1,0 +1,1 @@
+java -jar "VKR_UI.jar"

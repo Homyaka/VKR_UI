@@ -28,6 +28,7 @@ public class Problem {
     public ArrayList<Integer> superPattern;
     public HashMap<IntVar,Line> mapIntVarLine;
     public HashSet<String> setXsol;
+    public HashMap<Line,Integer> addition;
 
     public int getMinSup() {
         return minSup;
@@ -175,6 +176,7 @@ public class Problem {
         orderedsystems = new ArrayList<>();
         listBoolVectors=new ArrayList<>();
         setXsol=new HashSet<>();
+        addition=new HashMap<>();
     }
 
     public Problem(String name,int minSup,int containAtt,int noContainAtt,int patternLength, ArrayList<Integer> subPattern,ArrayList<Integer> superPattern){
@@ -196,8 +198,8 @@ public class Problem {
         orderedsystems = new ArrayList<>();
         listBoolVectors=new ArrayList<>();
         setXsol=new HashSet<>();
+        addition=new HashMap<>();
     }
-
 
     public void addsys(String name,List <List<String>> sys){
         DSystem prblm = new DSystem(name, solutions, decisions,this);

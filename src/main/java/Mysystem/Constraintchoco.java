@@ -88,6 +88,7 @@ public class Constraintchoco {
         problem.generateArrayLong();
         problem.fillArrayLong();
         problem.solvemany(true);
+        System.out.println(" ");
         List<Solution> res=problem.removeByVectorsNOSET();
         time= java.lang.System.currentTimeMillis()-time;
         return res;

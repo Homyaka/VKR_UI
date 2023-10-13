@@ -71,41 +71,37 @@ public class DPropagator extends Propagator<IntVar>{
         int i=0;
         checkEmptyRow(); // 1 statement
         deleteRowWithFullComp(); // 4 statement
-        //deleteEmptyCol();
         checkOnNotSolution(problem.getProblem().getMinSup()); //8 statement
         while(problem.getActiveLinesCount()>0 && i<problem.getLines().size()){
             Line line = problem.getLines().get(i);
-            if(line.isActive()){
+            if(line.isActive()){ //начало 1 блока
                 int notempty =-1;
-                if(calcNodeWeight((line.getNodes().get(0).getActivevals()))<problem.getProblem().getMinSup()) notempty=1;
-                if(line.getNodes().get(1).getActive()==0) notempty=0;
-                if(problem.getProblem().containAtt!=-1){
+                if(calcNodeWeight((line.getNodes().get(0).getActivevals()))<problem.getProblem().getMinSup()) notempty=1; // минимальная граница встречаемости
+                if(line.getNodes().get(1).getActive()==0) notempty=0; // Y не пустая ?
+                if(problem.getProblem().containAtt!=-1){ //ограничение на наличие аттрибута
                     Value v=problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().containAtt-1);
-                    if(!line.getNodes().get(1).getActivevals().contains(v)) {
-                        System.out.print("LINE:"+line.toString()+"\n");
+                    if(!line.getNodes().get(1).getActivevals().contains(v))
                         notempty=0;
-                    }
                 }
-                if(problem.getProblem().noContainAtt!=-1){
+                if(problem.getProblem().noContainAtt!=-1){ //ограничение на отсутствие атрибута
                     Value v=problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().noContainAtt-1);
                     if((!line.getNodes().get(1).getActivevals().contains(v)) && problem.getColumns().get(1).getActivedomain().contains(v)) notempty=1;
                 }
-                if (problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount()==problem.getProblem().patternLength) notempty=1;
+                if (problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount()==problem.getProblem().patternLength) notempty=1; //ограничение на длину паттерна
                 if(problem.getProblem().subPattern!=null)
                     if (checkOnSubPattern(line)) notempty=0;
                 if (problem.getProblem().superPattern!=null)
                     if (checkOnSuperPattern(line)) notempty=1;
-                if(notempty!=-1){
+                if(notempty!=-1){ //начало 2 блока
                     line.intVar.instantiateTo(notempty, this);
                     Node node=line.getNodes().get(notempty);
                     Decision newmy = new Decision(node.getComplvals(), "changing domain of variable "+node.getColumn().getVariable().getName()+" to "+node.toString()+"in system "+problem.getName(), 1);
                     newmy.apply(false);
                     decisions.addDec(newmy);
                     delRow(line);
-                    checkOnNotSolution(problem.getProblem().getMinSup());
                     deleteRowWithFullComp();
                     checkOnNotSolution(problem.getProblem().getMinSup());
-                    if(checkEmptyRow()) i=1;
+                    checkEmptyRow();
                 }
                 else i++;
             }
@@ -188,23 +184,36 @@ public class DPropagator extends Propagator<IntVar>{
                     }
             }
             if(problem.getProblem().superPattern!=null){ // ограничение на суперпаттерн
-                boolean flag=false;
-                List<Value> domainY=problem.getColumns().get(1).getActivedomain();
-                ArrayList<Integer> valY=new ArrayList<>();
-                for(Value v:domainY)
-                    valY.add(v.getValue());
-                for(int i:problem.getProblem().superPattern) {
-                    if (!flag) {
-                        if (valY.contains(i)) {
-                            flag = true;
-                            break;
+                List<Value> domY=yCol.getActivedomain();
+                List<Integer> intDomY=new ArrayList<>();
+                List<Integer> additionAL=additionForActiveLines();
+                List<Integer> superPattern=problem.getProblem().superPattern;
+                for(Value v:domY)
+                    intDomY.add(v.getValue());
+                for(int valY:intDomY)
+                    if(!superPattern.contains(valY))
+                        if (!additionAL.contains(valY)){
+                            System.out.println("FAILED CHECK DOMAIN ON SUPER-PATTERN");
+                            this.fails();
                         }
-                    }
-                }
-                if (!flag)
-                    this.fails();
             }
         }
+    }
+    public void fillAddition(){
+        for(int i=0;i<problem.getLines().size();i++)
+            problem.getProblem().addition.put(problem.getLines().get(i),i+1);
+    }
+
+    public ArrayList<Integer> additionForActiveLines(){
+        ArrayList<Integer> res=new ArrayList<>();
+        for(int i=0;i<problem.getActiveLinesCount();i++){
+            res.add(problem.getProblem().addition.get(problem.getActiveLines().get(i)));
+        }
+        /*System.out.print("ADDITION FOR ACTIVE LINES: ");
+        for (int re : res)
+            System.out.print(re + " ");
+        System.out.print('\n');*/
+        return res;
     }
     public boolean checkOnSubPattern(Line line){
         List<Integer> subPattern=problem.getProblem().subPattern;
@@ -217,18 +226,20 @@ public class DPropagator extends Propagator<IntVar>{
             return false;
     }
     public boolean checkOnSuperPattern(Line line){
-            List<Value> missVals=line.getNodes().get(1).getMissVals();
-            int missval=missVals.get(0).getValue();
-            if (!problem.getProblem().superPattern.contains(missval)) return true;
+        List<Value> missVals=line.getNodes().get(1).getMissVals();
+        int missval=missVals.get(0).getValue();
+        if (!problem.getProblem().superPattern.contains(missval)) return true;
         return false;
     }
     @Override
     public void propagate(int evtmask) throws ContradictionException {
-           /* System.out.print("Разница домена и количества строк: ");
-            System.out.println(problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount());
-            System.out.println("Система:");*/
-            System.out.println(problem.toString());
-            checkOnlyVar();
+        /* System.out.print("Разница домена и количества строк: ");
+        System.out.println(problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount());
+        System.out.println("Система:");*/
+        //System.out.println(problem.toString());
+        fillAddition();
+        additionForActiveLines();
+        checkOnlyVar();
     }
     private void systemDeactivate(){
         List<Activable> lst=new ArrayList<>();

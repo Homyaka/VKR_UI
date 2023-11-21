@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Mysystem;
 
 import java.util.ArrayList;
@@ -26,12 +21,6 @@ public class Decisions {
     public Decision getDec(int n){
         return decisions.get(n);
     }
-    public void deleteDec(){
-       decisions.remove(decisions.size()-1);
-    }
-    public void deleteDec(int n){
-       decisions.remove(n);
-    }
     
     public int size(){
         return decisions.size();
@@ -53,18 +42,4 @@ public class Decisions {
             i--;
         }
     }
-
-    public void unapplyto(Decision dc, boolean act){
-        int i=decisions.size()-1;
-        Decision tmp;
-        do{
-            tmp =decisions.get(i); 
-            tmp.unapply(act);
-            decisions.remove(i);
-            i--;
-        }while(tmp!=dc);
-    }
-
-    
-    
 }

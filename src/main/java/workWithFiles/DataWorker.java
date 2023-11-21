@@ -1,8 +1,6 @@
 package workWithFiles;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,6 +11,7 @@ public class DataWorker {
     public List<String> attributeSet;
     public ArrayList<Integer> weight;
     public List<String> data;
+    public HashMap<String,Integer> attributeType;
 
     public void generatematrix(List<String> data){
         LinkedHashSet<String> set= new LinkedHashSet<>();
@@ -26,31 +25,38 @@ public class DataWorker {
         for (int i=1;i<data.size();i++) {
             String[] line=data.get(i).split("\t");
             for(int j=1;j<attributeSet.size()+1;j++){
-                if (line[j].equals("1")) matrix[i-1][j-1]=true;
-                else matrix[i-1][j-1]=false;
+                matrix[i-1][j-1]= line[j].equals("1");
             }
         }
     }
+
     public List<String> txtParse(String path) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
         data=new ArrayList<>(lines);
-        for (String s:lines) {
-            System.out.println(s);
-        }
         return lines;
     }
+
     public void codedAttribute(List<String> data){
         LinkedHashSet<String> set= new LinkedHashSet<>();
+        attributeType=new HashMap<>();
+        String firstLine=data.get(0);
+        String[] FLarray=firstLine.split("\t");
+        for(int i=1;i<FLarray.length-1;i++){
+            attributeType.put(FLarray[i],i);
+        }
         for (int i=1;i<data.size();i++){
             String line=data.get(i);
             String[] linesplit=line.split("\t");
             for (int n=1;n<linesplit.length-1;n++){
-                set.add(linesplit[n]);
+                if (!set.contains(linesplit[n])) {
+                    set.add(linesplit[n]+"\t"+n);
+                }
             }
         }
         attributeSet= new ArrayList<>(set);
     }
-    public List<String> convertToOATable(List<String> data,List<String> attributes){//Преобразует данные в ОП таблицу
+
+    public List<String> convertToOATable(List<String> data,List<String> attributes){
         List<String> OAtable= new ArrayList<>();
         String firstLine="#";
         matrix =new Boolean[data.size()-1][attributes.size()];
@@ -76,6 +82,7 @@ public class DataWorker {
         }
         return OAtable;
     }
+
     public String buildLine(ArrayList<Integer> x, ArrayList<Integer> y){
         String line="{"+x.get(0);
         for (int i=1;i<x.size();i++) line+=(";"+x.get(i));
@@ -84,16 +91,9 @@ public class DataWorker {
         line+="}";
         return line;
     }
+
     public List<String> convertToDTable(){
         weight= new ArrayList<>();
-        for (String s:attributeSet) System.out.print(s+" ");
-        System.out.println("\n");
-        for (int i=0;i<matrix.length;i++){
-            for (int j=0;j<attributeSet.size();j++){
-                System.out.print(matrix[i][j]+" ");
-            }
-            System.out.println("\n");
-        }
         List<String> dtable=new ArrayList<>();
         dtable.add("X Y");
         ArrayList<Integer> att=new ArrayList<>();
@@ -116,6 +116,4 @@ public class DataWorker {
         }
         return dtable;
     }
-
-
 }

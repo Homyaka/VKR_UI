@@ -17,28 +17,20 @@ public class SolvedVariable {
         values = new ArrayList<>();
         variable = vr;
         List<Value> dom=vr.getDomain();
-        for(int i=0; i<dom.size();i++)
-            if(dom.get(i).isActive())
-                values.add(dom.get(i).getValue());
+        for (Value value : dom)
+            if (value.isActive())
+                values.add(value.getValue());
     }
+
     public SolvedVariable(List<Integer> vl,Variable vr){
         values=vl;
         variable=vr;
-    }
-
-    public int GetValuesNum(){
-        int num=0;
-        for(int i:this.values)
-            num++;
-        return num;
     }
     
     public String toString(boolean withcodes){
             String ret="";
             ret=ret+variable.getName()+"={";
             for(int i=0; i<values.size(); i++){
-               /* ret+=values.get(i).getValue();
-                if(withcodes) ret+="("+values.get(i).getCode()+")";*/
                 ret+=values.get(i);
                 if(withcodes) ret+="("+values.get(i)+")";
                 if(i!=values.size()-1)ret+=",";

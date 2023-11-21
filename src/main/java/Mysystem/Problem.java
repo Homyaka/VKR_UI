@@ -11,10 +11,8 @@ import org.chocosolver.solver.exception.ContradictionException;
 import static org.chocosolver.solver.search.strategy.Search.intVarSearch;
 
 import org.chocosolver.solver.variables.IntVar;
-import workWithFiles.DataWorker;
 
 public class Problem {
-    //public HashMap<SolvedVariable,SolvedVariable> uniqueSolution;
     public HashMap<String,Solution> uniqueSolution;
     private final Model model;
     private final List<Variable> vars;
@@ -94,7 +92,7 @@ public class Problem {
             else{
                 if(tmp!=null) tmpval = tmp.checkValue(dind);
                 else tmpval = new Value(dind);
-            }    
+            }
             domarr.add(tmpval);
             doms=doms.substring(doms.indexOf(";")+1);
         }
@@ -110,12 +108,11 @@ public class Problem {
         domarr.add(tmpval);
         return domarr;
     }
-    
+
     private void buildsys(DSystem prblm, List <List<String>> problem){
         int domnum=problem.size();
         String weight=problem.get(0).get(2);
         weight=weight.substring(weight.indexOf('{')+1,weight.indexOf('}'));
-        System.out.println(weight);
         String[] weightsArr=weight.split(";");
         weights=new ArrayList<>();
         for(int i=0;i<weightsArr.length;i++) weights.add(Integer.parseInt(weightsArr[i]));
@@ -149,14 +146,8 @@ public class Problem {
                 prblm.getLines().get(j-3).addNode(newnode);
             }
         }
-        // System.out.println(prblm.toString());
-       // System.out.println(prblm.getLines().size()+"  "+prblm.getColumns().size());
     }
-    
-    public void buildqueen(int n){
-       /* Nqueens nq = new Nqueens();
-        nq.build(n, vars, domvals, problems, solutions, decisions);*/
-    }
+
     public Problem(String name,int minSup){
         mapIntVarLine =new HashMap<>();
         this.minSup=minSup;
@@ -240,17 +231,15 @@ public class Problem {
     private void preparechoco(boolean withtiming){
         long time= java.lang.System.currentTimeMillis();
         if(!prepared){
-            //for(int i=0; i<vars.size(); i++)
-               // vars.get(i).buildchoco(model);
             for(int i=0; i<problems.size(); i++){
                 DSystem prblm = problems.get(i);
                 Constraint c = new Constraint("D-system", new DPropagator(prblm));
                 model.and(c).post();
-                }
             }
-            prepared=true;
-            if(withtiming) java.lang.System.out.println("Preparation is done in "+(java.lang.System.currentTimeMillis()-time)+" ms");
         }
+        prepared=true;
+        if(withtiming) java.lang.System.out.println("Preparation is done in "+(java.lang.System.currentTimeMillis()-time)+" ms");
+    }
 
     public List<Variable> getActiveVars() {
         List<Variable> ret = new ArrayList<>();
@@ -281,7 +270,7 @@ public class Problem {
         if(withtiming)time= java.lang.System.currentTimeMillis()-time;
         return time;
     }
-    
+
     public long firstsolvemany(boolean withtiming){
         preparechoco(withtiming);
         long time= java.lang.System.currentTimeMillis();
@@ -295,22 +284,20 @@ public class Problem {
         if(withtiming)time= java.lang.System.currentTimeMillis()-time;
         return time;
     }
-    
+
     public String showsolutions(boolean justcount,boolean withdec){
-            if (solutions.size()==0) return "Решений не найдено"+"\n"+"или содержимое файла" + "\n"+"некорректно!";
-            String ret="Найдено "+ solutions.size()+" решений: \n";
-            //String ret="Найдено "+ solutions.size()+" решений: \n";
+        if (solutions.size()==0) return "Решений не найдено"+"\n"+"или содержимое файла" + "\n"+"некорректно!";
+        String ret="Найдено "+ solutions.size()+" решений: \n";
         if(!justcount){
-            for(int i=0; i<solutions.size();i++){
-                ret+=solutions.get(i).solutiontoString(false);
-                if(withdec)ret+=solutions.get(i).decisionstoString();
-                ret+="\n";
+            for (Solution solution : solutions) {
+                ret += solution.solutiontoString(false);
+                if (withdec) ret += solution.decisionstoString();
+                ret += "\n";
             }
-            if (ret.length()==0)ret="no solutions";
         }
-       // ret+="\nTotal solutions:"+solutions.size();
         return ret;
     }
+    // фильтрация с помощью словаря
     public List<Solution> removeWastePattern(){
         List<Solution> filterSolutions=new ArrayList<>();
         if (solutions.size()==0) return  filterSolutions;
@@ -319,13 +306,11 @@ public class Problem {
             String Xkey=sol.solution.get(0).toString(false);
             if(!uniqueSolution.containsKey(Xkey)){
                 uniqueSolution.put(Xkey,sol);
-                System.out.println("add "+Xkey);
             }
             else{
                 Solution oldSol=uniqueSolution.get(Xkey);
                 if(oldSol.getSolution().get(1).getValues().size()<sol.getSolution().get(1).getValues().size()) {
                     uniqueSolution.replace(Xkey,sol);
-                    System.out.println("replace "+Xkey);
                 }
             }
         }
@@ -334,222 +319,74 @@ public class Problem {
         return  filterSolutions;
     }
 
-    public void genBoolVectors() {
-       /* Variable X=vars.get(0);
-        List<Value> values=X.getDomain();*/
-        List<Line> lines = problems.get(0).getLines();
-        for (Line line : lines) {
-            List<Value> Ynode = line.getNodes().get(1).getMissVals();
-            List<Value> Xnode = line.getNodes().get(0).getActivevals();
-            List<Integer> Yvals = new ArrayList<>();
-            List<Integer> Xvals = new ArrayList<>();
-            for (Value x : Xnode) Xvals.add(x.getValue());
-            for (Value y : Ynode) Yvals.add(y.getValue());
-            for (int i : Xvals) System.out.print(i + " ");
-            System.out.print("\t Y: ");
-            for (int i : Yvals) System.out.print(i + " ");
-            System.out.print("\n");
-            Boolean[] test;
-            for (Value x : Xnode) {
-                for (Value y : Ynode) {
-                    listBoolVectors.get(x.getValue() - 1)[y.getValue() - 1] = true;
-                }
-            }
-        }
-    }
-    public List<Solution> removeByBooleanVector(){
-        int num=1;
-        List<Solution> filterSolutions=new ArrayList<>();
-        for(Solution solution:solutions) {
-            String strVarx = solution.solution.get(0).toString(false);
-            if (!setXsol.contains(strVarx)) {
-                setXsol.add(strVarx);
-                List<Integer> varX = solution.solution.get(0).getValues();
-                Boolean[] res = listBoolVectors.get(varX.get(0) - 1);
-                Boolean[] solVector = getBoolVectorSolution(solution);
-                boolean flag = false;
-                for (int i = 1; i < varX.size(); i++) {
-                    res = vectorMultiply(res, listBoolVectors.get(varX.get(i) - 1));
-                }
-                List<Integer> Y=new ArrayList<>();
-                for (int i=0;i<res.length;i++){
-                    if (res[i]) Y.add(i+1);
-                }
-                SolvedVariable newY=new SolvedVariable(Y,solution.getSolution().get(1).getVariable());
-                List<SolvedVariable> sol=new ArrayList<>();
-                sol.add(solution.solution.get(0));
-                sol.add(newY);
-                filterSolutions.add(new Solution(sol));
-               // if (checkVectors(res,solVector)) filterSolutions.add(solution);
-            }
-        }
-        return filterSolutions;
-    }
-
+   // рассчет числового вектора
     public void fillArrayLong(){
         List<Line> lines=problems.get(0).getLines();
         for(Line line:lines){
             List<Value> varX=line.getNodes().get(0).getValues();
             List<Value> varY=line.getNodes().get(1).getMissVals();
-            for(Value y: varY) System.out.println("\n In Y: "+y.getValue());
             for(Value x:varX){
                 for(Value y:varY)
                     vectors[x.getValue()-1]+=(long)Math.pow(2,countAtt-y.getValue());
             }
         }
-        System.out.println("Check BoolVector and LongVector:");
-        for(int i=0;i<vectors.length;i++){
-            System.out.print("Boolean: ");
-            Boolean[] booleans=listBoolVectors.get(i);
-            for(Boolean b:booleans) System.out.print(b+" ");
-            System.out.print("    Long: "+vectors[i]);
-            System.out.print("\n");
-        }
     }
 
+    // фильтрация числовым вектором без сета
     public List<Solution> removeByVectorsNOSET(){
         List<Solution> filterSolutions=new ArrayList<>();
         for(Solution solution:solutions){
             List<Integer> valX=solution.solution.get(0).getValues();
             long vec=vectors[valX.get(0)-1];
-            System.out.print("X: ");
-            for (int x:valX) System.out.print(x+" ");
-            System.out.println('\n');
-            System.out.println("LongVector: "+vec);
-            System.out.print("BoolVector: ");
-            Boolean[] b=listBoolVectors.get(valX.get(0)-1);
-            for(boolean q:b) System.out.print(q+" ");
-            System.out.print("\n");
             for(int i=1;i<valX.size();i++){
                 vec=vec&vectors[valX.get(i)-1];
-                System.out.println(vec);
             }
             long solvec=getSolutionVector(solution);
-            System.out.println("Compare Vec and SolVec:");
-            System.out.println(vec);
-            System.out.println(solvec);
             if (solvec==vec) filterSolutions.add(solution);
         }
         return filterSolutions;
     }
+
+    // фильтрация числовым вектором с сетом
     public List<Solution> removeByVectorsWITHSET(){
         List<Solution> filterSolutions=new ArrayList<>();
-            for (Solution solution : solutions) {
-                String strVarx = solution.solution.get(0).toString(false);
-                if(!setXsol.contains(strVarx)) {
-                    setXsol.add(strVarx);
-                    List<Integer> valX = solution.solution.get(0).getValues();
-                    long vec = vectors[valX.get(0) - 1];
-                    for (int i = 1; i < valX.size(); i++)
-                        vec = vec & vectors[valX.get(i) - 1];
-                    char[] charVec=Long.toBinaryString(vec).toCharArray();
-                    List<Integer> newY=new ArrayList<>();
-                    long[] binaryNum=new long[charVec.length];
-                    for (int i=0;i<charVec.length;i++){
-                        if (charVec[i]=='1') newY.add(i+1);
-                    }
-                    SolvedVariable svY=new SolvedVariable(newY,new Variable("Y"));
-                    List<SolvedVariable> sv=new ArrayList<>();
-                    sv.add(solution.solution.get(0));
-                    sv.add(svY);
-                    Solution sol=new Solution(sv);
-                    filterSolutions.add(sol);
+        for (Solution solution : solutions) {
+            String strVarx = solution.solution.get(0).toString(false);
+            if(!setXsol.contains(strVarx)) {
+                setXsol.add(strVarx);
+                List<Integer> valX = solution.solution.get(0).getValues();
+                long vec = vectors[valX.get(0) - 1];
+                for (int i = 1; i < valX.size(); i++)
+                    vec = vec & vectors[valX.get(i) - 1];
+                char[] charVec=Long.toBinaryString(vec).toCharArray();
+                List<Integer> newY=new ArrayList<>();
+                long[] binaryNum=new long[charVec.length];
+                for (int i=0;i<charVec.length;i++){
+                    if (charVec[i]=='1') newY.add(i+1);
                 }
+                SolvedVariable svY=new SolvedVariable(newY,new Variable("Y"));
+                List<SolvedVariable> sv=new ArrayList<>();
+                sv.add(solution.solution.get(0));
+                sv.add(svY);
+                Solution sol=new Solution(sv);
+                filterSolutions.add(sol);
+            }
 
         }
         return filterSolutions;
     }
 
+    //рассчет числового вектора для решения
     public long getSolutionVector(Solution sol){
         long res=0;
         List<Integer> varY=sol.solution.get(1).getValues();
         for(int i:varY) res+=(long) Math.pow(2,countAtt-i);
         return res;
     }
-    public void generateListBoolVector(){
-        for(int i=0;i<problems.get(0).getColumns().get(0).getLocaldomain().size();i++){
-            Boolean[] vec=new Boolean[problems.get(0).getColumns().get(1).getLocaldomain().size()];
-            Arrays.fill(vec,false);
-            listBoolVectors.add(vec);
-        }
-    }
+
+    // генерация списка числовых векторов
     public void generateArrayLong(){
         vectors=new long[problems.get(0).getColumns().get(0).getLocaldomain().size()];
         Arrays.fill(vectors,0);
-    }
-    public void generateBoolVectorsList( File oatableFile) throws IOException {
-        if(oatableFile.isFile()){
-            DataWorker dw=new DataWorker();
-            dw.generatematrix(dw.txtParse(oatableFile.getPath()));
-            listBoolVectors=new ArrayList<>();
-            for(int n=0;n<dw.matrix.length;n++)
-                listBoolVectors.add(dw.matrix[n]);
-        }
-        else {
-            genBoolVectors();
-            /*System.out.print("НЕ ТОТ ПУТЬ ФАЙЛА");
-            int yDomSize;
-            String l = text.get(1).substring(1, text.get(1).length());
-            yDomSize = l.split(",").length;
-            List<Value> values = vars.get(0).getDomain();
-            for (int i = 3; i < text.size(); i++) {
-                String line = text.get(i);
-                String[] str = line.split(" ");
-                String node = str[0];
-                node = node.substring(1, node.length());
-                String y = str[0].substring(1, str.length);
-                int ind = getMissingNum(y, yDomSize);
-                for (String s : node.split(",")) {
-                    System.out.print(s+" ");
-                }
-                System.out.print('\n');*/
-            }
-        }
-    public Boolean[] getBoolVectorSolution(Solution sol){
-        Boolean[] res=new Boolean[listBoolVectors.get(0).length];
-        Arrays.fill(res,false);
-        List<Integer> varY=sol.solution.get(1).getValues();
-            for(int y:varY){
-                res[y-1]=true;
-            }
-            System.out.println('\n'+"SOLUTION");
-        for(int i=0;i<res.length;i++){
-            System.out.print(res[i]+" ");
-        }
-        System.out.println('\n');
-        return res;
-    }
-    public int getMissingNum(String str,int size){
-        for(int i=1;i<=size;i++){
-            String i_= String.valueOf(i);
-            if(!str.contains(i_)) return i;
-        }
-        return -1;
-    }
-    public Boolean[] vectorMultiply(Boolean[] arr1,Boolean[] arr2){
-        Boolean[] res=new Boolean[arr1.length];
-        for (boolean b : arr1) System.out.print(b + " ");
-        System.out.print('\n');
-        for (boolean b : arr2) System.out.print(b + " ");
-        for(int i=0;i<arr1.length;i++)
-            res[i]=arr1[i]&arr2[i];
-        System.out.print('\n');
-        for (boolean re : res) System.out.print(re + " ");
-        System.out.print('\n');
-        System.out.print('\n');
-        return res;
-    }
-    public boolean checkVectors(Boolean[] arr1,Boolean[] arr2){
-        boolean flag=true;
-        for(int i=0;i<arr1.length;i++)
-            System.out.print(arr1[i]+" ");
-        System.out.print("\n");
-        for(int i=0;i<arr2.length;i++)
-            System.out.print(arr2[i]+" ");
-        System.out.print("\n");
-        for(int i=0;i<arr1.length;i++)
-            if (arr1[i]!=arr2[i]) flag=false;
-        System.out.print(flag);
-        return flag;
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Mysystem;
 
 import java.util.ArrayList;
@@ -27,26 +22,26 @@ public class DSystem extends Activable{
     @Override
     void onActivate(){}
 
-    public int getActiveLinesCount() { //получить кол-во активных строк в системе
+    public int getActiveLinesCount() {
         int count=0;
         for(int i=0; i<lines.size(); i++)
             if(lines.get(i).isActive())count++;
         return count;
     }
 
-    public int getActiveColumnsCount() { //получить кол-во активных столбцов в системе
+    public int getActiveColumnsCount() {
         int count=0;
         for(int i=0; i<columns.size(); i++)
             if(columns.get(i).isActive())count++;
         return count;
     }
 
-    public void addColumn(Column column){ //добавить в систему столбец
+    public void addColumn(Column column){
         columns.add(column);
         column.setSystem(this);
     }
 
-    public void addLine(Line lin){  //добавить в систему строку
+    public void addLine(Line lin){
         lines.add(lin);
         lin.setSystem(this);
     }
@@ -62,18 +57,17 @@ public class DSystem extends Activable{
     @Override
     public String toString(){
         String ret="";
-        for(int i=0; i<columns.size(); i++)
-            ret=ret+columns.get(i).toString()+" ";
+        for (Column column : columns) ret = ret + column.toString() + " ";
         ret=ret+"\n";
-        for(int i=0; i<lines.size(); i++)
-            if(lines.get(i).isActive())
-                ret=ret+lines.get(i).toString()+"\n";
+        for (Line line : lines)
+            if (line.isActive())
+                ret = ret + line.toString() + "\n";
         return ret;
     }
-    public IntVar[] getIntVars(){  // получить массив переменных IntVar
+    public IntVar[] getIntVars(){
         List<IntVar> ret = new ArrayList<>();
         for (Line line : lines) ret.add(line.intVar);
-        return ret.toArray(new IntVar[ret.size()]);
+        return ret.toArray(new IntVar[0]);
     }
     @Override
     public boolean isActive(){
@@ -96,32 +90,4 @@ public class DSystem extends Activable{
     }
 
     public Problem getProblem() {return problem;}
-
-    /*public String printChoco(){
-        String ret="";
-        for(int i=0; i<columns.size(); i++)
-            ret=ret+columns.get(i).getVariable().getChocovar().toString()+" ";
-        ret=ret+"\n";
-        return ret;
-    }*/
-
-    /*public List<Column> getActivecolumns() { //получить лист активных столбцов в системе
-        List<Column> ret=new ArrayList<>();
-        for(int i=0; i<columns.size(); i++)
-            if(columns.get(i).isActive())ret.add(columns.get(i));
-        return ret;
-    }*/
-
-     /* public Column getColumn(String var){ // получить столбец по заданной переменной
-        for(int i=0; i<columns.size(); i++)
-            if(columns.get(i).getVariable().getName().compareTo(var)==0)return columns.get(i);
-        return null;
-    }*/
-
-   /* public List<Line> getActiveLines(){ // //получить лист активных строк в системе
-        List<Line> ret=new ArrayList<>();
-        for(int i=0; i<lines.size(); i++)
-            if(lines.get(i).isActive())ret.add(lines.get(i));
-        return ret;
-    }*/
 }

@@ -1,17 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Mysystem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Node extends Activable{
-    private Column column; //колонка
-    private Line line; //строка
-    private List<Value> values; //значения в ячейке
+    private Column column;
+    private Line line;
+    private List<Value> values;
     @Override
     void onActivate(){
     }
@@ -30,23 +25,15 @@ public class Node extends Activable{
         return values;
     }
 
-    public int getActive() { //Count количество активных значений
+    public int getActive() {
         int count=0;
         for(int i=0; i<values.size(); i++)
             if(values.get(i).isActive())count++;
         return count;
     }
-    
-    public Node(){
-        values = new ArrayList<>();
-    }
 
     public Node(List<Value> vals){
         values = vals;
-    }
-    
-    public void addval(Value val){
-        values.add(val);
     }
 
     public void setColumn(Column variable) {
@@ -57,36 +44,26 @@ public class Node extends Activable{
         this.line = line;
     }
 
-    
     @Override
     public String toString(){
         String ret="";
         if(this.isActive(true)){
             ret="{";
-            for(int i =0; i<values.size(); i++)
-                if(values.get(i).isActive())ret+=values.get(i).getValue()+";";
+            for (Value value : values)
+                if (value.isActive())
+                    ret += value.getValue() + ";";
             ret+="}";}
-        //ret+="active: "+active;
         return ret;
     }
     
-    public int[] toIntarr(){
-        List<Integer> ret = new ArrayList<>();
-        for(int i =0; i<values.size(); i++)
-            if(values.get(i).isActive())ret.add(values.get(i).getValue());
-        int[] reti = new int[ret.size()];
-        for (int i=0; i<ret.size(); i++)
-            reti[i]=ret.get(i);
-        return reti;
-    }
-    
-    public List<Activable> getComplvals(){ //получить значения домена столбца которых нет в этой ячейке (активные)
+    public List<Activable> getComplvals(){
         List<Activable> ret = new ArrayList<>();
         for(int i = 0; i< column.getLocaldomain().size(); i++)
             if(column.getLocaldomain().get(i).isActive()&&!values.contains(column.getLocaldomain().get(i)))
                 ret.add(column.getLocaldomain().get(i));
         return ret;
     }
+
     public List<Value> getMissVals(){
         List<Value> ret = new ArrayList<>();
         for(int i = 0; i< column.getLocaldomain().size(); i++)
@@ -94,20 +71,12 @@ public class Node extends Activable{
                 ret.add(column.getLocaldomain().get(i));
         return ret;
     }
-    public List<Value> getAllVals(){
-        List<Value> res=new ArrayList<>();
-        for(int i = 0; i< column.getLocaldomain().size(); i++)
-            if(column.getLocaldomain().get(i).isActive()&&!values.contains(column.getLocaldomain().get(i)))
-                res.add(column.getLocaldomain().get(i));
-        return res;
-    }
     
-    public List<Value> getActivevals(){  // получить активные значения ячейки
+    public List<Value> getActivevals(){
         List<Value> ret = new ArrayList<>();
-        for(int i=0; i<values.size(); i++)
-            if(values.get(i).isActive())
-                ret.add(values.get(i));
+        for (Value value : values)
+            if (value.isActive())
+                ret.add(value);
         return ret;
     }
-
 }

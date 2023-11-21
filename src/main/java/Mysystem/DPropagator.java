@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Mysystem;
 
-//import constraintchoco.intvars.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.chocosolver.solver.constraints.Propagator;
@@ -21,16 +15,15 @@ public class DPropagator extends Propagator<IntVar>{
         problem=prblm;
         decisions =prblm.getDecisions();
     }
-    private void delRow(Line line) throws ContradictionException {
+    private void delRow(Line line){
             List <Activable> lst = new ArrayList<>();
             lst.add(line);
-            Decision decision = new Decision(lst, "deleting line "+/*lin.toString(true)+*/" in system "+problem.getName(), 1);
+            Decision decision = new Decision(lst, "deleting line "+line.toString(true)+" in system "+problem.getName(), 1);
             decision.apply(false);
             decisions.addDec(decision);
            }
-    private boolean checkEmptyRow() throws ContradictionException{ //1 утверждение
+    private boolean checkEmptyRow() throws ContradictionException{
         if(problem.getActiveColumnsCount()>0){
-          //  List<Line> lines = problem.getLines();
             List<Line> activeLines=problem.getActiveLines();
             for (Line line : activeLines) {
                     if (line.IsEmpty()) {
@@ -42,57 +35,33 @@ public class DPropagator extends Propagator<IntVar>{
         }
         return false;
     }
-    private void deleteEmptyCol(){ //2 утверждение
-        List<Activable> list=null;
-        List<Column> columns = problem.getColumns();
-        for (Column column : columns) {
-            if (column.isActive()) {
-                List<Node> nodes = column.getNodes();
-                boolean flagStop = false;
-                int j = 0;
-                while (!flagStop && j < nodes.size()) {
-                    Node tempnode = nodes.get(j);
-                    if (tempnode.isActive() && tempnode.getActive() != 0) flagStop = true;
-                    j++;
-                }
-                if (!flagStop) {
-                    if (list == null) list = new ArrayList<>();
-                    list.add(column);
-                }
-            }
-        }
-        if(list!=null){
-            Decision decision = new Decision(list, "deleting empty columns in system "+problem.getName(), 1);
-            decision.apply(false);
-            decisions.addDec(decision);
-        }
-    }
-    private void checkOnlyVar() throws ContradictionException { // 3 и 7 утверждения
+
+    private void checkOnlyVar() throws ContradictionException {
         int i=0;
-        checkEmptyRow(); // 1 statement
-        deleteRowWithFullComp(); // 4 statement
-        checkOnNotSolution(problem.getProblem().getMinSup()); //8 statement
+        checkEmptyRow();
+        deleteRowWithFullComp();
+        checkOnNotSolution(problem.getProblem().getMinSup());
         while(problem.getActiveLinesCount()>0 && i<problem.getLines().size()){
             Line line = problem.getLines().get(i);
-            if(line.isActive()){ //начало 1 блока
+            if(line.isActive()){
                 int notempty =-1;
-                if(calcNodeWeight((line.getNodes().get(0).getActivevals()))<problem.getProblem().getMinSup()) notempty=1; // минимальная граница встречаемости
-                if(line.getNodes().get(1).getActive()==0) notempty=0; // Y не пустая ?
-                if(problem.getProblem().containAtt!=-1){ //ограничение на наличие аттрибута
+                if(calcNodeWeight((line.getNodes().get(0).getActivevals()))<problem.getProblem().getMinSup()) notempty=1;
+                if(line.getNodes().get(1).getActive()==0) notempty=0;
+                if(problem.getProblem().containAtt!=-1){
                     Value v=problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().containAtt-1);
                     if(!line.getNodes().get(1).getActivevals().contains(v))
                         notempty=0;
                 }
-                if(problem.getProblem().noContainAtt!=-1){ //ограничение на отсутствие атрибута
+                if(problem.getProblem().noContainAtt!=-1){
                     Value v=problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().noContainAtt-1);
                     if((!line.getNodes().get(1).getActivevals().contains(v)) && problem.getColumns().get(1).getActivedomain().contains(v)) notempty=1;
                 }
-                if (problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount()==problem.getProblem().patternLength) notempty=1; //ограничение на длину паттерна
+                if (problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount()==problem.getProblem().patternLength) notempty=1;
                 if(problem.getProblem().subPattern!=null)
                     if (checkOnSubPattern(line)) notempty=0;
                 if (problem.getProblem().superPattern!=null)
                     if (checkOnSuperPattern(line)) notempty=1;
-                if(notempty!=-1){ //начало 2 блока
+                if(notempty!=-1){
                     line.intVar.instantiateTo(notempty, this);
                     Node node=line.getNodes().get(notempty);
                     Decision newmy = new Decision(node.getComplvals(), "changing domain of variable "+node.getColumn().getVariable().getName()+" to "+node.toString()+"in system "+problem.getName(), 1);
@@ -108,7 +77,8 @@ public class DPropagator extends Propagator<IntVar>{
             else i++;
         }
     }
-    private void deleteRowWithFullComp() throws ContradictionException {  //4 утверждение
+
+    private void deleteRowWithFullComp() throws ContradictionException {
         List<Activable> listDel=null;
         List<Line> activeLines = problem.getActiveLines();
         for (Line line : activeLines) {
@@ -130,6 +100,7 @@ public class DPropagator extends Propagator<IntVar>{
             decisions.addDec(newmy);
         }
     }
+
     public int calcNodeWeight(List<Value> values){
         int sum=0;
         if(values.isEmpty()) return -1;
@@ -139,6 +110,7 @@ public class DPropagator extends Propagator<IntVar>{
         }
         return sum;
     }
+
     private void checkOnNotSolution(int support) throws ContradictionException{
         Column xCol=problem.getColumns().get(0);
         Column yCol=problem.getColumns().get(1);
@@ -148,7 +120,6 @@ public class DPropagator extends Propagator<IntVar>{
                 return;
             }
             if((problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount())>problem.getProblem().patternLength){
-                System.out.println("FAILS");
                 this.fails();
                 return;
             }
@@ -158,7 +129,7 @@ public class DPropagator extends Propagator<IntVar>{
                 this.fails();
                 return;
             }
-            if (problem.getProblem().containAtt!=-1) { // ограничение на включение атриубута
+            if (problem.getProblem().containAtt!=-1) {
                 Value v = problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().containAtt - 1);
                 if (!yCol.getActivedomain().contains(v)) {
                     this.fails();
@@ -166,13 +137,13 @@ public class DPropagator extends Propagator<IntVar>{
                 }
                 return;
             }
-            if (problem.getProblem().noContainAtt!=-1){ //ограничение на отсутствие атрибута
+            if (problem.getProblem().noContainAtt!=-1){
                 Value v=problem.getColumns().get(1).getLocaldomain().get(problem.getProblem().noContainAtt-1);
                 if (problem.getColumns().get(1).getActivedomain().size()==1 && problem.getColumns().get(1).getActivedomain().contains(v)){
                     this.fails();
                 }
             }
-            if(problem.getProblem().subPattern!=null){ // ограничение на подпаттерн
+            if(problem.getProblem().subPattern!=null){
                 List<Value> domainY= problem.getColumns().get(1).getActivedomain();
                 ArrayList<Integer> valY=new ArrayList<>();
                 for(Value v:domainY)
@@ -183,7 +154,7 @@ public class DPropagator extends Propagator<IntVar>{
                         return;
                     }
             }
-            if(problem.getProblem().superPattern!=null){ // ограничение на суперпаттерн
+            if(problem.getProblem().superPattern!=null){
                 List<Value> domY=yCol.getActivedomain();
                 List<Integer> intDomY=new ArrayList<>();
                 List<Integer> additionAL=additionForActiveLines();
@@ -192,13 +163,12 @@ public class DPropagator extends Propagator<IntVar>{
                     intDomY.add(v.getValue());
                 for(int valY:intDomY)
                     if(!superPattern.contains(valY))
-                        if (!additionAL.contains(valY)){
-                            System.out.println("FAILED CHECK DOMAIN ON SUPER-PATTERN");
+                        if (!additionAL.contains(valY))
                             this.fails();
-                        }
             }
         }
     }
+
     public void fillAddition(){
         for(int i=0;i<problem.getLines().size();i++)
             problem.getProblem().addition.put(problem.getLines().get(i),i+1);
@@ -209,10 +179,6 @@ public class DPropagator extends Propagator<IntVar>{
         for(int i=0;i<problem.getActiveLinesCount();i++){
             res.add(problem.getProblem().addition.get(problem.getActiveLines().get(i)));
         }
-        /*System.out.print("ADDITION FOR ACTIVE LINES: ");
-        for (int re : res)
-            System.out.print(re + " ");
-        System.out.print('\n');*/
         return res;
     }
     public boolean checkOnSubPattern(Line line){
@@ -233,10 +199,6 @@ public class DPropagator extends Propagator<IntVar>{
     }
     @Override
     public void propagate(int evtmask) throws ContradictionException {
-        /* System.out.print("Разница домена и количества строк: ");
-        System.out.println(problem.getColumns().get(1).getActivedomain().size()-problem.getActiveLinesCount());
-        System.out.println("Система:");*/
-        //System.out.println(problem.toString());
         fillAddition();
         additionForActiveLines();
         checkOnlyVar();

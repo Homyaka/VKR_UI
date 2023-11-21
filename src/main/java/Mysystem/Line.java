@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Mysystem;
 
 import org.chocosolver.solver.variables.IntVar;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +31,7 @@ public class Line extends Activable {
         return nodes;
     }
 
-    public int getActive() {//количество активных ячеек
+    public int getActive() {
         int count=0;
         for(int i=0; i<nodes.size(); i++)
             if(nodes.get(i).isActive())count++;
@@ -46,34 +40,34 @@ public class Line extends Activable {
     public Line(){
         nodes=new ArrayList<>();
     }
-    
-    
+
     public void addNode(Node add){
         nodes.add(add);
         add.setLine(this);
     }
     
-    public boolean IsEmpty(){ //проверяет пустая ли строка
-        for(int i=0; i<nodes.size(); i++)
-            if(nodes.get(i).isActive()&&nodes.get(i).getActive()!=0)return false;
+    public boolean IsEmpty(){
+        for (Node node : nodes)
+            if (node.isActive() && node.getActive() != 0)
+                return false;
         return true;    
     }
-    public boolean hasempty(){ //проверяет есть ли пустые ячейки
-        for(int i=0; i<nodes.size(); i++)
-            if(nodes.get(i).isActive()&&nodes.get(i).getActive()==0)return true;
+    public boolean hasempty(){
+        for (Node node : nodes)
+            if (node.isActive() && node.getActive() == 0)
+                return true;
         return false;    
     }
     @Override
-    public String toString(){ //отладочный
+    public String toString(){
         String ret="";
         if(this.isActive()){
-            for(int i=0; i<nodes.size(); i++)
-                ret=ret+nodes.get(i).toString()+" ";
+            for (Node node : nodes)
+                ret += node.toString() + " ";
         }
-        //return ret+"active: "+active;
         return ret;
     }
-    public String toString(boolean withinactive){ //отладочный
+    public String toString(boolean withinactive){
         String ret="";
         if(this.isActive()){
             for(int i=0; i<nodes.size(); i++){
@@ -82,13 +76,6 @@ public class Line extends Activable {
                 else ret+="{} ";
             }
         }
-        //return ret+"active: "+active;
-        return ret;
-    }
-    public Node getnodefromcol(Column col){
-        Node ret=null;
-        for(int i=0; i<nodes.size(); i++)
-            if(nodes.get(i).getColumn()==col)return nodes.get(i);
         return ret;
     }
 

@@ -1,23 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Mysystem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author User
- */
 public class Column extends Activable{
     
-    private final List<Value> localdomain; //локальный домен для столбца
-    private final List<Node> nodes; //указатель на ячейки
-    private Variable variable; //указатель на переменную
-    private DSystem system; //указатель на систему в которой столбец
+    private final List<Value> localdomain;
+    private final List<Node> nodes;
+    private Variable variable;
+    private DSystem system;
     
     @Override
     void onActivate(){
@@ -90,43 +81,11 @@ public class Column extends Activable{
         
     }
     
-   /* public int[] toIntarr(){
-        List<Integer> ret = new ArrayList<>();
-        for(int i =0; i<localdomain.size(); i++)
-            if(localdomain.get(i).isActive())ret.add(localdomain.get(i).getValue().getCode());
-        int[] reti = new int[ret.size()];
-        for (int i=0; i<ret.size(); i++)
-            reti[i]=ret.get(i);
-        return reti;
-    }*/
-    
-    public Value getValue(int code){ //значение по коду code
+    public Value getValue(int code){
         for(int i=0; i<localdomain.size(); i++)
             if(localdomain.get(i).getValue()==code) return localdomain.get(i);
         return null;
     }
-
-    public List<Node> getActivenodes() { // список активных ячеек столбца
-        List<Node> ret=new ArrayList<>();
-        for(int i=0; i<nodes.size(); i++)
-            if(nodes.get(i).isActive())ret.add(nodes.get(i));
-        return ret;
-    }
-    
-   /* public List<Value> getdomainwithout(List<CodedValue> codedvalue){
-        List<Value> ret = new ArrayList<>();
-        for(int i=0; i<localdomain.size(); i++){
-            Value chk = localdomain.get(i);
-            if(!codedvalue.contains(chk.getValue())) ret.add(chk);}
-        return ret;
-    }*/
-   /*public List<Value> getdomainwithout(CodedValue codedvalue){
-        List<Value> ret = new ArrayList<>();
-        for(int i=0; i<localdomain.size(); i++){
-            Value chk = localdomain.get(i);
-            if(codedvalue!=chk.getValue()) ret.add(chk);}
-        return ret;
-    }*/
 
     public List<Value> getActivedomain(){
         List<Value> ret = new ArrayList<>();
@@ -134,14 +93,5 @@ public class Column extends Activable{
             Value val=localdomain.get(i);
             if(val.isActive()) ret.add(val);}
         return ret;
-    }
-    public boolean hasinNodes(Value val){
-        for (int i=0; i<nodes.size();i++){
-            Node tmpnode=nodes.get(i);
-            if(tmpnode.isActive()){
-                if(tmpnode.getActivevals().contains(val)) return true;
-            }
-        }
-        return false;
     }
 }

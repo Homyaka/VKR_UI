@@ -12,13 +12,24 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        //создание переменных
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        /*Variable var1=new Variable(new Box(4,4));
+        var1.obj=new Cell[][]{{Cell.FREE,Cell.FREE,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT,Cell.OBJECT}};
+        Variable var2= new Variable(new Box(3,3));
+        var2.obj=new Cell[][]{{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT}};
+        Variable var3=new Variable(new Box(3,2));
+        var3.obj= new Cell[][]{{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT}};*/
+        List<Variable> vs=new ArrayList<>();
         Variable var1=new Variable(new Box(2,2));
-        var1.obj=new Cell[][]{{Cell.FREE,Cell.FREE},{Cell.OBJECT,Cell.OBJECT}};
-        Variable var2= new Variable(new Box(1,2));
-        var2.obj=new Cell[][]{{Cell.FREE},{Cell.OBJECT}};
-        System.out.print(var1);
-        System.out.print("\n");
+        Variable var2= new Variable(new Box(2,1));
+        var1.obj=new Cell[][]{{Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT}};
+        var2.obj= new Cell[][]{{Cell.OBJECT,Cell.OBJECT}};
+        vs.add(var1);
+        vs.add(var2);
+        var1.name="1";
+        var2.name="2";
+        //создание грида
         System.out.print("width: ");
         int width =Integer.parseInt(reader.readLine());
         System.out.print("height: ");
@@ -33,24 +44,23 @@ public class Main {
             grid.grid[i][0]=Cell.WALLS;
             grid.grid[i][grid.grid[0].length-1]=Cell.WALLS;
         }
+        //grid.grid[2][1]=Cell.WALLS;
         System.out.print(grid);
         System.out.println("\n"+grid.pointsToGridString());
-        System.out.println(grid.fromCellToInt(0,3));
-        System.out.println(grid.fromIntToCell(19));
-        List<Variable> vs=new ArrayList<>();
-        vs.add(var1);
-        vs.add(var2);
+        // создание решателя и распространителя
         Solver solver=new Solver(vs,grid);
-        System.out.println(solver.tryPlace(var1,6));
         solver.computeDomains();
-        System.out.print("domain var1: ");
-        for(int i:var1.domain) System.out.print(i+" ");
-        System.out.print("\ndomain var2: ");
-        for (int i: var2.domain) System.out.print(i+" ");
-        //grid.getPointCell(10);
-        solver.place(var1,15);
-        System.out.print("BEFORE:\n"+grid);
-        System.out.print("RESULT:\n");
-        System.out.print(grid);
+        //тест
+        System.out.print(" Before\n"+grid);
+        System.out.print("domain var2 before: ");
+        for(int i:var2.domain) System.out.print(i+" ");
+        System.out.print("\ndomain var3 before: ");
+      //  for(int i: var3.domain) System.out.print(i+" ");
+        //solver.place(var1,11);
+        System.out.print("\n\ndomain var2 after: ");
+        for(int i:var2.domain) System.out.print(i+" ");
+        System.out.print("\ndomain var3 after: ");
+       // for(int i:solver.variables.get(2).domain) System.out.print(i+" ");
+        System.out.print(solver.solve());
     }
 }

@@ -1,9 +1,11 @@
 package Mysystem;
 
+import org.chocosolver.solver.variables.IntVar;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Variable {
+public class Variable  {
     private final String name;
 
     private final List<Value> domain;

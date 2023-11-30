@@ -1,6 +1,10 @@
 package GenDesign;
 
 import GDSystem.*;
+import org.chocosolver.solver.Model;
+import org.chocosolver.solver.constraints.Constraint;
+import org.chocosolver.solver.exception.ContradictionException;
+import org.chocosolver.solver.variables.IntVar;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,10 +13,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.chocosolver.solver.search.strategy.Search.intVarSearch;
+
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        //создание переменных
+    public static void testSolve(){
+        Model testModel=new Model("test");
+        IntVar v1= testModel.intVar("v1",new int[]{2,4,5,6,7,1});
+        IntVar v2= testModel.intVar("v2",new int[]{3,4,5});
+        IntVar[] testIntvar=new IntVar[2];
+        testIntvar[0]=v1;
+        testIntvar[1]=v2;
+        Constraint c=new Constraint("testConstraint",new TestProp(testIntvar));
+        testModel.and(c).post();
+        org.chocosolver.solver.Solver solver=testModel.getSolver();
+        TestVariableSelector variableSelector=new TestVariableSelector();
+        TestValueSelector valueSelector=new TestValueSelector();
+        solver.setSearch(intVarSearch(variableSelector,valueSelector,testIntvar));
+        while (solver.solve()) {
+            System.out.print(solver.getSolutionCount()+"sol:\n");
+            System.out.print(testIntvar[0]+" "+testIntvar[1]+'\n');
+        }
+       // solver.findAllSolutions();
+        System.out.print(solver.getSolutionCount()+"sols");
+        //System.out.print("\n"+testIntvar[0]+" "+testIntvar[1]);
+    }
+    public static void main(String[] args) throws IOException, ContradictionException {
+       // testSolve();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         /*Variable var1=new Variable(new Box(4,4));
         var1.obj=new Cell[][]{{Cell.FREE,Cell.FREE,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT,Cell.OBJECT}};
@@ -27,8 +54,8 @@ public class Main {
         var2.obj= new Cell[][]{{Cell.OBJECT,Cell.OBJECT}};
         vs.add(var1);
         vs.add(var2);
-        var1.name="1";
-        var2.name="2";
+        var1.name="var1";
+        var2.name="var2";
         //создание грида
         System.out.print("width: ");
         int width =Integer.parseInt(reader.readLine());
@@ -45,22 +72,12 @@ public class Main {
             grid.grid[i][grid.grid[0].length-1]=Cell.WALLS;
         }
         //grid.grid[2][1]=Cell.WALLS;
-        System.out.print(grid);
-        System.out.println("\n"+grid.pointsToGridString());
+        //System.out.print(grid);
+        //System.out.println("\n"+grid.pointsToGridString());
         // создание решателя и распространителя
-        Solver solver=new Solver(vs,grid);
-        solver.computeDomains();
-        //тест
-        System.out.print(" Before\n"+grid);
-        System.out.print("domain var2 before: ");
-        for(int i:var2.domain) System.out.print(i+" ");
-        System.out.print("\ndomain var3 before: ");
-      //  for(int i: var3.domain) System.out.print(i+" ");
-        //solver.place(var1,11);
-        System.out.print("\n\ndomain var2 after: ");
-        for(int i:var2.domain) System.out.print(i+" ");
-        System.out.print("\ndomain var3 after: ");
-       // for(int i:solver.variables.get(2).domain) System.out.print(i+" ");
-        System.out.print(solver.solve());
+        MySolver mySolver =new MySolver(vs,grid);
+        mySolver.firstSolve(true);
     }
+
+
 }

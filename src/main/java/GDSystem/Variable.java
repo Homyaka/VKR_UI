@@ -11,6 +11,7 @@ public class Variable {
     public Box box;
     public ArrayList<Integer> domain;
     public Cell[][] obj;
+    public  IntVar intVar;
 
     public Variable(Box box){
         this.box=box;
@@ -19,6 +20,14 @@ public class Variable {
     }
     public int getDomainSize(){
         return domain.size();
+    }
+
+    public int[] convertDomainFromListToArray(){
+        int[] res=new int[domain.size()];
+        for(int i=0;i<domain.size();i++){
+            res[i]=domain.get(i);
+        }
+        return res;
     }
    public String variableToString(){
         String s="";

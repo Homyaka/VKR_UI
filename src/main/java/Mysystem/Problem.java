@@ -27,30 +27,25 @@ public class Problem {
     public HashMap<IntVar,Line> mapIntVarLine;
     public HashSet<String> setXsol;
     public HashMap<Line,Integer> addition;
-
-    public int getMinSup() {
-        return minSup;
-    }
-
     public ArrayList<Integer> weights;
-
-    public void setMinSup(int minSup) {
-        this.minSup = minSup;
-    }
-
     private List<List<DSystem>> orderedsystems;
     private boolean prepared;
     private final Decisions decisions;
     private final List<Solution> solutions;
-    public ArrayList<Boolean[]> listBoolVectors;
     public long[] vectors;
     public int countAtt;
 
     public List<List<DSystem>> getOrderedsystems() {
         return orderedsystems;
     }
+    public int getMinSup() {
+        return minSup;
+    }
     public List<Variable> getVars() {
         return vars;
+    }
+    public void setMinSup(int minSup) {
+        this.minSup = minSup;
     }
 
     public List<DSystem> getProblems() {
@@ -165,7 +160,6 @@ public class Problem {
         decisions = new Decisions();
         solutions = new ArrayList<>();
         orderedsystems = new ArrayList<>();
-        listBoolVectors=new ArrayList<>();
         setXsol=new HashSet<>();
         addition=new HashMap<>();
     }
@@ -187,7 +181,6 @@ public class Problem {
         decisions = new Decisions();
         solutions = new ArrayList<>();
         orderedsystems = new ArrayList<>();
-        listBoolVectors=new ArrayList<>();
         setXsol=new HashSet<>();
         addition=new HashMap<>();
     }

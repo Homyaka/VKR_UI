@@ -50,7 +50,7 @@ public class Main {
         List<Variable> vs=new ArrayList<>();
         Variable var1=new Variable(new Box(2,2));
         Variable var2= new Variable(new Box(2,1));
-        var1.obj=new Cell[][]{{Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT}};
+        var1.obj=new Cell[][]{{Cell.OBJECT,Cell.FREE},{Cell.OBJECT,Cell.OBJECT}};
         var2.obj= new Cell[][]{{Cell.OBJECT,Cell.OBJECT}};
         vs.add(var1);
         vs.add(var2);

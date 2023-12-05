@@ -57,7 +57,7 @@ public class MySolver {
             prepared=true;
         }
         if(withtiming)
-            System.out.print("Preparation is done in "+(java.lang.System.currentTimeMillis()-time)+" ms");
+            System.out.print("Preparation is done in "+(java.lang.System.currentTimeMillis()-time)+" ms\n");
     }
     public long firstSolve(boolean withtiming){
        // computeDomains();
@@ -67,13 +67,13 @@ public class MySolver {
         GDVariableSelector variableSelector=new GDVariableSelector();
         GDValueSelector valueSelector=new GDValueSelector();
         solver.setSearch((intVarSearch(variableSelector,valueSelector,intVars)));
-        while (solver.solve()){
-            System.out.print(solver.getSolutionCount()+"sol:\n");
-            for(IntVar intVar:intVars)
-                System.out.print("\n"+intVar.toString()+"\n");
-            }
-        //System.out.print("\n"+solver.getSolutionCount());
-        System.out.print("\nZBC");
+        while (solver.solve()) {
+            System.out.println(solver.getSolutionCount() + "sol:");
+            for (IntVar intVar : intVars)
+                System.out.print(intVar.toString()+" ");
+            System.out.print("\n\n");
+        }
+        System.out.print("\nВсего решений: ");
         return time;
     }
 

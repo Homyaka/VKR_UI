@@ -15,6 +15,8 @@ public class MySolver {
     public Boolean prepared;
     public IntVar[] intVars;
 
+    public List<Solution> solutions;
+
     public MySolver(List<Variable> variables, Grid grid){
         model=new Model(" ");
        // model.getSolver().limitTime(Long.MAX_VALUE);
@@ -23,6 +25,7 @@ public class MySolver {
         this.grid=grid;
         prepared=false;
         computeDomains();
+        solutions=new ArrayList<>();
     }
 
     public boolean tryPlace(Variable v,int point){
@@ -59,8 +62,7 @@ public class MySolver {
         if(withtiming)
             System.out.print("Preparation is done in "+(java.lang.System.currentTimeMillis()-time)+" ms\n");
     }
-    public long firstSolve(boolean withtiming){
-       // computeDomains();
+    public long manySolve(boolean withtiming){
         preparechoco(withtiming);
         long time=java.lang.System.currentTimeMillis();
         org.chocosolver.solver.Solver solver=model.getSolver();
@@ -68,12 +70,14 @@ public class MySolver {
         GDValueSelector valueSelector=new GDValueSelector();
         solver.setSearch((intVarSearch(variableSelector,valueSelector,intVars)));
         while (solver.solve()) {
-            System.out.println(solver.getSolutionCount() + "sol:");
+            System.out.println(solver.getSolutionCount() + " sol:");
             for (IntVar intVar : intVars)
                 System.out.print(intVar.toString()+" ");
             System.out.print("\n\n");
+            Solution sol=new Solution(Arrays.asList(intVars),variables);
+            solutions.add(sol);
         }
-        System.out.print("\nВсего решений: ");
+        System.out.print("\nВсего решений: "+solver.getSolutionCount());
         return time;
     }
 

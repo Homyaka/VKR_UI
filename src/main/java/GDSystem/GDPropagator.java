@@ -29,21 +29,21 @@ public class GDPropagator extends Propagator<IntVar> {
     public void reComputeDomain(Variable v) throws ContradictionException {
         newDom=new ArrayList<>();
         for(int i:v.intVar) newDom.add(i);
-        System.out.println("Домен Variable до распространения:");
-        System.out.println(v.toString()+": "+Arrays.toString(v.domain.toArray()));
+        //System.out.println("Домен Variable до распространения:");
+        //System.out.println(v.toString()+": "+Arrays.toString(v.domain.toArray()));
         delValuesArrangedVariable(v);
         delTopCells(v);
         delLeftCells(v);
         delTopLeftCells(v);
         v.domain=newDom;
         if(newDom.size()!=0) {
-            System.out.println("Домен Variable после распространения:");
-            System.out.println(Arrays.toString(v.domain.toArray()));
+            //System.out.println("Домен Variable после распространения:");
+            //System.out.println(Arrays.toString(v.domain.toArray()));
             IntIterableBitSet set = new IntIterableBitSet();
             set.addAll(v.convertDomainFromListToArray());
             v.intVar.removeAllValuesBut(set, this );
-            System.out.println("Домен IntVar:");
-            System.out.print(v.intVar);
+            //System.out.println("Домен IntVar:");
+            //System.out.print(v.intVar);
         }
         else this.fails();
     }
@@ -51,13 +51,13 @@ public class GDPropagator extends Propagator<IntVar> {
         for(int i=0;i<arrangedVariable.box.getHeight();i++){
             for(int j=0;j<arrangedVariable.box.getWidth();j++){
                 int p=point+i* mySolver.grid.width+j;
-                System.out.println("delValuesArrangedVariable\ni= "+i+",j= "+j+"point="+p);
+                //System.out.println("delValuesArrangedVariable\ni= "+i+",j= "+j+"point="+p);
                 int index=newDom.indexOf(p);
                 if(index!=-1) newDom.remove(index);
             }
         }
         if(newDom.size()==0) {
-            System.out.println("NEL`ZYA POSTAVIT`");
+            //System.out.println("NEL`ZYA POSTAVIT`");
             this.fails();
         }
     }
@@ -66,13 +66,13 @@ public class GDPropagator extends Propagator<IntVar> {
         for (int j=1;j<v.box.getHeight();j++){
             for(int i=0;i<arrangedVariable.box.getWidth();i++){
                 int p=point+i- mySolver.grid.width*j;
-                System.out.println("delTopCells\ni= "+i+",j= "+j+"point="+p);
+                //System.out.println("delTopCells\ni= "+i+",j= "+j+"point="+p);
                 int index=newDom.indexOf(p);
                 if(index!=-1) newDom.remove(index);
             }
         }
         if(newDom.size()==0) {
-            System.out.println("NEL`ZYA POSTAVIT`");
+            //System.out.println("NEL`ZYA POSTAVIT`");
             this.fails();
         }
     }
@@ -81,13 +81,13 @@ public class GDPropagator extends Propagator<IntVar> {
         for(int j=0;j<arrangedVariable.box.getHeight();j++){
             for(int i=1;i<v.box.getWidth();i++){
                 int p=point-i+ mySolver.grid.width*j;
-                System.out.println("delLeftCells\ni= "+i+",j= "+j+"point="+p);
+                //System.out.println("delLeftCells\ni= "+i+",j= "+j+"point="+p);
                 int index=newDom.indexOf(p);
                 if(index!=-1) newDom.remove(index);
             }
         }
         if(newDom.size()==0) {
-            System.out.println("NEL`ZYA POSTAVIT`");
+            //System.out.println("NEL`ZYA POSTAVIT`");
             this.fails();
         }
     }
@@ -96,13 +96,13 @@ public class GDPropagator extends Propagator<IntVar> {
         for (int j=1;j<v.box.getHeight();j++){
             for(int i=1;i<v.box.getWidth();i++){
                 int p=point-i- mySolver.grid.width*j;
-                System.out.println("delTopLeftCells\ni= "+i+",j= "+j+"point="+p);
+                //System.out.println("delTopLeftCells\ni= "+i+",j= "+j+"point="+p);
                 int index=newDom.indexOf(p);
                 if (index!=-1) newDom.remove(index);
             }
         }
         if(newDom.size()==0) {
-            System.out.println("NEL`ZYA POSTAVIT`");
+            //System.out.println("NEL`ZYA POSTAVIT`");
             this.fails();
         }
     }
@@ -114,18 +114,18 @@ public class GDPropagator extends Propagator<IntVar> {
 
     @Override
     public void propagate(int i) throws ContradictionException {
-        System.out.println("\n ZAHOL V NE KRUTOI PROP\n");
+        //System.out.println("\n ZAHOL V NE KRUTOI PROP\n");
         for(IntVar intVar:vars){
            // System.out.println(intVar+" "+System.identityHashCode(intVar));
         }
     }
     @Override
     public void propagate(int idxVarInProp, int mask) throws ContradictionException{
-        System.out.println("\nДо распространения: "+idxVarInProp);
+        //System.out.println("\nДо распространения: "+idxVarInProp);
         for(IntVar v:vars){
-            System.out.print(v);
-            if(v.isInstantiated()) System.out.print(" Поставлена\n");
-            else System.out.println("\n");
+            //System.out.print(v);
+            //if(v.isInstantiated()) System.out.print(" Поставлена\n");
+            //else System.out.println("\n");
         }
         index=idxVarInProp;
         placedVar=vars[index];
@@ -134,24 +134,24 @@ public class GDPropagator extends Propagator<IntVar> {
        // System.out.print("Поставлена: Variable"+arrangedVariable.variableToString());
         if(vars[idxVarInProp].isInstantiated()){
             reComputeDomains();
-            System.out.println("\nПосле распространения:");
+            //System.out.println("\nПосле распространения:");
             for(IntVar v:vars){
-            System.out.println(v);
+            //System.out.println(v);
             }
         }
-        else System.out.println("БЕЗ РАСПРОСТРАНЕНИЯ");
+       // else System.out.println("БЕЗ РАСПРОСТРАНЕНИЯ");
     }
 
     @Override
     public ESat isEntailed() {
-        System.out.print("ZAHEL V IsEntailed: ");
+       // System.out.print("ZAHEL V IsEntailed: ");
         for(IntVar intVar:vars){
             if(!intVar.isInstantiated()) {
-                System.out.print("POKA NE NAHOL\n");
+               // System.out.print("POKA NE NAHOL\n");
                 return ESat.UNDEFINED;
             }
         }
-        System.out.print("NAHOL\n");
+       // System.out.print("NAHOL\n");
         return ESat.TRUE;
     }
 }

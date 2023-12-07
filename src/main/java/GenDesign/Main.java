@@ -38,46 +38,10 @@ public class Main {
         System.out.print(solver.getSolutionCount()+"sols");
         //System.out.print("\n"+testIntvar[0]+" "+testIntvar[1]);
     }
-    public static void main(String[] args) throws IOException, ContradictionException {
-       // testSolve();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        /*Variable var1=new Variable(new Box(4,4));
-        var1.obj=new Cell[][]{{Cell.FREE,Cell.FREE,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT,Cell.OBJECT}};
-        Variable var2= new Variable(new Box(3,3));
-        var2.obj=new Cell[][]{{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT}};
-        Variable var3=new Variable(new Box(3,2));
-        var3.obj= new Cell[][]{{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT},{Cell.OBJECT,Cell.OBJECT,Cell.OBJECT}};*/
-        List<Variable> vs=new ArrayList<>();
-        Variable var1=new Variable(new Box(2,2));
-        Variable var2= new Variable(new Box(2,1));
-        var1.obj=new Cell[][]{{Cell.OBJECT,Cell.FREE},{Cell.OBJECT,Cell.OBJECT}};
-        var2.obj= new Cell[][]{{Cell.OBJECT,Cell.OBJECT}};
-        vs.add(var1);
-        vs.add(var2);
-        var1.name="var1";
-        var2.name="var2";
-        //создание грида
-        System.out.print("width: ");
-        int width =Integer.parseInt(reader.readLine());
-        System.out.print("height: ");
-        int height =Integer.parseInt(reader.readLine());
-        System.out.print("\n");
-        Grid grid=new Grid(width,height);
-        for(int i=0;i<grid.grid.length;i++)
-            Arrays.fill(grid.grid[i],Cell.EMPTY);
-        Arrays.fill(grid.grid[0],Cell.WALLS);
-        Arrays.fill(grid.grid[grid.grid.length-1],Cell.WALLS);
-        for(int i=1;i<grid.grid.length-1;i++){
-            grid.grid[i][0]=Cell.WALLS;
-            grid.grid[i][grid.grid[0].length-1]=Cell.WALLS;
-        }
-        //grid.grid[2][1]=Cell.WALLS;
-        //System.out.print(grid);
-        //System.out.println("\n"+grid.pointsToGridString());
-        // создание решателя и распространителя
-        MySolver mySolver =new MySolver(vs,grid);
-        mySolver.firstSolve(true);
+    public static void main(String[] args) {
+        GenApplication.main(args);
     }
+
 
 
 }

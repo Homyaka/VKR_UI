@@ -12,6 +12,7 @@ public class Variable {
     public ArrayList<Integer> domain;
     public Cell[][] obj;
     public  IntVar intVar;
+    public Cell type;
 
     public Variable(Box box){
         this.box=box;

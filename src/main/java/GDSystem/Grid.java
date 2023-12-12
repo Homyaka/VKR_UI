@@ -37,6 +37,7 @@ public class Grid {
         }
     }
 
+
     public int fromCellToInt(int x,int y){
         return y*width+x;
     }

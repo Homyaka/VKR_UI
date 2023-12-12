@@ -12,21 +12,24 @@ public class MySolver {
     public Model model;
     public List<Variable> variables;
     public Grid grid;
+    public Grid filledGrid;
     public Boolean prepared;
     public IntVar[] intVars;
-
+    public List<Grid> filledGrids;
     public List<Solution> solutions;
 
     public MySolver(List<Variable> variables, Grid grid){
         model=new Model(" ");
        // model.getSolver().limitTime(Long.MAX_VALUE);
         intVars=new IntVar[variables.size()];
+        filledGrids=new ArrayList<>();
         this.variables=variables;
         this.grid=grid;
         prepared=false;
         computeDomains();
         solutions=new ArrayList<>();
     }
+
 
     public boolean tryPlace(Variable v,int point){
         for(int i=0;i<v.obj.length;i++){
@@ -62,6 +65,7 @@ public class MySolver {
         if(withtiming)
             System.out.print("Preparation is done in "+(java.lang.System.currentTimeMillis()-time)+" ms\n");
     }
+
     public long manySolve(boolean withtiming){
         preparechoco(withtiming);
         long time=java.lang.System.currentTimeMillis();
@@ -74,8 +78,17 @@ public class MySolver {
             for (IntVar intVar : intVars)
                 System.out.print(intVar.toString()+" ");
             System.out.print("\n\n");
-            Solution sol=new Solution(Arrays.asList(intVars),variables);
+            Solution sol=new Solution(variables);
+            System.out.println("MY VARIABLES:");
+            for(Variable v:variables){
+                System.out.println(v.name+" "+v.intVar.getValue());
+            }
             solutions.add(sol);
+           // filledGrids.add(fillGrid(sol));
+        }
+        System.out.print("2 sol:");
+        for(Variable v:solutions.get(1).variables){
+            System.out.println(v.name+" "+v.intVar.getValue());
         }
         System.out.print("\nВсего решений: "+solver.getSolutionCount());
         return time;

@@ -78,17 +78,18 @@ public class MySolver {
             for (IntVar intVar : intVars)
                 System.out.print(intVar.toString()+" ");
             System.out.print("\n\n");
-            Solution sol=new Solution(variables);
+            Solution sol=new Solution(variables,intVars);
             System.out.println("MY VARIABLES:");
             for(Variable v:variables){
                 System.out.println(v.name+" "+v.intVar.getValue());
             }
             solutions.add(sol);
-           // filledGrids.add(fillGrid(sol));
+
         }
         System.out.print("2 sol:");
-        for(Variable v:solutions.get(1).variables){
-            System.out.println(v.name+" "+v.intVar.getValue());
+        Solution s=solutions.get(1);
+        for(int i=0;i<s.variables.size();i++){
+            System.out.println(s.variables.get(i).name+" "+s.variables.get(i).intVar.getValue());
         }
         System.out.print("\nВсего решений: "+solver.getSolutionCount());
         return time;

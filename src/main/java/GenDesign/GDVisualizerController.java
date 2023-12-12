@@ -73,7 +73,7 @@ public class GDVisualizerController {
         Grid resGrid=grid;
         for(int i=0;i<solution.variables.size();i++){
             Variable v=solution.variables.get(i);
-            int point=solution.variables.get(i).intVar.getValue();
+            int point=solution.intVars[i].getValue();
             for(int y=0;y<v.obj.length;y++){
                 for(int x=0;x<v.obj[0].length;x++){
                     int p=point+y*resGrid.width+x;

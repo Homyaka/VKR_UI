@@ -2,6 +2,7 @@ package GDSystem;
 
 import org.chocosolver.solver.variables.IntVar;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,14 +10,15 @@ import java.util.Map;
 public class Solution {
     HashMap<Variable,Integer> placedVariables;
     public List<Variable> variables;
-    public IntVar[] intVars;
+    public List<Integer> values;
 
-    public Solution(List<Variable> variables,IntVar[] intVars){
+    public Solution(List<Variable> variables){
         placedVariables=new HashMap<>();
+        values=new ArrayList<>();
         this.variables=variables;
-        this.intVars=intVars;
-        for(int i=0;i<variables.size();i++)
-            placedVariables.put(variables.get(i),intVars[i].getValue());
-
+        for(int i=0;i<variables.size();i++) {
+            values.add(variables.get(i).intVar.getValue());
+            placedVariables.put(variables.get(i), variables.get(i).intVar.getValue());
+        }
     }
 }

@@ -7,10 +7,11 @@ public enum Cell {
     FREE(1),
 
     //Для отображения
-    OBJ1 (10),
-    OBJ2 (11),
-    OBJ3 (12);
-
+    OBJ1 (11),
+    OBJ2 (12),
+    OBJ3 (13),
+    OBJ4 (14),
+    OBJ5(15);
     Cell(int i) {
     }
 }

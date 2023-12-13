@@ -54,5 +54,16 @@ public class Grid {
         p[1]=point/width;
         return p;
     }
+    public Grid(Grid grid){
+        this.height= grid.height;
+        this.width= grid.width;
+        this.points=grid.points;
+        this.grid=new Cell[grid.grid.length][grid.grid[0].length];
+        for(int i=0;i<grid.width;i++){
+            for(int j=0;j< grid.height;j++){
+                this.grid[j][i]=grid.grid[j][i];
+            }
+        }
+    }
 }
 

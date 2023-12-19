@@ -10,13 +10,13 @@ public class Variable {
     public String name;
     public Box box;
     public ArrayList<Integer> domain;
-    public Cell[][] obj;
+    public int[][] obj;
     public  IntVar intVar;
     public int id;
 
     public Variable(Box box){
         this.box=box;
-        obj=new Cell[box.getHeight()][box.getWidth()];
+        obj=new int[box.getHeight()][box.getWidth()];
         this.domain=new ArrayList<>();
     }
     public int getDomainSize(){

@@ -34,7 +34,7 @@ public class MySolver {
     public boolean tryPlace(Variable v,int point){
         for(int i=0;i<v.obj.length;i++){
             for(int j=0;j<v.obj[0].length;j++){
-                if (grid.fromIntToCell(point+j+grid.width*i)!=Cell.EMPTY) return false;
+                if (grid.fromIntToCell(point+j+grid.width*i)!=0) return false;
             }
         }
         return true;
@@ -42,6 +42,7 @@ public class MySolver {
 
     public void computeDomains(){
         for(Variable v:variables){
+            v.domain.clear();
             computeDomain(v);
         }
         variables.sort(Comparator.comparing(Variable::getDomainSize));
@@ -74,15 +75,7 @@ public class MySolver {
         GDValueSelector valueSelector=new GDValueSelector();
         solver.setSearch((intVarSearch(variableSelector,valueSelector,intVars)));
         while (solver.solve()) {
-            System.out.println(solver.getSolutionCount() + " sol:");
-            for (IntVar intVar : intVars)
-                System.out.print(intVar.toString()+" ");
-            System.out.print("\n\n");
             Solution sol=new Solution(variables);
-            System.out.println("MY VARIABLES:");
-            for(Variable v:variables){
-                System.out.println(v.name+" "+v.intVar.getValue());
-            }
             solutions.add(sol);
 
         }

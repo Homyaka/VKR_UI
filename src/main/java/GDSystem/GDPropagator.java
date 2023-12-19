@@ -29,21 +29,15 @@ public class GDPropagator extends Propagator<IntVar> {
     public void reComputeDomain(Variable v) throws ContradictionException {
         newDom=new ArrayList<>();
         for(int i:v.intVar) newDom.add(i);
-        //System.out.println("Домен Variable до распространения:");
-        //System.out.println(v.toString()+": "+Arrays.toString(v.domain.toArray()));
         delValuesArrangedVariable(v);
         delTopCells(v);
         delLeftCells(v);
         delTopLeftCells(v);
         v.domain=newDom;
         if(newDom.size()!=0) {
-            //System.out.println("Домен Variable после распространения:");
-            //System.out.println(Arrays.toString(v.domain.toArray()));
             IntIterableBitSet set = new IntIterableBitSet();
             set.addAll(v.convertDomainFromListToArray());
             v.intVar.removeAllValuesBut(set, this );
-            //System.out.println("Домен IntVar:");
-            //System.out.print(v.intVar);
         }
         else this.fails();
     }
@@ -51,13 +45,11 @@ public class GDPropagator extends Propagator<IntVar> {
         for(int i=0;i<arrangedVariable.box.getHeight();i++){
             for(int j=0;j<arrangedVariable.box.getWidth();j++){
                 int p=point+i* mySolver.grid.width+j;
-                //System.out.println("delValuesArrangedVariable\ni= "+i+",j= "+j+"point="+p);
                 int index=newDom.indexOf(p);
                 if(index!=-1) newDom.remove(index);
             }
         }
         if(newDom.size()==0) {
-            //System.out.println("NEL`ZYA POSTAVIT`");
             this.fails();
         }
     }

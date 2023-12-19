@@ -3,7 +3,7 @@ package GDSystem;
 import java.util.List;
 
 public class Grid {
-    public Cell[][] grid;
+    public int[][] grid;
     public int[] points;
     public int width;
     public int height;
@@ -30,7 +30,7 @@ public class Grid {
     public Grid(int width,int height){
         this.width=width;
         this.height=height;
-        grid=new Cell[height][width];
+        grid=new int[height][width];
         points=new int[width*height];
         for(int i=0;i<points.length;i++){
             points[i]=i;
@@ -41,8 +41,8 @@ public class Grid {
     public int fromCellToInt(int x,int y){
         return y*width+x;
     }
-    public Cell fromIntToCell(int point){
-        Cell c;
+    public int fromIntToCell(int point){
+        int c;
         int y=point/width;
         int x=point%width;
         c=grid[y][x];
@@ -58,7 +58,7 @@ public class Grid {
         this.height= grid.height;
         this.width= grid.width;
         this.points=grid.points;
-        this.grid=new Cell[grid.grid.length][grid.grid[0].length];
+        this.grid=new int[grid.grid.length][grid.grid[0].length];
         for(int i=0;i<grid.width;i++){
             for(int j=0;j< grid.height;j++){
                 this.grid[j][i]=grid.grid[j][i];

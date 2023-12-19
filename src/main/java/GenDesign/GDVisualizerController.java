@@ -110,14 +110,11 @@ public class GDVisualizerController {
             for(int y=0;y<v.obj.length;y++){
                 for(int x=0;x<v.obj[0].length;x++){
                     int p=point+y*resGrid.width+x;
-                    System.out.println(v.name+" "+point+" point "+p);
                     int[] ps=resGrid.getPointCell(p);
                     resGrid.grid[ps[1]][ps[0]]=v.obj[y][x];
-                    System.out.print(v.name+" "+v.obj[y][x]);
                 }
             }
         }
-        System.out.println(Arrays.deepToString(resGrid.grid));
         return resGrid;
     }
     private static Image convertToFxImage(BufferedImage image) {
@@ -143,22 +140,22 @@ public class GDVisualizerController {
         for(int x=0;x<solsGrid.width;x++){
             for(int y=0;y<solsGrid.height;y++){
                 switch (solsGrid.grid[y][x]) {
-                    case WALLS:{
+                    case -1:{
                         ImageView imageView=new ImageView(convertToFxImage(wallImage));
                         gridPane.add(imageView,x,y);
                         break;
                     }
-                    case EMPTY:{
+                    case 0:{
                         ImageView imageView=new ImageView(convertToFxImage(emptyImage));
                         gridPane.add(imageView,x,y);
                         break;
                     }
-                    case FREE:{
+                    case 1:{
                         ImageView imageView=new ImageView(convertToFxImage(freeImage));
                         gridPane.add(imageView,x,y);
                         break;
                     }
-                    case OBJ1:{
+                    case 11:{
                         Graphics objG=objectImage.createGraphics();
                         objG.setColor(objectColor.get(0));
                         objG.fillRect(1,1,cellsSize-2,cellsSize-2);
@@ -166,7 +163,7 @@ public class GDVisualizerController {
                         gridPane.add(imageView,x,y);
                         break;
                     }
-                    case OBJ2:{
+                    case 12:{
                         Graphics objG=objectImage.createGraphics();
                         objG.setColor(objectColor.get(1));
                         objG.fillRect(1,1,cellsSize-2,cellsSize-2);
@@ -174,7 +171,7 @@ public class GDVisualizerController {
                         gridPane.add(imageView,x,y);
                         break;
                     }
-                    case OBJ3:{
+                    case 13:{
                         Graphics objG=objectImage.createGraphics();
                         objG.setColor(objectColor.get(2));
                         objG.fillRect(1,1,cellsSize-2,cellsSize-2);
@@ -182,7 +179,7 @@ public class GDVisualizerController {
                         gridPane.add(imageView,x,y);
                         break;
                     }
-                    case OBJ4:{
+                    case 14:{
                         Graphics objG=objectImage.createGraphics();
                         objG.setColor(objectColor.get(3));
                         objG.fillRect(1,1,cellsSize-2,cellsSize-2);
@@ -190,7 +187,7 @@ public class GDVisualizerController {
                         gridPane.add(imageView,x,y);
                         break;
                     }
-                    case OBJ5:{
+                    case 15:{
                         Graphics objG=objectImage.createGraphics();
                         objG.setColor(objectColor.get(4));
                         objG.fillRect(1,1,cellsSize-2,cellsSize-2);
@@ -204,73 +201,21 @@ public class GDVisualizerController {
         gridPane.getColumnConstraints().setAll(new ColumnConstraints(size));
         gridPane.getRowConstraints().setAll(new RowConstraints(size));
     }
-    /*public void fillGridPane(){
-        int size=100;
-        if(grid.height==8) size=10;
-        else size=100;
-        gridPane.getRowConstraints().removeAll();
-        gridPane.getColumnConstraints().removeAll();
-        gridPane.getChildren().removeAll();
-        gridPane.getColumnConstraints().clear();
-        gridPane.getRowConstraints().clear();
-        gridPane.getChildren().clear();
-        gridPane.setGridLinesVisible(true);
-        for(int x=0;x<grid.width;x++){
-            for(int y=0;y<grid.height;y++){
-                switch (grid.grid[y][x]) {
-                    case WALLS:{
-                        ImageView imageView=new ImageView(wallImage);
-                        gridPane.add(imageView,x,y);
-                        break;
-                    }
-                    case EMPTY:{
-                        ImageView imageView=new ImageView();
-                        imageView.setImage(new Image(emptyImage));
-                        gridPane.add(imageView,x,y);
-                        break;
-                    }
-                    case FREE:{
-                        ImageView imageView=new ImageView();
-                        imageView.setImage(new Image(freeImage));
-                        break;
-                    }
-                    case OBJECT:{
-                        ImageView imageView=new ImageView();
-                        imageView.setImage(new Image(object1Image));
-                        gridPane.add(imageView,x,y);
-                        break;
-                    }
-                }
-            }
-       }
-        for(int i=0;i<grid.width;i++)
-            gridPane.getColumnConstraints().add(new ColumnConstraints(size));
-        for(int i=0;i<grid.height;i++)
-            gridPane.getRowConstraints().add(new RowConstraints(size));
-    }*/
     @FXML
     void initialize() {
         generateBufferedImages();
         fillListIObjColor();
-        /*scrollPane.setContent(gridPane);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);*/
         paneSolutions.setMinWidth(300);
         SplitPane.setResizableWithParent(paneSolutions,false);
-        //splitPane.setDividerPositions(0.0f);
-        /*listView.setOnMouseClicked(mouseEvent -> {
-            System.out.println(paneSolutions.getWidth());
-            System.out.println(Arrays.toString(splitPane.getDividerPositions()));
-        });*/
         MultipleSelectionModel<String> langsSelectionModel = listView.getSelectionModel();
         langsSelectionModel.selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                System.out.println(t1);
+                //System.out.println(t1);
                 String[] ss=t1.split(" ");
                 int ind=Integer.parseInt(ss[0])-1;
                 //System.out.println(solutions.get(Integer.parseInt(ss[0])-1));
-                System.out.println(fillGrid(solutions.get(Integer.parseInt(ss[0])-1)));
+                //System.out.println(fillGrid(solutions.get(Integer.parseInt(ss[0])-1)));
                 //fillGrid(solutions.get(ind));
                 visualizeSols(fillGrid(solutions.get(ind)));
             }

@@ -1,6 +1,7 @@
 package GenDesign;
 
 import GDSystem.*;
+import GDSystem.Box;
 import com.vkrui.vkr_ui.MainApplication;
 import com.vkrui.vkr_ui.MainController;
 import javafx.application.Application;
@@ -16,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,6 +122,21 @@ public class GenController {
         solver=new MySolver(variables,grid);
         time=solver.manySolve(true);
     }
+
+    public void addVar(String name,String content){
+        String[] lines=content.split("\n");
+        int height=lines.length;
+        String[] firstLine=lines[0].split(" ");
+        int width=firstLine.length;
+        Variable newVar=new Variable(new Box(width,height));
+        int[][] cells=new int[height][width];
+        for(int y=0;y<height;y++){
+            String[] lineContent=lines[y].split(" ");
+            for(int x=0;x<width;x++){
+                cells[y][x]=Integer.parseInt(lineContent[x]);
+            }
+        }
+    }
     @FXML
     void initialize() {
         paneAddVar.setVisible(false);
@@ -140,6 +157,14 @@ public class GenController {
             paneAddVar.setVisible(true);
             tfFillVar.setText(null);
             tfVarName.setText(null);
+        });
+        btnAddVar.setOnAction(event -> {
+            if(tfVarName.getText()==null||tfFillVar.getText()==null){
+                JOptionPane.showMessageDialog(null,"Заполните поля!","ERROR",JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+
+            }
         });
     }
 }

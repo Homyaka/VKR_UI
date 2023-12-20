@@ -9,15 +9,17 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
-import javafx.scene.control.ScrollPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -30,7 +32,11 @@ import java.util.List;
 
 public class GDVisualizerController {
     @FXML
+    private Button btnSaveSol;
+    @FXML
     private GridPane gridPane;
+    @FXML
+    private Label labelSaveSol;
     @FXML
     private Pane paneSolutions;
     @FXML
@@ -50,10 +56,14 @@ public class GDVisualizerController {
     private BufferedImage objectImage;
     private BufferedImage emptyImage;
     private BufferedImage freeImage;
+    private BufferedImage windowImage;
+    private BufferedImage doorImage;
 
     private Color wallColor=Color.GRAY;
     private Color emptyColor=Color.WHITE;
     private Color freeColor=Color.WHITE;
+    private Color windowColor=new Color(224, 255, 255);
+    private Color doorColor=new Color(139, 69, 19);
     private List<Color> objectColor;
 
     public void generateBufferedImages(){
@@ -61,24 +71,36 @@ public class GDVisualizerController {
         objectImage=new BufferedImage(cellsSize,cellsSize,BufferedImage.TYPE_INT_RGB);
         freeImage=new BufferedImage(cellsSize,cellsSize,BufferedImage.TYPE_INT_RGB);
         emptyImage=new BufferedImage(cellsSize,cellsSize,BufferedImage.TYPE_INT_RGB);
+        windowImage=new BufferedImage(cellsSize,cellsSize,BufferedImage.TYPE_INT_RGB);
+        doorImage= new BufferedImage(cellsSize,cellsSize,BufferedImage.TYPE_INT_RGB);
 
         Graphics wallG =wallImage.createGraphics();
         Graphics emptyG=emptyImage.createGraphics();
-        Graphics objG=objectImage.createGraphics();
         Graphics freeG=freeImage.createGraphics();
+        Graphics windowG=windowImage.createGraphics();
+        Graphics doorG=doorImage.createGraphics();
 
         wallG.setColor(wallColor);
         emptyG.setColor(emptyColor);
         freeG.setColor(freeColor);
+        windowG.setColor(windowColor);
+        doorG.setColor(doorColor);
 
         wallG.fillRect(1,1,cellsSize-2,cellsSize-2);
         emptyG.fillRect(1,1,cellsSize-2,cellsSize-2);
         freeG.fillRect(1,1,cellsSize-2,cellsSize-2);
+        windowG.fillRect(1,1,cellsSize-2,cellsSize-2);
+        doorG.fillRect(1,1,cellsSize-2,cellsSize-2);
+
         freeG.setColor(Color.BLACK);
         for(int i=0;i<cellsSize;i++){
             for(int j=0;j<cellsSize;j++)
                 if(i==j) freeG.fillRect(i,j,1,1);
         }
+        windowG.setColor(Color.BLACK);
+        int mid=cellsSize/2;
+        windowG.fillRect(mid,1,1,cellsSize);
+        windowG.fillRect(1,mid,cellsSize,1);
     }
     public void fillListIObjColor(){
         objectColor=new ArrayList<>();
@@ -133,10 +155,6 @@ public class GDVisualizerController {
 
     public void visualizeSols(Grid solsGrid){
        int size =cellsSize;
-        /*for(int i=0;i<grid.width;i++)
-            gridPane.getColumnConstraints().add(new ColumnConstraints(size));
-        for(int i=0;i<grid.height;i++)
-            gridPane.getRowConstraints().add(new RowConstraints(size));*/
         for(int x=0;x<solsGrid.width;x++){
             for(int y=0;y<solsGrid.height;y++){
                 switch (solsGrid.grid[y][x]) {
@@ -152,6 +170,16 @@ public class GDVisualizerController {
                     }
                     case 1:{
                         ImageView imageView=new ImageView(convertToFxImage(freeImage));
+                        gridPane.add(imageView,x,y);
+                        break;
+                    }
+                    case 2:{
+                        ImageView imageView=new ImageView(convertToFxImage(doorImage));
+                        gridPane.add(imageView,x,y);
+                        break;
+                    }
+                    case 3:{
+                        ImageView imageView=new ImageView(convertToFxImage(windowImage));
                         gridPane.add(imageView,x,y);
                         break;
                     }
@@ -220,7 +248,13 @@ public class GDVisualizerController {
                 visualizeSols(fillGrid(solutions.get(ind)));
             }
         });
-
         //System.out.print(Arrays.toString(splitPane.getDividerPositions()));
+        btnSaveSol.setOnAction(event -> {
+            Stage stage=new Stage();
+            DirectoryChooser directoryChooser=new DirectoryChooser();
+            File test=directoryChooser.showDialog(stage);
+            System.out.print(test.getPath());
+
+        });
     }
 }

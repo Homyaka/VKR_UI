@@ -12,7 +12,7 @@ public class GenApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("GDTask.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 780, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 780, 700);
         stage.setTitle("Application");
         stage.setScene(scene);
         stage.show();

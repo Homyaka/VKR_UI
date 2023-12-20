@@ -2,13 +2,13 @@ package GenDesign;
 
 import GDSystem.*;
 import GDSystem.Box;
-import com.vkrui.vkr_ui.MainApplication;
 import com.vkrui.vkr_ui.MainController;
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,12 +25,17 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,6 +54,8 @@ public class GenController {
 
     @FXML
     private Button btnStart;
+    @FXML
+    private Button btnReafFileGrid;
 
     @FXML
     private GridPane gridPaneVars;
@@ -58,6 +65,9 @@ public class GenController {
 
     @FXML
     private Label labelSolCount;
+
+    @FXML
+    private Label labelFileNameGrid;
 
     @FXML
     private ListView<String> listViewVars;
@@ -72,10 +82,16 @@ public class GenController {
     private Pane paneVars;
 
     @FXML
+    private Pane paneWidthHeightGrid;
+
+    @FXML
     private SplitPane splitPane;
 
     @FXML
     private TextArea tfFillVar;
+
+    @FXML
+    private TextArea textAreaGridContent;
 
     @FXML
     private TextField tfHeight;
@@ -85,13 +101,17 @@ public class GenController {
 
     @FXML
     private TextField tfWidth;
+    @FXML
+    private CheckBox checkBoxEasySetting;
+
     private List<Variable> variables;
     public long time;
     private Grid grid;
     private MySolver solver;
-
     int widthGridPane=1;
     int heightGridPane=1;
+
+    public File fileGridContent=new File("");
 
     List<String> strings=new ArrayList<>();
 
@@ -166,7 +186,12 @@ public class GenController {
             }
         }
     }
-    public Grid createGrid(){
+
+    public List<String> txtParse(String path) throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
+        return lines;
+    }
+    public Grid createEasyGrid(){
         Grid grid=new Grid(Integer.parseInt(tfWidth.getText()),Integer.parseInt(tfHeight.getText()));
         for(int i=0;i<grid.grid.length;i++)
             Arrays.fill(grid.grid[i],0);
@@ -210,13 +235,13 @@ public class GenController {
         int width=firstLine.length;
         Variable newVar=new Variable(new Box(width,height));
         newVar.name=name;
-        String[] strs=name.split(" ");
         newVar.id=variables.size()+1;
         int[][] cells=new int[height][width];
         for(int y=0;y<height;y++){
             String[] lineContent=lines[y].split(" ");
+            if(lineContent.length!=width) return null;
             for(int x=0;x<width;x++){
-                if(Integer.parseInt(lineContent[x])==2) cells[y][x]=1;
+                if(Integer.parseInt(lineContent[x])==0) cells[y][x]=1;
                 else cells[y][x]=Integer.parseInt(lineContent[x])*10+newVar.id;
             }
         }
@@ -225,19 +250,72 @@ public class GenController {
         System.out.print(Arrays.deepToString(newVar.obj));
         return newVar;
     }
+
+    public Grid createGrid(){
+        String[] lines=textAreaGridContent.getText().split("\n");
+        int height=lines.length;
+        String[] firstLine=lines[0].split(" ");
+        int width=firstLine.length;
+        Grid resGrid=new Grid(width,height);
+        int[][] grid=new int[width][height];
+        for(int y=0;y<height;y++){
+            String[] line=lines[y].split(" ");
+            if (line.length!=width) return null;
+            for(int x=0;x<width;x++){
+                int cell=Integer.parseInt(line[x]);
+                switch (cell){
+                   case 1:{
+                       grid[y][x] = -1;
+                       break;
+                   }
+                   case 2:{
+                       grid[y][x]=2;
+                       if(y!=0&&grid[y-1][x]!=-1) grid[y-1][x]=1;
+                       if(y!=height-1&&grid[y+1][x]!=-1) grid[y+1][x]=1;
+                       if(x!=0&&grid[y][x-1]!=-1) grid[y][x-1]=1;
+                       if(x!=width-1&&grid[y][x+1]!=-1) grid[y][x+1]=1;
+                       break;
+                   }
+                   default:{
+                       if (grid[y][x]!=1) grid[y][x] = cell;
+                       break;
+                   }
+               }
+            }
+        }
+        resGrid.grid=grid;
+        return resGrid;
+    }
     @FXML
     void initialize() {
+        paneWidthHeightGrid.setVisible(false);
         generateBufferedImages();
         fillListIObjColor();
         variables=new ArrayList<>();
         paneAddVar.setVisible(false);
         paneSolutions.setVisible(false);
+        checkBoxEasySetting.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (checkBoxEasySetting.isSelected()) paneWidthHeightGrid.setVisible(true);
+                if (!checkBoxEasySetting.isSelected()) paneWidthHeightGrid.setVisible(false);
+            }
+        });
         btnStart.setOnAction(event -> {
-            grid=new Grid(createGrid());
             paneSolutions.setVisible(true);
-            JOptionPane.showMessageDialog(null,"QWE");
+            if (checkBoxEasySetting.isSelected()){
+                if (tfWidth.getText()==null||tfHeight.getText()==null)
+                    JOptionPane.showMessageDialog(null,"Поле ширины или высоты пустое!","ERROR",JOptionPane.ERROR_MESSAGE);
+                else
+                    grid=new Grid(createEasyGrid());
+            }
+            else {
+                    grid=new Grid(createGrid());
+            }
             if(variables.size()==0) JOptionPane.showMessageDialog(null,"Нет объектов!","NO OBJECT",JOptionPane.ERROR_MESSAGE);
-            else solve();
+            else if(grid==null){
+                JOptionPane.showMessageDialog(null,"Не удалось создать пространство!","FAILED CREATE GRID",JOptionPane.ERROR_MESSAGE);
+            } else solve();
             int count=solver.solutions.size();
             labelSolCount.setTextFill(Color.BLACK);
             labelSolCount.setText("Найдено "+count+" решений за "+time+" ms.");
@@ -255,12 +333,38 @@ public class GenController {
                 JOptionPane.showMessageDialog(null,"Заполните поля!","ERROR",JOptionPane.ERROR_MESSAGE);
             }
             else {
-                variables.add(addVar(tfVarName.getText(),tfFillVar.getText()));
-                labelAddVar.setText("Переменная "+tfVarName.getText()+" добавлена");
-                strings.add(tfVarName.getText());
-                ObservableList<String> obsList= FXCollections.observableArrayList(strings);
-                listViewVars.setItems(obsList);
-                showVarOnGridPane(variables.get(0));
+                Variable v=(addVar(tfVarName.getText(),tfFillVar.getText()));
+                if (v!=null) {
+                    variables.add(v);
+                    labelAddVar.setTextFill(Color.GREEN);
+                    labelAddVar.setText("Переменная " + tfVarName.getText() + " добавлена");
+                    strings.add(tfVarName.getText());
+                    ObservableList<String> obsList = FXCollections.observableArrayList(strings);
+                    listViewVars.setItems(obsList);
+                    showVarOnGridPane(variables.get(0));
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,"Некоректное содержимое переменной!","ERROR",JOptionPane.ERROR_MESSAGE);
+                    labelAddVar.setText("Не удалось добавить переменную "+tfVarName.getText()+"!");
+                    labelAddVar.setTextFill(Color.RED);
+                }
+            }
+        });
+        btnReafFileGrid.setOnAction(event -> {
+            Stage stage=new Stage();
+            FileChooser fileChooser=new FileChooser();
+            fileGridContent=fileChooser.showOpenDialog(stage);
+            if(fileGridContent.isFile()){
+                labelFileNameGrid.setText("Выбран файл: "+fileGridContent.getPath());
+                List<String> dataGrid;
+                String gridContent="";
+                try {
+                    dataGrid=txtParse(fileGridContent.getPath());
+                    for(String s: dataGrid) gridContent+=s+"\n";
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                textAreaGridContent.setText(gridContent);
             }
         });
         SplitPane.setResizableWithParent(paneVars,false);

@@ -1,5 +1,6 @@
 package GDSystem;
 
+import GDSystem.UnarConstaints.UnarConstraints;
 import org.chocosolver.solver.variables.IntVar;
 
 import java.awt.*;
@@ -10,6 +11,7 @@ public class Variable {
     public String name;
     public Box box;
     public ArrayList<Integer> domain;
+    public ArrayList<UnarConstraints> unarConstraints;
     public int[][] obj;
     public  IntVar intVar;
     public int id;
@@ -19,6 +21,7 @@ public class Variable {
         obj=new int[box.getHeight()][box.getWidth()];
         this.domain=new ArrayList<>();
     }
+
     public int getDomainSize(){
         return domain.size();
     }
@@ -30,6 +33,7 @@ public class Variable {
         }
         return res;
     }
+
    public String variableToString(){
         String s="";
         for(int i=0;i<obj.length;i++){
@@ -40,6 +44,7 @@ public class Variable {
         }
         return s;
     }
+
    public String toString(){
         return name;
    }

@@ -239,22 +239,16 @@ public class GDVisualizerController {
         langsSelectionModel.selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                //System.out.println(t1);
                 String[] ss=t1.split(" ");
                 int ind=Integer.parseInt(ss[0])-1;
-                //System.out.println(solutions.get(Integer.parseInt(ss[0])-1));
-                //System.out.println(fillGrid(solutions.get(Integer.parseInt(ss[0])-1)));
-                //fillGrid(solutions.get(ind));
                 visualizeSols(fillGrid(solutions.get(ind)));
             }
         });
-        //System.out.print(Arrays.toString(splitPane.getDividerPositions()));
         btnSaveSol.setOnAction(event -> {
             Stage stage=new Stage();
             DirectoryChooser directoryChooser=new DirectoryChooser();
             File test=directoryChooser.showDialog(stage);
             System.out.print(test.getPath());
-
         });
     }
 }

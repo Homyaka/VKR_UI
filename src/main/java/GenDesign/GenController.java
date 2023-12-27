@@ -2,6 +2,7 @@ package GenDesign;
 
 import GDSystem.*;
 import GDSystem.Box;
+import GDSystem.UnarConstaints.DistanceToWallConstraint;
 import com.vkrui.vkr_ui.MainController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -83,6 +84,8 @@ public class GenController {
 
     @FXML
     private Pane paneWidthHeightGrid;
+    @FXML
+    private Pane paneExtraConstraints;
 
     @FXML
     private SplitPane splitPane;
@@ -102,7 +105,19 @@ public class GenController {
     @FXML
     private TextField tfWidth;
     @FXML
+    private TextField tfDTW;
+    @FXML
+    private TextField tfConWithObj;
+    @FXML
     private CheckBox checkBoxEasySetting;
+    @FXML
+    private CheckBox checkBoxExtraConstraints;
+    @FXML
+    private CheckBox checkBoxInCorner;
+    @FXML
+    private ChoiceBox<String> choiceBoxDTW;
+    @FXML
+    private ChoiceBox<String> choiceBoxConWithObj;
 
     private List<Variable> variables;
     public long time;
@@ -120,7 +135,12 @@ public class GenController {
     BufferedImage freeImage;
     BufferedImage emptyImage;
 
-
+    public void fillChoiceBox(){
+        ObservableList<String> walls=FXCollections.observableArrayList("Любой","Сверху","Снизу","Справа","Слева");
+        choiceBoxDTW.setItems(walls);
+        ObservableList<String> connectWithObject=FXCollections.observableArrayList("Рядом","Напротив");
+        choiceBoxConWithObj.setItems(connectWithObject);
+    }
     public void generateBufferedImages(){
         emptyImage=new BufferedImage(50,50,BufferedImage.TYPE_INT_RGB);
         freeImage=new BufferedImage(50,50,BufferedImage.TYPE_INT_RGB);
@@ -248,9 +268,38 @@ public class GenController {
         newVar.obj=cells;
         System.out.println(newVar.name);
         System.out.print(Arrays.deepToString(newVar.obj));
+        if (checkBoxExtraConstraints.isSelected()){
+            if(checkBoxInCorner.isSelected()){
+                JOptionPane.showMessageDialog(null,"ПОКА НЕ РЕАЛИЗОВАНО");
+            }
+            if (!tfDTW.getText().isEmpty()){
+                newVar.unarConstraints=new ArrayList<>();
+                switch (choiceBoxDTW.getValue()){
+                    case "Любой":{
+                        newVar.unarConstraints.add(new DistanceToWallConstraint(Integer.parseInt(tfDTW.getText())));
+                        break;
+                    }
+                    case "Сверху":{
+                        newVar.unarConstraints.add(new DistanceToWallConstraint(Direction.NORTH,Integer.parseInt(tfDTW.getText())));
+                        break;
+                    }
+                    case "Снизу":{
+                        newVar.unarConstraints.add(new DistanceToWallConstraint(Direction.SOUTH,Integer.parseInt(tfDTW.getText())));
+                        break;
+                    }
+                    case "Справа":{
+                        newVar.unarConstraints.add(new DistanceToWallConstraint(Direction.EAST,Integer.parseInt(tfDTW.getText())));
+                        break;
+                    }
+                    case "Слева": {
+                        newVar.unarConstraints.add(new DistanceToWallConstraint(Direction.WEST,Integer.parseInt(tfDTW.getText())));
+                        break;
+                    }
+                }
+            }
+        }
         return newVar;
     }
-
     public Grid createGrid(){
         String[] lines=textAreaGridContent.getText().split("\n");
         int height=lines.length;
@@ -288,17 +337,26 @@ public class GenController {
     }
     @FXML
     void initialize() {
+        fillChoiceBox();
         paneWidthHeightGrid.setVisible(false);
         generateBufferedImages();
         fillListIObjColor();
         variables=new ArrayList<>();
         paneAddVar.setVisible(false);
         paneSolutions.setVisible(false);
+        paneExtraConstraints.setVisible(false);
         checkBoxEasySetting.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if (checkBoxEasySetting.isSelected()) paneWidthHeightGrid.setVisible(true);
                 if (!checkBoxEasySetting.isSelected()) paneWidthHeightGrid.setVisible(false);
+            }
+        });
+        checkBoxExtraConstraints.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(checkBoxExtraConstraints.isSelected()) paneExtraConstraints.setVisible(true);
+                if(!checkBoxExtraConstraints.isSelected()) paneExtraConstraints.setVisible(false);
             }
         });
         btnStart.setOnAction(event -> {

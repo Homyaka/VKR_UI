@@ -8,7 +8,6 @@ public class GDValueSelector implements IntValueSelector {
 
     @Override
     public int selectValue(IntVar intVar) {
-        //System.out.print("SELECT VALUE: "+intVar.toString()+" "+intVar.getValue());
         return intVar.getValue();
     }
 }

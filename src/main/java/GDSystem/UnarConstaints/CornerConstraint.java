@@ -12,4 +12,8 @@ public class CornerConstraint extends UnarConstraints{
     public void propagate(){
 
     }
+    public CornerConstraint(Variable v,Grid grid){
+        variable=v;
+        this.grid=grid;
+    }
 }

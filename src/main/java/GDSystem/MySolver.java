@@ -1,5 +1,6 @@
 package GDSystem;
 
+import GDSystem.UnarConstaints.DistanceToWallConstraint;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.variables.IntVar;
@@ -77,9 +78,9 @@ public class MySolver {
         while (solver.solve()) {
             Solution sol=new Solution(variables);
             solutions.add(sol);
-
         }
         System.out.print("\nВсего решений: "+solver.getSolutionCount());
+        DistanceToWallConstraint distance=new DistanceToWallConstraint(grid);
         return java.lang.System.currentTimeMillis()-time;
     }
 

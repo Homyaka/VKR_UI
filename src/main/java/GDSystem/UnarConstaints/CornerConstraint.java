@@ -13,6 +13,7 @@ public class CornerConstraint extends UnarConstraints{
 
     }
     public CornerConstraint(Variable v,Grid grid){
+        super("corner");
         variable=v;
         this.grid=grid;
     }

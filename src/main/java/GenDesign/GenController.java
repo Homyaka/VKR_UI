@@ -276,23 +276,23 @@ public class GenController {
                 newVar.unarConstraints=new ArrayList<>();
                 switch (choiceBoxDTW.getValue()){
                     case "Любой":{
-                        newVar.unarConstraints.add(new DistanceToWallConstraint(Integer.parseInt(tfDTW.getText())));
+                        newVar.unarConstraints.add(new DistanceToWallConstraint(newVar,Direction.ANY,Integer.parseInt(tfDTW.getText())));
                         break;
                     }
                     case "Сверху":{
-                        newVar.unarConstraints.add(new DistanceToWallConstraint(Direction.NORTH,Integer.parseInt(tfDTW.getText())));
+                        newVar.unarConstraints.add(new DistanceToWallConstraint(newVar,Direction.NORTH,Integer.parseInt(tfDTW.getText())));
                         break;
                     }
                     case "Снизу":{
-                        newVar.unarConstraints.add(new DistanceToWallConstraint(Direction.SOUTH,Integer.parseInt(tfDTW.getText())));
+                        newVar.unarConstraints.add(new DistanceToWallConstraint(newVar,Direction.SOUTH,Integer.parseInt(tfDTW.getText())));
                         break;
                     }
                     case "Справа":{
-                        newVar.unarConstraints.add(new DistanceToWallConstraint(Direction.EAST,Integer.parseInt(tfDTW.getText())));
+                        newVar.unarConstraints.add(new DistanceToWallConstraint(newVar,Direction.EAST,Integer.parseInt(tfDTW.getText())));
                         break;
                     }
                     case "Слева": {
-                        newVar.unarConstraints.add(new DistanceToWallConstraint(Direction.WEST,Integer.parseInt(tfDTW.getText())));
+                        newVar.unarConstraints.add(new DistanceToWallConstraint(newVar,Direction.WEST,Integer.parseInt(tfDTW.getText())));
                         break;
                     }
                 }
